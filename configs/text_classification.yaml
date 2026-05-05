@@ -1,0 +1,12 @@
+model_name: distilbert-base-uncased
+text_col: text
+label_col: label
+max_length: 160
+test_size: 0.2
+validation_size: 0.1
+epochs: 2
+batch_size: 16
+learning_rate: 0.00002
+weight_decay: 0.01
+metric_for_best_model: f1
+seed: 42

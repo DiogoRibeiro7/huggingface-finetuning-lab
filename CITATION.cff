@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: Hugging Face Fine-Tuning Lab
+message: If you use this repository, please cite it.
+type: software
+authors:
+  - family-names: Ribeiro
+    given-names: Diogo
+repository-code: https://github.com/DiogoRibeiro7/huggingface-finetuning-lab
+license: MIT
+version: 0.1.0

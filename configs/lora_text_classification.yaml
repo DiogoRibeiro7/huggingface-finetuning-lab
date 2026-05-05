@@ -1,0 +1,19 @@
+model_name: distilbert-base-uncased
+text_col: text
+label_col: label
+max_length: 160
+test_size: 0.2
+validation_size: 0.1
+epochs: 2
+batch_size: 16
+learning_rate: 0.00005
+weight_decay: 0.01
+metric_for_best_model: f1
+seed: 42
+use_lora: true
+lora_r: 8
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target_modules:
+  - q_lin
+  - v_lin
