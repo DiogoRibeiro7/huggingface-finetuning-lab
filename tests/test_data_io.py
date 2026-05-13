@@ -1,7 +1,11 @@
 import pandas as pd
 import pytest
 
-from hf_finetuning_lab.data.io import build_label_mapping, encode_labels, validate_text_classification_frame
+from hf_finetuning_lab.data.io import (
+    build_label_mapping,
+    encode_labels,
+    validate_text_classification_frame,
+)
 
 
 def test_validate_text_classification_frame_accepts_valid_data() -> None:

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
 
 import typer
 
@@ -36,7 +35,7 @@ def train(
     batch_size: int = typer.Option(16, help="Batch size."),
     learning_rate: float = typer.Option(2e-5, help="Learning rate."),
     max_length: int = typer.Option(160, help="Maximum tokenized length."),
-    config_file: Optional[Path] = typer.Option(None, help="Optional YAML config."),
+    config_file: Path | None = typer.Option(None, help="Optional YAML config."),
     use_lora: bool = typer.Option(False, help="Enable PEFT/LoRA fine-tuning."),
 ) -> None:
     """Fine-tune a transformer for text classification."""

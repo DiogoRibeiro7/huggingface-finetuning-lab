@@ -51,7 +51,7 @@ class TrainingConfig:
             raise ValueError("learning_rate must be positive.")
 
     @classmethod
-    def from_yaml(cls, path: str | Path) -> "TrainingConfig":
+    def from_yaml(cls, path: str | Path) -> TrainingConfig:
         """Load configuration from a YAML file."""
         config_path = Path(path)
         if not config_path.exists():

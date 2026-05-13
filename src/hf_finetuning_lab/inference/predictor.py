@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 
 from hf_finetuning_lab.data.io import load_table
-from hf_finetuning_lab.evaluation.metrics import softmax
 
 
 class TextClassificationPredictor:

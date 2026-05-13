@@ -7,8 +7,15 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import classification_report
 
-from hf_finetuning_lab.data.io import build_label_mapping, load_table, validate_text_classification_frame
-from hf_finetuning_lab.evaluation.metrics import compute_classification_metrics, confusion_matrix_frame
+from hf_finetuning_lab.data.io import (
+    build_label_mapping,
+    load_table,
+    validate_text_classification_frame,
+)
+from hf_finetuning_lab.evaluation.metrics import (
+    compute_classification_metrics,
+    confusion_matrix_frame,
+)
 from hf_finetuning_lab.inference.predictor import TextClassificationPredictor
 
 

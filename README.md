@@ -38,6 +38,26 @@ poetry install --with dev
 
 For CPU-only local work this is enough. GPU execution depends on your local PyTorch/CUDA environment.
 
+## Quality checks
+
+Run the same checks used in CI:
+
+```bash
+make check
+```
+
+Or run tools directly:
+
+```bash
+poetry run ruff check .
+poetry run mypy src
+poetry run pytest
+```
+
+## Contributing
+
+See `CONTRIBUTING.md` for development workflow, test constraints, and responsible AI contribution rules.
+
 ## Generate sample data
 
 ```bash
