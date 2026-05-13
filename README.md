@@ -58,6 +58,32 @@ poetry run pytest
 
 See `CONTRIBUTING.md` for development workflow, test constraints, and responsible AI contribution rules.
 
+## Quickstart and architecture
+
+- 5-minute setup: `docs/quickstart_5min.md`
+- System architecture: `docs/architecture.md`
+- Release/versioning policy: `docs/release_process.md`
+- Changelog: `CHANGELOG.md`
+
+## Branch protection baseline
+
+Apply branch protection (review + required checks) with:
+
+```bash
+pwsh -File scripts/setup_branch_protection.ps1 -Repo <owner/repo> -Branch main
+```
+
+This requires GitHub CLI (`gh`) authentication with repository admin permissions.
+
+## Python and Poetry stability
+
+This repository is pinned to Python `3.12` for local consistency (`.python-version`).
+If Poetry selects an unsupported interpreter, run:
+
+```bash
+poetry env use 3.12
+```
+
 ## Generate sample data
 
 ```bash

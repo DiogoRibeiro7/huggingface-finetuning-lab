@@ -1,4 +1,4 @@
-.PHONY: install test lint typecheck check format sample run precommit
+.PHONY: install test lint typecheck check format sample run precommit release-check branch-protect
 
 install:
 	poetry install --with dev
@@ -19,6 +19,12 @@ format:
 
 precommit:
 	poetry run pre-commit run --all-files
+
+release-check: check
+	poetry build
+
+branch-protect:
+	pwsh -File scripts/setup_branch_protection.ps1 -Repo $(REPO) -Branch $${BRANCH:-main}
 
 sample:
 	poetry run hf-lab sample-data --output data/raw/support_tickets.csv --rows 500
