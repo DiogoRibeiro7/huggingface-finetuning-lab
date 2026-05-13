@@ -26,7 +26,11 @@ jobs:
         run: poetry install --with dev
       - name: Lint
         run: poetry run ruff check .
+      - name: Notebook lint
+        run: poetry run nbqa ruff check notebooks
       - name: Type check
         run: poetry run mypy src
       - name: Test
         run: poetry run pytest
+      - name: Notebook smoke execute
+        run: poetry run jupyter nbconvert --to notebook --execute notebooks/01_hf_text_classification_workflow.ipynb --output 01_hf_text_classification_workflow.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600

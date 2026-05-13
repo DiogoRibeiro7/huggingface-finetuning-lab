@@ -65,6 +65,15 @@ See `CONTRIBUTING.md` for development workflow, test constraints, and responsibl
 - Release/versioning policy: `docs/release_process.md`
 - Changelog: `CHANGELOG.md`
 
+## Notebook development
+
+Run notebook quality checks locally:
+
+```bash
+make notebook-lint
+make notebook-smoke
+```
+
 ## Branch protection baseline
 
 Apply branch protection (review + required checks) with:
