@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import (
     accuracy_score,
+    classification_report,
     confusion_matrix,
     f1_score,
     precision_score,
@@ -62,3 +63,26 @@ def confusion_matrix_frame(
     matrix = confusion_matrix(y_true, y_pred, labels=labels)
     names = [id2label[idx] for idx in labels]
     return pd.DataFrame(matrix, index=names, columns=names)
+
+
+def per_class_report(
+    y_true: np.ndarray,
+    y_pred: np.ndarray,
+    labels: list[str] | None = None,
+) -> pd.DataFrame:
+    """Return a per-class precision/recall/F1/support DataFrame.
+
+    Rows are per-class entries plus ``accuracy``, ``macro avg``, and
+    ``weighted avg`` (as produced by :func:`sklearn.metrics.classification_report`).
+    """
+    report = classification_report(
+        y_true,
+        y_pred,
+        labels=labels,
+        output_dict=True,
+        zero_division=0,
+    )
+    frame = pd.DataFrame(report).T
+    if "support" in frame.columns:
+        frame["support"] = frame["support"].astype(int)
+    return frame

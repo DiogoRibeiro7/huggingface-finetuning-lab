@@ -18,12 +18,12 @@
 
 ## v0.2 — Stronger experiment management
 
-- Add explicit run IDs.
-- Save full training configuration as JSON.
-- Save dataset hashes.
-- Add experiment comparison tables.
-- Add support for repeated train/eval runs.
-- Add confusion-matrix and per-class error reports.
+- [x] Add explicit run IDs (`hf_finetuning_lab.experiments.make_run_id`).
+- [x] Save full training configuration as JSON (`RunRecord.params` persisted via `save_run`).
+- [x] Save dataset hashes (`hash_dataframe`).
+- [x] Add experiment comparison tables (`runs_to_frame`, surfaced in `notebooks/02_experiment_management.ipynb`).
+- [x] Add support for repeated train/eval runs (notebook 02 sweep).
+- [x] Add confusion-matrix and per-class error reports (`per_class_report`, `confusion_matrix_frame`).
 
 ## v0.3 — Real Hugging Face datasets
 
@@ -34,11 +34,12 @@
 
 ## v0.4 — Robust evaluation
 
-- Add calibration metrics.
-- Add threshold optimization.
-- Add subgroup metrics.
-- Add prediction drift comparison between two datasets.
-- Add bootstrap confidence intervals.
+- [x] Add calibration metrics (`expected_calibration_error`, `reliability_curve`).
+- [x] Add threshold optimization (`find_best_threshold`).
+- [x] Add subgroup metrics (`subgroup_metrics`).
+- [x] Add prediction drift comparison between two datasets (`prediction_share_drift`, PSI).
+- [x] Add bootstrap confidence intervals (`bootstrap_metric`).
+- All demoed in `notebooks/03_robust_evaluation.ipynb`.
 
 ## v0.5 — Deployment hardening
 

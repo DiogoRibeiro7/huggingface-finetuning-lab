@@ -30,6 +30,16 @@ dist/
 artifacts/models/
 reports/sample_run/evaluation.json
 reports/sample_run/predictions.csv
+reports/sample_run/runs/
+reports/sample_run/experiment_comparison.csv
+reports/sample_run/best_run_model_card.md
+reports/sample_run/baseline_metrics.json
+reports/sample_run/baseline_errors.csv
+reports/sample_run/baseline_model_card.md
+reports/sample_run/calibration_curve.csv
+reports/sample_run/bootstrap_metrics.csv
+reports/sample_run/subgroup_metrics.csv
+reports/sample_run/prediction_drift.csv
 
 # OS files
 .DS_Store
