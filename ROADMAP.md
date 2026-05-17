@@ -27,10 +27,11 @@
 
 ## v0.3 — Real Hugging Face datasets
 
-- Add `--hf-dataset-name` command path.
-- Add split mapping for Hub datasets.
-- Add label-name normalization.
-- Add support for common datasets such as AG News, IMDb, Yelp, Banking77, and TweetEval.
+- [x] Add Hub dataset CLI commands (`list-hub-datasets`, `fetch-hub-dataset`).
+- [x] Add split mapping for Hub datasets (`HubDatasetConfig.splits`).
+- [x] Add label-name normalization (uses `ClassLabel.names` with explicit preset override).
+- [x] Add support for AG News, IMDb, Banking77, and TweetEval sentiment via `HUB_PRESETS`.
+- All demoed in `notebooks/04_hub_datasets.ipynb` (offline-by-default with opt-in real download).
 
 ## v0.4 — Robust evaluation
 

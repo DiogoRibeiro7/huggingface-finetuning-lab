@@ -5,6 +5,7 @@ from pathlib import Path
 import typer
 
 from hf_finetuning_lab.config import TrainingConfig
+from hf_finetuning_lab.data.hub import list_hub_presets, write_hub_dataset_csv
 from hf_finetuning_lab.evaluation.evaluator import evaluate_model
 from hf_finetuning_lab.inference.predictor import batch_predict
 from hf_finetuning_lab.sample_data import write_sample_data
@@ -22,6 +23,27 @@ def sample_data(
     """Generate synthetic support-ticket text-classification data."""
     path = write_sample_data(output=output, rows=rows, seed=seed)
     typer.echo(f"Wrote sample data to {path}")
+
+
+@app.command("list-hub-datasets")
+def list_hub_datasets_cmd() -> None:
+    """List built-in Hugging Face Hub preset names."""
+    for name in list_hub_presets():
+        typer.echo(name)
+
+
+@app.command("fetch-hub-dataset")
+def fetch_hub_dataset(
+    name: str = typer.Option(..., help="Hub preset name (see list-hub-datasets)."),
+    output_dir: Path = typer.Option(..., help="Directory to write per-split CSV files."),
+    max_rows_per_split: int | None = typer.Option(
+        None, help="Cap rows per split. Omit to use the full dataset."
+    ),
+) -> None:
+    """Download a preset Hub dataset and write one CSV per split."""
+    paths = write_hub_dataset_csv(name, output_dir=output_dir, max_rows_per_split=max_rows_per_split)
+    for split, path in paths.items():
+        typer.echo(f"{split}: {path}")
 
 
 @app.command("train")
