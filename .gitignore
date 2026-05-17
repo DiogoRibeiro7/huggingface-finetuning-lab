@@ -47,3 +47,6 @@ data/hub/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Local agent instructions (not shared on the public repo)
+AGENTS.md
