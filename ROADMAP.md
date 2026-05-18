@@ -67,9 +67,9 @@
 
 ## v0.8 — Retrieval and embeddings
 
-- Add sentence-transformer embedding generation.
-- Add semantic search example.
-- Add evaluation for retrieval tasks.
+- [x] Add `EmbeddingIndex` for cosine-similarity search over any L2-normalisable matrix.
+- [x] Add retrieval metrics (`recall_at_k`, `mean_reciprocal_rank`, `ndcg_at_k`, `retrieval_report`).
+- [x] Add semantic search example (`notebooks/06_semantic_search.ipynb`) with a synthetic FAQ corpus, TF-IDF embeddings for offline smoke, and an opt-in sentence-transformer path.
 
 ## v0.9 — Reproducibility and model governance
 

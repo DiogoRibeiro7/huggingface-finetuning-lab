@@ -18,6 +18,8 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 - `notebooks/04_hub_datasets.ipynb`: preset registry walkthrough, offline mock-DatasetDict normalization, opt-in real Hub download, and a TF-IDF baseline on the normalized schema.
 - `hf_finetuning_lab.token_classification` module: NER schema (`NERExample`, synthetic data generation, JSONL writer, validator), subword alignment (`align_word_labels_to_subwords` with `first` and `all` strategies), and entity-level metrics (`extract_entities`, `sequence_tagging_report`).
 - `notebooks/05_token_classification.ipynb`: synthetic CoNLL-style NER, label/entity distribution, subword alignment demo, per-token logistic-regression baseline, and entity-level micro/macro P/R/F1.
+- `hf_finetuning_lab.retrieval` module: `EmbeddingIndex` (cosine search over L2-normalised embeddings), `IndexEntry`, `l2_normalize`, plus retrieval metrics `recall_at_k`, `mean_reciprocal_rank`, `ndcg_at_k`, `retrieval_report`.
+- `notebooks/06_semantic_search.ipynb`: synthetic FAQ corpus, TF-IDF embedding index, cosine retrieval with Recall@k / MRR / nDCG@k, error inspection, and an opt-in sentence-transformer comparison.
 
 ## [0.1.0] - 2026-05-05
 

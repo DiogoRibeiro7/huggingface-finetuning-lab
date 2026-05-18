@@ -44,6 +44,8 @@ reports/sample_run/hub_dataset_summary.csv
 reports/sample_run/hub_baseline_metrics.json
 reports/sample_run/ner_entity_report.csv
 reports/sample_run/ner_metrics.json
+reports/sample_run/retrieval_report.csv
+reports/sample_run/retrieval_summary.json
 data/hub/
 data/raw/synthetic_ner.jsonl
 
