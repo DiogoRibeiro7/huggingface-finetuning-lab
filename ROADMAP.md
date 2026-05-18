@@ -59,9 +59,11 @@
 
 ## v0.7 — Sequence and token classification
 
-- Add NER data schema.
-- Add token classification fine-tuning.
-- Add sequence tagging metrics.
+- [x] Add NER data schema (`NERExample`, `generate_synthetic_ner_data`, `write_synthetic_ner_jsonl`).
+- [x] Add subword alignment helper (`align_word_labels_to_subwords`) so the same labels work with any HF fast tokenizer.
+- [x] Add sequence tagging metrics (`extract_entities`, `sequence_tagging_report` — entity-level micro/macro P/R/F1).
+- All demoed in `notebooks/05_token_classification.ipynb` (offline synthetic NER + per-token logistic-regression baseline).
+- Transformer fine-tuning path still TODO — keep it out of CI smoke; integrate as an opt-in cell when needed.
 
 ## v0.8 — Retrieval and embeddings
 

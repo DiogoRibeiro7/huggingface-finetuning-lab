@@ -16,6 +16,8 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 - `hf_finetuning_lab.data.hub` module: `HubDatasetConfig`, `HUB_PRESETS` (AG News, IMDb, Banking77, TweetEval sentiment), `load_hub_dataset`, `normalize_hub_dataset_dict`, and `write_hub_dataset_csv`.
 - CLI commands `hf-lab list-hub-datasets` and `hf-lab fetch-hub-dataset` for downloading Hub presets to local CSV.
 - `notebooks/04_hub_datasets.ipynb`: preset registry walkthrough, offline mock-DatasetDict normalization, opt-in real Hub download, and a TF-IDF baseline on the normalized schema.
+- `hf_finetuning_lab.token_classification` module: NER schema (`NERExample`, synthetic data generation, JSONL writer, validator), subword alignment (`align_word_labels_to_subwords` with `first` and `all` strategies), and entity-level metrics (`extract_entities`, `sequence_tagging_report`).
+- `notebooks/05_token_classification.ipynb`: synthetic CoNLL-style NER, label/entity distribution, subword alignment demo, per-token logistic-regression baseline, and entity-level micro/macro P/R/F1.
 
 ## [0.1.0] - 2026-05-05
 

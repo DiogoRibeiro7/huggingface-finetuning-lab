@@ -28,6 +28,7 @@ notebook-smoke:
 	poetry run jupyter nbconvert --to notebook --execute notebooks/02_experiment_management.ipynb --output 02_experiment_management.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600
 	poetry run jupyter nbconvert --to notebook --execute notebooks/03_robust_evaluation.ipynb --output 03_robust_evaluation.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600
 	poetry run jupyter nbconvert --to notebook --execute notebooks/04_hub_datasets.ipynb --output 04_hub_datasets.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600
+	poetry run jupyter nbconvert --to notebook --execute notebooks/05_token_classification.ipynb --output 05_token_classification.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600
 
 release-check: check
 	poetry build
