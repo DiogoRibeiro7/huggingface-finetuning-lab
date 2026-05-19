@@ -1,7 +1,18 @@
 [tool.poetry]
 name = "huggingface-finetuning-lab"
 version = "0.1.0"
-description = "Hugging Face fine-tuning, evaluation, inference, serving, and model-card workbench"
+description = "Production-focused Hugging Face NLP fine-tuning lab with reproducible training, evaluation, PEFT/LoRA, serving, and model cards"
+keywords = [
+  "hugging-face",
+  "transformers",
+  "nlp",
+  "text-classification",
+  "fine-tuning",
+  "peft",
+  "lora",
+  "fastapi",
+  "pytorch",
+]
 authors = ["Diogo Ribeiro <diogo_dj@hotmail.com>"]
 readme = "README.md"
 packages = [{ include = "hf_finetuning_lab", from = "src" }]
