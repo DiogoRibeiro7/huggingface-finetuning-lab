@@ -87,7 +87,7 @@ See `CONTRIBUTING.md` for development workflow, test constraints, and responsibl
 
 ## Notebook development
 
-The repo ships six notebooks under `notebooks/`:
+The repo ships seven notebooks under `notebooks/`:
 
 1. `01_hf_text_classification_workflow.ipynb` — end-to-end workflow with a scikit-learn baseline and opt-in Hugging Face CLI commands.
 2. `02_experiment_management.ipynb` — repeated runs with explicit run IDs, persisted training configs, dataset hashes, side-by-side comparison, per-class report, and confusion-matrix heatmap.
@@ -95,6 +95,7 @@ The repo ships six notebooks under `notebooks/`:
 4. `04_hub_datasets.ipynb` — Hugging Face Hub presets (AG News, IMDb, Banking77, TweetEval sentiment) with split mapping, label normalization, and an offline mock for CI smoke (`RUN_HUB_DOWNLOAD=True` to fetch real data).
 5. `05_token_classification.ipynb` — synthetic CoNLL-style NER, subword alignment, a per-token logistic-regression baseline, and entity-level BIO-span precision / recall / F1.
 6. `06_semantic_search.ipynb` — TF-IDF embedding index over a synthetic FAQ corpus with cosine retrieval, Recall@k / MRR / nDCG@k metrics, and an opt-in sentence-transformer path (`RUN_SENTENCE_TRANSFORMER=True`).
+7. `07_governance_template.ipynb` — dataset card, task-specific model card (with curated v0.4 / v0.7 / v0.8 limitations), and reproducibility checklist for one training run.
 
 Run notebook quality checks locally:
 

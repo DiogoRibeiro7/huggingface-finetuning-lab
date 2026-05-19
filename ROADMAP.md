@@ -73,10 +73,11 @@
 
 ## v0.9 — Reproducibility and model governance
 
-- Add model-card templates by task.
-- Add dataset cards.
-- Add risk and limitation sections.
-- Add reproducibility checklist.
+- [x] Add model-card templates by task (`write_task_model_card`, `task_limitations` for text-classification / token-classification / retrieval).
+- [x] Add dataset cards (`DatasetCard`, `DatasetColumn`, `DatasetSplit`, `write_dataset_card`).
+- [x] Add risk and limitation sections (curated bullets per task, with project-specific extras).
+- [x] Add reproducibility checklist (`ReproducibilityRecord`, `capture_environment`, `write_reproducibility_checklist` — Markdown + JSON sidecar).
+- All demoed in `notebooks/07_governance_template.ipynb`.
 
 ## v1.0 — Stable Hugging Face production template
 

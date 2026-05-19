@@ -46,6 +46,7 @@ reports/sample_run/ner_entity_report.csv
 reports/sample_run/ner_metrics.json
 reports/sample_run/retrieval_report.csv
 reports/sample_run/retrieval_summary.json
+reports/sample_run/governance/
 data/hub/
 data/raw/synthetic_ner.jsonl
 

@@ -20,6 +20,8 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 - `notebooks/05_token_classification.ipynb`: synthetic CoNLL-style NER, label/entity distribution, subword alignment demo, per-token logistic-regression baseline, and entity-level micro/macro P/R/F1.
 - `hf_finetuning_lab.retrieval` module: `EmbeddingIndex` (cosine search over L2-normalised embeddings), `IndexEntry`, `l2_normalize`, plus retrieval metrics `recall_at_k`, `mean_reciprocal_rank`, `ndcg_at_k`, `retrieval_report`.
 - `notebooks/06_semantic_search.ipynb`: synthetic FAQ corpus, TF-IDF embedding index, cosine retrieval with Recall@k / MRR / nDCG@k, error inspection, and an opt-in sentence-transformer comparison.
+- `hf_finetuning_lab.governance` module: `DatasetCard` / `DatasetColumn` / `DatasetSplit` + `write_dataset_card`, `task_limitations` and `write_task_model_card` for text-classification, token-classification, and retrieval, and `ReproducibilityRecord` + `capture_environment` + `write_reproducibility_checklist` (Markdown + JSON sidecar with environment, seed, dataset hash, and git commit metadata).
+- `notebooks/07_governance_template.ipynb`: end-to-end governance walkthrough — trains a small baseline, writes a dataset card with split-level label distributions, a task-specific model card, and a reproducibility checklist tying together run ID, dataset hash, environment snapshot, and metrics.
 
 ## [0.1.0] - 2026-05-05
 
