@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "huggingface-finetuning-lab"
-version = "0.1.0"
+version = "1.0.0"
 description = "Production-focused Hugging Face NLP fine-tuning lab with reproducible training, evaluation, PEFT/LoRA, serving, and model cards"
 keywords = [
   "hugging-face",

@@ -82,7 +82,9 @@
 
 ## v1.0 — Stable Hugging Face production template
 
-- Stable CLI.
-- Stable model artifact format.
-- Tested CPU and GPU workflows.
-- Documentation for fine-tuning, inference, serving, and governance.
+- [x] Stable CLI surface (`hf-lab list-commands`, `hf-lab version`).
+- [x] Stable model artifact format (`hf_finetuning_lab.artifacts` + `hf-lab verify-artifact --strict`).
+- [x] Tested CPU workflow (full pytest + nine-notebook smoke run in CI). GPU paths are documented but exercised manually until a GPU CI job lands.
+- [x] Documentation refresh (`docs/architecture.md` lists the v1.0 module map, artifact contract, and notebook stack).
+- [x] Version bumped to `1.0.0` in `pyproject.toml` and `hf_finetuning_lab.__version__`.
+- All demoed in `notebooks/09_v1_capstone.ipynb`.

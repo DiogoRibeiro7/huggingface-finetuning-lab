@@ -48,6 +48,7 @@ reports/sample_run/retrieval_report.csv
 reports/sample_run/retrieval_summary.json
 reports/sample_run/governance/
 reports/sample_run/serving/
+reports/sample_run/v1_capstone/
 data/hub/
 data/raw/synthetic_ner.jsonl
 

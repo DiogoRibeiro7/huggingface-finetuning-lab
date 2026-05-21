@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project follows Semantic Versioning.
 
+## [1.0.0] - 2026-05-21
+
+### Added
+- `hf_finetuning_lab.artifacts` module: `ArtifactCheck`, `ArtifactReport`, and `verify_artifact(model_dir)` enforcing the stable v1.0 model-artifact layout (`config.json`, weights, tokenizer, plus recommended `tokenizer_config.json` / `special_tokens_map.json` / `model_card.md` / `metrics.json`).
+- CLI commands `hf-lab version`, `hf-lab list-commands`, and `hf-lab verify-artifact --model-dir <path> [--strict]`.
+- `notebooks/09_v1_capstone.ipynb`: enumerates the CLI surface, demonstrates `verify_artifact` on a synthetic artifact, lists the v1.0 module map and the notebook stack, and includes the release checklist.
+- `docs/architecture.md` refreshed with the v1.0 module map, the artifact contract, and the notebook stack.
+
+### Changed
+- Bumped package version to `1.0.0` (`pyproject.toml` + `hf_finetuning_lab.__version__`).
+
 ## [Unreleased]
 
 ### Added

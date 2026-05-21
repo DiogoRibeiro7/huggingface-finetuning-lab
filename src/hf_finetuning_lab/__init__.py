@@ -1,3 +1,3 @@
 """Hugging Face fine-tuning lab."""
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"

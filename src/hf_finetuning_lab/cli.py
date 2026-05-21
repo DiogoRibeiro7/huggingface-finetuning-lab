@@ -4,6 +4,8 @@ from pathlib import Path
 
 import typer
 
+from hf_finetuning_lab import __version__
+from hf_finetuning_lab.artifacts import verify_artifact
 from hf_finetuning_lab.config import TrainingConfig
 from hf_finetuning_lab.data.hub import list_hub_presets, write_hub_dataset_csv
 from hf_finetuning_lab.evaluation.evaluator import evaluate_model
@@ -12,6 +14,38 @@ from hf_finetuning_lab.sample_data import write_sample_data
 from hf_finetuning_lab.training.trainer import train_text_classifier
 
 app = typer.Typer(help="Hugging Face fine-tuning lab CLI.")
+
+
+@app.command("version")
+def version() -> None:
+    """Print the installed package version."""
+    typer.echo(__version__)
+
+
+@app.command("list-commands")
+def list_commands() -> None:
+    """Print the names of every registered CLI command, sorted."""
+    names = sorted(command.name or command.callback.__name__ for command in app.registered_commands)
+    for name in names:
+        typer.echo(name)
+
+
+@app.command("verify-artifact")
+def verify_artifact_cmd(
+    model_dir: Path = typer.Option(..., help="Local model directory to inspect."),
+    strict: bool = typer.Option(
+        False, help="Exit with code 1 if any recommended file is missing."
+    ),
+) -> None:
+    """Verify that a model directory follows the stable v1.0 artifact layout."""
+    report = verify_artifact(model_dir)
+    for check in report.checks:
+        marker = {"ok": "OK ", "warning": "WARN", "missing": "MISS"}[check.status]
+        typer.echo(f"[{marker}] {check.name}: {check.detail}")
+    if not report.ok:
+        raise typer.Exit(code=1)
+    if strict and report.warnings:
+        raise typer.Exit(code=1)
 
 
 @app.command("sample-data")
