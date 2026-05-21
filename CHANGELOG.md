@@ -19,6 +19,8 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 ### Added
 - Repository professionalization baseline: CI quality gates, contributor workflow, and release automation.
+- `hf_finetuning_lab.governance.promotion` module: `PromotionCriterion`, `PromotionReport`, `threshold_criterion` / `boolean_criterion` / `skipped_criterion` helpers, `write_promotion_report` (Markdown verdict + criteria table + JSON sidecar), and `aggregate_reports` for comparison tables.
+- `notebooks/10_promotion_gate.ipynb`: composes v0.4 robust-evaluation checks (bootstrap CIs on macro F1, ECE, subgroup F1 ratio, train/test PSI drift), v0.9 governance artifacts (dataset card, model card, reproducibility checklist), and v1.0 artifact verification into a single Markdown + JSON promotion report with an explicit `should_promote` verdict.
 - `hf_finetuning_lab.experiments` module: run IDs, dataset hashing, run-record persistence, and run-comparison DataFrame.
 - `per_class_report` helper in `hf_finetuning_lab.evaluation.metrics`.
 - `notebooks/02_experiment_management.ipynb`: repeated TF-IDF + LogReg runs with persisted records, side-by-side comparison, per-class report, and confusion-matrix heatmap.

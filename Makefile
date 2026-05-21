@@ -33,6 +33,7 @@ notebook-smoke:
 	poetry run jupyter nbconvert --to notebook --execute notebooks/07_governance_template.ipynb --output 07_governance_template.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600
 	poetry run jupyter nbconvert --to notebook --execute notebooks/08_serving_hardening.ipynb --output 08_serving_hardening.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600
 	poetry run jupyter nbconvert --to notebook --execute notebooks/09_v1_capstone.ipynb --output 09_v1_capstone.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600
+	poetry run jupyter nbconvert --to notebook --execute notebooks/10_promotion_gate.ipynb --output 10_promotion_gate.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600
 
 release-check: check
 	poetry build

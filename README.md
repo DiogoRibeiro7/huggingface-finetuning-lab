@@ -87,7 +87,7 @@ See `CONTRIBUTING.md` for development workflow, test constraints, and responsibl
 
 ## Notebook development
 
-The repo ships nine notebooks under `notebooks/`:
+The repo ships ten notebooks under `notebooks/`:
 
 1. `01_hf_text_classification_workflow.ipynb` — end-to-end workflow with a scikit-learn baseline and opt-in Hugging Face CLI commands.
 2. `02_experiment_management.ipynb` — repeated runs with explicit run IDs, persisted training configs, dataset hashes, side-by-side comparison, per-class report, and confusion-matrix heatmap.
@@ -98,6 +98,7 @@ The repo ships nine notebooks under `notebooks/`:
 7. `07_governance_template.ipynb` — dataset card, task-specific model card (with curated v0.4 / v0.7 / v0.8 limitations), and reproducibility checklist for one training run.
 8. `08_serving_hardening.ipynb` — drives the FastAPI app via `TestClient` with an injected fake predictor: liveness / readiness probes, request logging, model warm-up, optional Prometheus `/metrics`, and the `docker-compose` recipe.
 9. `09_v1_capstone.ipynb` — v1.0 release walkthrough: enumerates the stable CLI surface, runs `verify_artifact` on a synthetic artifact, and lists the module map.
+10. `10_promotion_gate.ipynb` — promotion gate composing v0.4 robust evaluation (bootstrap CIs, ECE, subgroup parity, PSI drift), v0.9 governance (dataset card + model card + reproducibility), and v1.0 artifact verification into one go/no-go decision with a Markdown + JSON report.
 
 Run notebook quality checks locally:
 
