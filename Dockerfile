@@ -17,4 +17,8 @@ RUN pip install --no-cache-dir poetry==1.8.3 && \
     poetry install --only main --no-interaction --no-ansi
 
 EXPOSE 8000
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=5 \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=2)" || exit 1
+
 CMD ["hf-lab", "serve", "--model-dir", "artifacts/models/support-triage", "--host", "0.0.0.0", "--port", "8000"]

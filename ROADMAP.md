@@ -44,11 +44,12 @@
 
 ## v0.5 — Deployment hardening
 
-- Add request logging.
-- Add health and readiness checks.
-- Add model warm-up.
-- Add Docker Compose serving example.
-- Add optional Prometheus metrics.
+- [x] Add request logging (`StructuredRequestLogger` middleware emitting one JSON line per request).
+- [x] Add health and readiness checks (`/health/live`, `/health/ready` with diagnostic payload when the predictor fails to load).
+- [x] Add model warm-up (`warm_up_texts` argument on `create_app`).
+- [x] Add Docker Compose serving example (`docker-compose.yml` + Dockerfile `HEALTHCHECK` wired to `/health/ready`).
+- [x] Add optional Prometheus metrics (`enable_metrics=True` mounts `/metrics` via `install_metrics`, requires `prometheus-client`).
+- All demoed in `notebooks/08_serving_hardening.ipynb`.
 
 ## v0.6 — PEFT expansion
 

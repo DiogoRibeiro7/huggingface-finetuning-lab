@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  hf-lab-serve:
+    build: .
+    image: hf-finetuning-lab:latest
+    container_name: hf-lab-serve
+    environment:
+      # Override these from a .env file or your secrets manager. The defaults
+      # point at the example artifact baked into the image so the container
+      # starts; mount a real model artifact for production.
+      HF_LAB_MODEL_DIR: "/app/artifacts/models/support-triage"
+      HF_LAB_MODEL_VERSION: "0.1.0"
+      HF_LAB_ENABLE_METRICS: "false"
+    ports:
+      - "8000:8000"
+    # Bind-mount a host directory holding the trained model so the image
+    # itself does not need to ship one.
+    volumes:
+      - ./artifacts:/app/artifacts:ro
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health/ready', timeout=2)\""
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped

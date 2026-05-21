@@ -22,6 +22,9 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 - `notebooks/06_semantic_search.ipynb`: synthetic FAQ corpus, TF-IDF embedding index, cosine retrieval with Recall@k / MRR / nDCG@k, error inspection, and an opt-in sentence-transformer comparison.
 - `hf_finetuning_lab.governance` module: `DatasetCard` / `DatasetColumn` / `DatasetSplit` + `write_dataset_card`, `task_limitations` and `write_task_model_card` for text-classification, token-classification, and retrieval, and `ReproducibilityRecord` + `capture_environment` + `write_reproducibility_checklist` (Markdown + JSON sidecar with environment, seed, dataset hash, and git commit metadata).
 - `notebooks/07_governance_template.ipynb`: end-to-end governance walkthrough — trains a small baseline, writes a dataset card with split-level label distributions, a task-specific model card, and a reproducibility checklist tying together run ID, dataset hash, environment snapshot, and metrics.
+- `hf_finetuning_lab.serving` deployment hardening: `create_app` now accepts a `predictor_factory` (lazy/injectable predictor), runs model warm-up on startup, and exposes `/health/live` + `/health/ready` (with 503 + diagnostic payload when the predictor cannot load). `StructuredRequestLogger` emits one JSON log line per request; `install_metrics(app)` mounts a Prometheus `/metrics` endpoint when `prometheus-client` is installed.
+- `docker-compose.yml` at the repo root plus a `HEALTHCHECK` in the Dockerfile wired to `/health/ready` so orchestrators only route traffic to healthy instances.
+- `notebooks/08_serving_hardening.ipynb`: drives the hardened API offline via `TestClient` + a fake predictor; demonstrates warm-up evidence, structured logs, a 503 readiness failure, and the optional Prometheus metrics endpoint.
 
 ## [0.1.0] - 2026-05-05
 
