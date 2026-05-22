@@ -18,7 +18,7 @@ def softmax(logits: np.ndarray) -> np.ndarray:
     logits = np.asarray(logits, dtype=float)
     shifted = logits - logits.max(axis=1, keepdims=True)
     exp_logits = np.exp(shifted)
-    return exp_logits / exp_logits.sum(axis=1, keepdims=True)
+    return np.asarray(exp_logits / exp_logits.sum(axis=1, keepdims=True))
 
 
 def compute_classification_metrics(
