@@ -1,90 +1,63 @@
 # Roadmap
 
-## v0.1 — Text-classification fine-tuning workbench
+The v0.1 → v1.0 release roadmap is complete. See `CHANGELOG.md` for the per-version history and the existing notebooks (`notebooks/01_*` through `notebooks/10_*`) for the shipped capabilities.
 
-- [x] Synthetic support-ticket text classification data.
-- [x] CSV/JSONL loading utilities.
-- [x] Hugging Face Dataset conversion.
-- [x] Tokenization with `AutoTokenizer`.
-- [x] Transformer fine-tuning with `Trainer`.
-- [x] Optional PEFT/LoRA configuration.
-- [x] Evaluation metrics.
-- [x] Batch inference.
-- [x] FastAPI serving.
-- [x] Model-card generation.
-- [x] CLI workflow.
-- [x] Notebook workflow.
-- [x] Tests for non-GPU components.
+This document tracks the next phase of work. Milestones are sized to mirror the shape of the v0.x deliverables — a coherent feature, a thin support module under `src/hf_finetuning_lab/`, unit tests that run without a model download, and a notebook that ships with executed outputs. Unchecked items are speculative; check them as scope solidifies.
 
-## v0.2 — Stronger experiment management
+## v1.1 — GPU CI and real-model smoke
 
-- [x] Add explicit run IDs (`hf_finetuning_lab.experiments.make_run_id`).
-- [x] Save full training configuration as JSON (`RunRecord.params` persisted via `save_run`).
-- [x] Save dataset hashes (`hash_dataframe`).
-- [x] Add experiment comparison tables (`runs_to_frame`, surfaced in `notebooks/02_experiment_management.ipynb`).
-- [x] Add support for repeated train/eval runs (notebook 02 sweep).
-- [x] Add confusion-matrix and per-class error reports (`per_class_report`, `confusion_matrix_frame`).
+- [ ] Add a self-hosted-GPU GitHub Actions job that runs `hf-lab train` against a tiny base model and asserts the artifact passes `hf-lab verify-artifact --strict`.
+- [ ] Document GPU-runner provisioning prerequisites in `docs/`.
+- [ ] Add a `gpu` pytest marker and a per-notebook `RUN_GPU=True` opt-in flag so existing notebooks can exercise the real transformer training path when a GPU is present.
+- [ ] Pin a reproducible training run that produces a known-good artifact + metrics, and snapshot its `metrics.json` for regression detection.
+- Closes the one open caveat from the v1.0 release checklist.
 
-## v0.3 — Real Hugging Face datasets
+## v1.2 — Active learning loop
 
-- [x] Add Hub dataset CLI commands (`list-hub-datasets`, `fetch-hub-dataset`).
-- [x] Add split mapping for Hub datasets (`HubDatasetConfig.splits`).
-- [x] Add label-name normalization (uses `ClassLabel.names` with explicit preset override).
-- [x] Add support for AG News, IMDb, Banking77, and TweetEval sentiment via `HUB_PRESETS`.
-- All demoed in `notebooks/04_hub_datasets.ipynb` (offline-by-default with opt-in real download).
+- [ ] New module `hf_finetuning_lab.active_learning` with uncertainty sampling (margin, entropy, least confidence) and diversity sampling (k-center, BADGE-lite).
+- [ ] CLI command `hf-lab pick-samples --model-dir <path> --pool <jsonl> --k <n> --strategy <name>`.
+- [ ] Notebook 11 walks one full loop: train → score the unlabeled pool → select N → simulate human labels → retrain. Compares a "random" vs "active" sampler on a macro-F1-vs-labels trajectory.
+- Rationale: closes the data side of the lab — every other notebook assumes labels already exist.
 
-## v0.4 — Robust evaluation
+## v1.3 — Drift monitoring service
 
-- [x] Add calibration metrics (`expected_calibration_error`, `reliability_curve`).
-- [x] Add threshold optimization (`find_best_threshold`).
-- [x] Add subgroup metrics (`subgroup_metrics`).
-- [x] Add prediction drift comparison between two datasets (`prediction_share_drift`, PSI).
-- [x] Add bootstrap confidence intervals (`bootstrap_metric`).
-- All demoed in `notebooks/03_robust_evaluation.ipynb`.
+- [ ] Productionise the v0.4 drift logic: capture a reference snapshot at training time, run scheduled comparison jobs against live predictions.
+- [ ] New module `hf_finetuning_lab.monitoring` with `DriftSnapshot`, `compare_snapshots`, alert thresholds, and a JSON report.
+- [ ] CLI commands `hf-lab snapshot` (writes a reference snapshot) and `hf-lab compare-drift` (compares two snapshots and exits non-zero on threshold breach so a cron job can page).
+- [ ] Notebook 12 demonstrates the loop end-to-end and writes a Markdown drift report.
 
-## v0.5 — Deployment hardening
+## v1.4 — Quantization and efficient inference
 
-- [x] Add request logging (`StructuredRequestLogger` middleware emitting one JSON line per request).
-- [x] Add health and readiness checks (`/health/live`, `/health/ready` with diagnostic payload when the predictor fails to load).
-- [x] Add model warm-up (`warm_up_texts` argument on `create_app`).
-- [x] Add Docker Compose serving example (`docker-compose.yml` + Dockerfile `HEALTHCHECK` wired to `/health/ready`).
-- [x] Add optional Prometheus metrics (`enable_metrics=True` mounts `/metrics` via `install_metrics`, requires `prometheus-client`).
-- All demoed in `notebooks/08_serving_hardening.ipynb`.
+- [ ] Add Int8 / fp16 quantization paths (`bitsandbytes` for training-aware, `optimum-onnxruntime` for inference) gated behind opt-in flags.
+- [ ] Latency-budget notebook (13): compare fp32 / fp16 / int8 / ONNX on the same artifact across batch sizes, plus a per-tier memory table.
+- [ ] Promotion gate gains an optional latency-SLO criterion that consumes the benchmark output.
 
-## v0.6 — PEFT expansion
+## v1.5 — Sequence-to-sequence and generation
 
-- Add LoRA target-module presets by architecture.
-- Add adapter merge/export utilities.
-- Add quantized loading path where available.
-- Add adapter comparison reports.
+- [ ] Broaden task coverage to summarisation and short-form generation.
+- [ ] New module `hf_finetuning_lab.generation` with `Seq2SeqExample`, decoding configuration, and ROUGE / faithfulness metrics.
+- [ ] Notebook 14 walks fine-tuning a small T5 / BART variant on a synthetic seq2seq dataset; the existing CLI grows a `--task seq2seq` shape.
 
-## v0.7 — Sequence and token classification
+## v1.6 — Multilingual coverage
 
-- [x] Add NER data schema (`NERExample`, `generate_synthetic_ner_data`, `write_synthetic_ner_jsonl`).
-- [x] Add subword alignment helper (`align_word_labels_to_subwords`) so the same labels work with any HF fast tokenizer.
-- [x] Add sequence tagging metrics (`extract_entities`, `sequence_tagging_report` — entity-level micro/macro P/R/F1).
-- All demoed in `notebooks/05_token_classification.ipynb` (offline synthetic NER + per-token logistic-regression baseline).
-- Transformer fine-tuning path still TODO — keep it out of CI smoke; integrate as an opt-in cell when needed.
+- [ ] Add language-aware presets (XLM-R, mBERT) to `data.hub` with per-language column hints.
+- [ ] Extend `evaluation.robust.subgroup_metrics` examples with a language stratification cookbook.
+- [ ] Notebook 15 demonstrates a multilingual fine-tune with per-language metric tables and an audit slot in the model card.
 
-## v0.8 — Retrieval and embeddings
+## v1.7 — Continuous fine-tuning loop
 
-- [x] Add `EmbeddingIndex` for cosine-similarity search over any L2-normalisable matrix.
-- [x] Add retrieval metrics (`recall_at_k`, `mean_reciprocal_rank`, `ndcg_at_k`, `retrieval_report`).
-- [x] Add semantic search example (`notebooks/06_semantic_search.ipynb`) with a synthetic FAQ corpus, TF-IDF embeddings for offline smoke, and an opt-in sentence-transformer path.
+- [ ] Drift-triggered retraining job composed of v1.3 (snapshots + comparison), v1.2 (active sampling), and the existing training stack.
+- [ ] Safe rollback gate keyed on the promotion-gate report from notebook 10.
+- [ ] Notebook 16 simulates the full loop on synthetic data over multiple "days" and renders the resulting deployment timeline.
 
-## v0.9 — Reproducibility and model governance
+## v2.0 — Distributed training and multi-task heads
 
-- [x] Add model-card templates by task (`write_task_model_card`, `task_limitations` for text-classification / token-classification / retrieval).
-- [x] Add dataset cards (`DatasetCard`, `DatasetColumn`, `DatasetSplit`, `write_dataset_card`).
-- [x] Add risk and limitation sections (curated bullets per task, with project-specific extras).
-- [x] Add reproducibility checklist (`ReproducibilityRecord`, `capture_environment`, `write_reproducibility_checklist` — Markdown + JSON sidecar).
-- All demoed in `notebooks/07_governance_template.ipynb`.
+- [ ] Multi-node / multi-GPU training documentation and `accelerate` / `deepspeed` launch examples.
+- [ ] Multi-task model heads (text classification + NER on a shared encoder) with a single artifact spec covering both label maps.
+- [ ] Refreshed stability commitments — same shape as the v1.0 release checklist — covering the broadened surface.
 
-## v1.0 — Stable Hugging Face production template
+## Always-on backlog
 
-- [x] Stable CLI surface (`hf-lab list-commands`, `hf-lab version`).
-- [x] Stable model artifact format (`hf_finetuning_lab.artifacts` + `hf-lab verify-artifact --strict`).
-- [x] Tested CPU workflow (full pytest + nine-notebook smoke run in CI). GPU paths are documented but exercised manually until a GPU CI job lands.
-- [x] Documentation refresh (`docs/architecture.md` lists the v1.0 module map, artifact contract, and notebook stack).
-- [x] Version bumped to `1.0.0` in `pyproject.toml` and `hf_finetuning_lab.__version__`.
-- All demoed in `notebooks/09_v1_capstone.ipynb`.
+- [ ] Track new transformers / sklearn / datasets API drift each minor release and bump pins together with regression tests.
+- [ ] Expand notebook quality gate: `nbqa ruff` on every notebook + a `--check-outputs` step that fails on `output_type=="error"` cells.
+- [ ] Improve coverage of the existing modules' edge cases as new bugs surface in real use.
