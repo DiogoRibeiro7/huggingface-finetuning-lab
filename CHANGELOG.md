@@ -7,17 +7,27 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 ## [1.0.0] - 2026-05-21
 
 ### Added
+
 - `hf_finetuning_lab.artifacts` module: `ArtifactCheck`, `ArtifactReport`, and `verify_artifact(model_dir)` enforcing the stable v1.0 model-artifact layout (`config.json`, weights, tokenizer, plus recommended `tokenizer_config.json` / `special_tokens_map.json` / `model_card.md` / `metrics.json`).
 - CLI commands `hf-lab version`, `hf-lab list-commands`, and `hf-lab verify-artifact --model-dir <path> [--strict]`.
 - `notebooks/09_v1_capstone.ipynb`: enumerates the CLI surface, demonstrates `verify_artifact` on a synthetic artifact, lists the v1.0 module map and the notebook stack, and includes the release checklist.
 - `docs/architecture.md` refreshed with the v1.0 module map, the artifact contract, and the notebook stack.
 
 ### Changed
+
 - Bumped package version to `1.0.0` (`pyproject.toml` + `hf_finetuning_lab.__version__`).
 
 ## [Unreleased]
 
+### Changed
+
+- Bumped minimum supported Python to `3.11` (matches actual `datetime.UTC` usage). `pyproject.toml`, ruff `target-version`, mypy `python_version`, and the CI matrix all updated together.
+- Bumped `transformers` pin to `^4.46.0` so `Trainer(processing_class=...)` is available.
+- `trainer.py`: switched `TrainingArguments(evaluation_strategy=...)` to `eval_strategy=`, switched `Trainer(tokenizer=...)` to `processing_class=`, and modernised `isinstance(value, (int, float))` to `isinstance(value, int | float)`.
+- `CHANGELOG.md`: added blank lines under each `### Added` / `### Changed` heading per Keep-a-Changelog convention.
+
 ### Added
+
 - Repository professionalization baseline: CI quality gates, contributor workflow, and release automation.
 - `hf_finetuning_lab.governance.promotion` module: `PromotionCriterion`, `PromotionReport`, `threshold_criterion` / `boolean_criterion` / `skipped_criterion` helpers, `write_promotion_report` (Markdown verdict + criteria table + JSON sidecar), and `aggregate_reports` for comparison tables.
 - `notebooks/10_promotion_gate.ipynb`: composes v0.4 robust-evaluation checks (bootstrap CIs on macro F1, ECE, subgroup F1 ratio, train/test PSI drift), v0.9 governance artifacts (dataset card, model card, reproducibility checklist), and v1.0 artifact verification into a single Markdown + JSON promotion report with an explicit `should_promote` verdict.
@@ -42,4 +52,5 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 ## [0.1.0] - 2026-05-05
 
 ### Added
+
 - End-to-end Hugging Face text-classification workbench with CLI, evaluation, serving, and tests.

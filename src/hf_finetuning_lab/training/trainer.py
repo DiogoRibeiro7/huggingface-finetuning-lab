@@ -98,7 +98,7 @@ def train_text_classifier(input_path: str | Path, output_dir: str | Path, config
 
     args = TrainingArguments(
         output_dir=str(output_path / "trainer"),
-        evaluation_strategy="epoch",
+        eval_strategy="epoch",
         save_strategy="epoch",
         learning_rate=config.learning_rate,
         per_device_train_batch_size=config.batch_size,
@@ -116,7 +116,7 @@ def train_text_classifier(input_path: str | Path, output_dir: str | Path, config
         args=args,
         train_dataset=train_ds,
         eval_dataset=valid_ds,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         data_collator=DataCollatorWithPadding(tokenizer=tokenizer),
         compute_metrics=trainer_compute_metrics,
     )
@@ -143,7 +143,7 @@ def train_text_classifier(input_path: str | Path, output_dir: str | Path, config
         model_name=config.model_name,
         task="text-classification",
         label_names=list(label2id),
-        metrics={key: float(value) for key, value in eval_metrics.items() if isinstance(value, (int, float))},
+        metrics={key: float(value) for key, value in eval_metrics.items() if isinstance(value, int | float)},
         limitations=[
             "The sample workflow uses synthetic data unless replaced by a real dataset.",
             "Subgroup performance and calibration must be validated before production use.",

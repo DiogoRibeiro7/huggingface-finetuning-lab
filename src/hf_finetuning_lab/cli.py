@@ -25,8 +25,13 @@ def version() -> None:
 @app.command("list-commands")
 def list_commands() -> None:
     """Print the names of every registered CLI command, sorted."""
-    names = sorted(command.name or command.callback.__name__ for command in app.registered_commands)
-    for name in names:
+    names: list[str] = []
+    for command in app.registered_commands:
+        if command.name:
+            names.append(command.name)
+        elif command.callback is not None:
+            names.append(command.callback.__name__)
+    for name in sorted(names):
         typer.echo(name)
 
 

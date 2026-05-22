@@ -18,7 +18,7 @@ readme = "README.md"
 packages = [{ include = "hf_finetuning_lab", from = "src" }]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.13"
+python = ">=3.11,<3.13"
 pandas = "^2.2.0"
 numpy = "^1.26.0"
 scikit-learn = "^1.4.0"
@@ -28,7 +28,7 @@ matplotlib = "^3.8.0"
 fastapi = "^0.115.0"
 uvicorn = { version = "^0.30.0", extras = ["standard"] }
 pydantic = "^2.7.0"
-transformers = "^4.44.0"
+transformers = "^4.46.0"
 datasets = "^2.21.0"
 evaluate = "^0.4.2"
 accelerate = "^0.33.0"
@@ -56,7 +56,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 line-length = 100
 src = ["src", "tests"]
-target-version = "py310"
+target-version = "py311"
 exclude = [
   ".git",
   ".pytest_cache",
@@ -72,7 +72,7 @@ select = ["E", "F", "I", "B", "UP", "N"]
 ignore = ["E501", "B008"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
