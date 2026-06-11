@@ -30,10 +30,19 @@ class TextClassifierProtocol(Protocol):
 PredictorFactory = Callable[[Path], TextClassifierProtocol]
 
 
+#: Maximum number of texts accepted in a single /predict call. Bounds the
+#: work a single request can queue onto the model (resource-exhaustion guard).
+MAX_PREDICT_BATCH = 256
+
+
 class PredictRequest(BaseModel):
     """Prediction request payload."""
 
-    texts: list[str] = Field(min_length=1, description="Texts to classify.")
+    texts: list[str] = Field(
+        min_length=1,
+        max_length=MAX_PREDICT_BATCH,
+        description="Texts to classify.",
+    )
 
 
 class PredictResponse(BaseModel):

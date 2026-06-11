@@ -129,10 +129,15 @@ def validate_ner_dataset(examples: list[NERExample]) -> None:
                 f"({len(example.tokens)} vs {len(example.labels)})."
             )
         for label in example.labels:
-            if not (label == "O" or label.startswith("B-") or label.startswith("I-")):
-                raise ValueError(
-                    f"Example {i}: invalid BIO label '{label}'. Expected 'O', 'B-<TYPE>', or 'I-<TYPE>'."
-                )
+            # Valid labels are "O" or "B-/I-" with a non-empty entity type;
+            # a bare "B-"/"I-" (empty type) must not pass validation.
+            if label == "O":
+                continue
+            if label[:2] in ("B-", "I-") and len(label) > 2:
+                continue
+            raise ValueError(
+                f"Example {i}: invalid BIO label '{label}'. Expected 'O', 'B-<TYPE>', or 'I-<TYPE>'."
+            )
 
 
 def write_synthetic_ner_jsonl(

@@ -130,6 +130,17 @@ def test_predict_rejects_empty_texts(tmp_path: Path) -> None:
         assert response.status_code == 422
 
 
+def test_predict_rejects_oversized_batch(tmp_path: Path) -> None:
+    from hf_finetuning_lab.serving.api import MAX_PREDICT_BATCH
+
+    client, _ = _build_client(tmp_path)
+    with client:
+        response = client.post(
+            "/predict", json={"texts": ["x"] * (MAX_PREDICT_BATCH + 1)}
+        )
+        assert response.status_code == 422
+
+
 def test_request_logger_emits_structured_payload(tmp_path: Path, caplog: pytest.LogCaptureFixture) -> None:
     client, _ = _build_client(tmp_path)
     logger = logging.getLogger(REQUEST_LOGGER_NAME)

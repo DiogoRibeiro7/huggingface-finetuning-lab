@@ -75,6 +75,31 @@ def test_embedding_index_rejects_non_positive_k() -> None:
         index.search(np.array([1.0, 0.0, 0.0], dtype=np.float32), k=0)
 
 
+def test_embedding_index_search_rejects_multi_row_query() -> None:
+    # A 2D query with more than one row would otherwise ravel into m*N scores
+    # and silently return wrong documents; search() must reject it.
+    index = EmbeddingIndex(_toy_embeddings(), _toy_entries())
+    batched = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]], dtype=np.float32)
+    with pytest.raises(ValueError):
+        index.search(batched, k=1)
+
+
+def test_embedding_index_search_clamps_k_above_size() -> None:
+    index = EmbeddingIndex(_toy_embeddings(), _toy_entries())
+    results = index.search(np.array([1.0, 0.0, 0.0], dtype=np.float32), k=10)
+    assert len(results) == 3  # clamped to index size, no error
+
+
+def test_embedding_index_search_tie_break_is_deterministic() -> None:
+    # All documents are equidistant from this query, so every score ties.
+    # Ordering must be stable (ascending index) and reproducible across calls.
+    index = EmbeddingIndex(_toy_embeddings(), _toy_entries())
+    query = np.array([1.0, 1.0, 1.0], dtype=np.float32)
+    first = [entry.doc_id for entry, _ in index.search(query, k=3)]
+    second = [entry.doc_id for entry, _ in index.search(query, k=3)]
+    assert first == second == ["d1", "d2", "d3"]
+
+
 def test_embedding_index_search_batch_shapes() -> None:
     index = EmbeddingIndex(_toy_embeddings(), _toy_entries())
     queries = np.array([[1.0, 0.0, 0.0], [0.0, 0.0, 1.0]], dtype=np.float32)
@@ -95,6 +120,24 @@ def test_recall_at_k_missed_relevant_is_zero() -> None:
     relevance = [["d1"]]
     assert recall_at_k(rankings, relevance, k=2) == 0.0
     assert recall_at_k(rankings, relevance, k=3) == 1.0
+
+
+def test_recall_at_k_fractional_with_multiple_relevant() -> None:
+    # Two relevant docs, only one inside the top-2 window -> recall 0.5.
+    rankings = [["d1", "d4", "d2", "d3"]]
+    relevance = [["d1", "d2"]]
+    assert recall_at_k(rankings, relevance, k=2) == pytest.approx(0.5)
+    assert recall_at_k(rankings, relevance, k=3) == pytest.approx(1.0)
+
+
+def test_ndcg_at_k_multiple_relevant_uses_ideal_dcg() -> None:
+    # Both relevant docs ranked first is the ideal ordering -> nDCG == 1.0;
+    # pushing one relevant doc later must lower it below 1.
+    relevance = [["d1", "d2"]]
+    ideal = ndcg_at_k([["d1", "d2", "d3"]], relevance, k=3)
+    worse = ndcg_at_k([["d1", "d3", "d2"]], relevance, k=3)
+    assert ideal == pytest.approx(1.0)
+    assert worse < ideal
 
 
 def test_recall_at_k_rejects_non_positive_k() -> None:

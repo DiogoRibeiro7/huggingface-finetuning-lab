@@ -45,6 +45,14 @@ def test_validate_ner_dataset_rejects_empty() -> None:
         validate_ner_dataset([])
 
 
+def test_validate_ner_dataset_rejects_empty_entity_type() -> None:
+    # A bare "B-" / "I-" prefix with no entity type must not pass validation.
+    for bad in ("B-", "I-"):
+        examples = [NERExample(tokens=["x"], labels=[bad])]
+        with pytest.raises(ValueError):
+            validate_ner_dataset(examples)
+
+
 def test_write_synthetic_ner_jsonl_round_trips(tmp_path: Path) -> None:
     output = tmp_path / "ner.jsonl"
     path = write_synthetic_ner_jsonl(output, n_examples=5, seed=1)
