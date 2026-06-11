@@ -123,7 +123,15 @@ def train_text_classifier(input_path: str | Path, output_dir: str | Path, config
     trainer.train()
 
     eval_metrics = trainer.evaluate(eval_dataset=test_ds)
-    trainer.save_model(str(output_path))
+    if config.use_lora:
+        # Merge the LoRA adapter into the base weights and save a standalone
+        # classifier. Otherwise trainer.save_model would persist an adapter-only
+        # checkpoint that requires `peft` at inference time and re-resolves the
+        # base model from its name, breaking the local artifact contract.
+        merged = trainer.model.merge_and_unload()
+        merged.save_pretrained(str(output_path))
+    else:
+        trainer.save_model(str(output_path))
     tokenizer.save_pretrained(str(output_path))
 
     (output_path / "label_mapping.json").write_text(
