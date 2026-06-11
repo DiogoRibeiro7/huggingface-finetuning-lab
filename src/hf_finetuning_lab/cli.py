@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import click
 import typer
 
 from hf_finetuning_lab import __version__
@@ -87,6 +88,7 @@ def fetch_hub_dataset(
 
 @app.command("train")
 def train(
+    ctx: typer.Context,
     input: Path = typer.Option(..., help="Input CSV or JSONL file."),  # noqa: A002
     output_dir: Path = typer.Option(..., help="Model output directory."),
     model_name: str = typer.Option("distilbert-base-uncased", help="Hugging Face model name."),
@@ -101,6 +103,22 @@ def train(
 ) -> None:
     """Fine-tune a transformer for text classification."""
     if config_file is not None:
+        # The YAML file is the complete source of truth; reject explicitly
+        # passed training flags so they cannot be silently ignored.
+        config_flags = (
+            "model_name", "text_col", "label_col", "epochs",
+            "batch_size", "learning_rate", "max_length", "use_lora",
+        )
+        overridden = [
+            name
+            for name in config_flags
+            if ctx.get_parameter_source(name) != click.core.ParameterSource.DEFAULT
+        ]
+        if overridden:
+            raise typer.BadParameter(
+                f"--config-file cannot be combined with explicit flags: {overridden}. "
+                "Put these settings in the YAML file instead."
+            )
         config = TrainingConfig.from_yaml(config_file)
     else:
         config = TrainingConfig(

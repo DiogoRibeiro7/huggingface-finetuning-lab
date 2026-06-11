@@ -41,8 +41,13 @@ class TrainingConfig:
             raise ValueError("max_length must be positive.")
         if not 0 < self.test_size < 1:
             raise ValueError("test_size must be between 0 and 1.")
-        if not 0 <= self.validation_size < 1:
+        if not 0 < self.validation_size < 1:
             raise ValueError("validation_size must be between 0 and 1.")
+        if self.test_size + self.validation_size >= 1:
+            raise ValueError(
+                "test_size + validation_size must be < 1 to leave rows for training "
+                f"(got {self.test_size} + {self.validation_size})."
+            )
         if self.epochs <= 0:
             raise ValueError("epochs must be positive.")
         if self.batch_size <= 0:

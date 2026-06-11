@@ -38,9 +38,14 @@ def compute_classification_metrics(
         "f1": float(f1_score(y_true, y_pred, average=average, zero_division=0)),
     }
 
-    if y_prob is not None and len(np.unique(y_true)) == 2:
-        positive_prob = np.asarray(y_prob)[:, 1]
-        metrics["roc_auc"] = float(roc_auc_score(y_true, positive_prob))
+    # ROC-AUC is only well-defined here for a genuinely binary classifier
+    # (a 2-column probability matrix) evaluated on data containing both
+    # classes. Requiring shape[1] == 2 prevents a multiclass model from
+    # reporting a meaningless AUC when a batch happens to contain two labels.
+    if y_prob is not None:
+        prob_arr = np.asarray(y_prob)
+        if prob_arr.ndim == 2 and prob_arr.shape[1] == 2 and len(np.unique(y_true)) == 2:
+            metrics["roc_auc"] = float(roc_auc_score(y_true, prob_arr[:, 1]))
 
     return metrics
 

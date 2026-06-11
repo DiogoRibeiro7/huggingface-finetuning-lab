@@ -35,6 +35,19 @@ def test_threshold_criterion_le_passes_when_value_below() -> None:
     assert "<=" in c.detail
 
 
+def test_threshold_criterion_ge_passes_on_boundary_equality() -> None:
+    # The gate uses inclusive comparison (>=): value == threshold must pass.
+    # Guards against a regression flipping >= to >.
+    c = threshold_criterion("macro_f1_ci_low", 0.65, 0.65, direction="ge")
+    assert c.status == "pass"
+
+
+def test_threshold_criterion_le_passes_on_boundary_equality() -> None:
+    # The gate uses inclusive comparison (<=): value == threshold must pass.
+    c = threshold_criterion("ece", 0.15, 0.15, direction="le")
+    assert c.status == "pass"
+
+
 def test_threshold_criterion_rejects_unknown_direction() -> None:
     with pytest.raises(ValueError):
         threshold_criterion("x", 1.0, 1.0, direction="eq")  # type: ignore[arg-type]

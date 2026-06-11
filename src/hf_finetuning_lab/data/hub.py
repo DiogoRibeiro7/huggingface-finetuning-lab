@@ -88,12 +88,16 @@ def normalize_hub_dataset(
     dataset: Dataset,
     cfg: HubDatasetConfig,
     max_rows: int | None = None,
+    seed: int = 42,
 ) -> pd.DataFrame:
     """Normalize a single ``Dataset`` split into a ``text`` / ``label`` DataFrame.
 
     The returned frame has ``text`` (str), ``label`` (human-readable label name
     when available, else the raw value as a string) and ``label_id`` (int)
-    columns. ``max_rows`` caps the output so smoke runs stay quick.
+    columns. ``max_rows`` caps the output so smoke runs stay quick; the split is
+    shuffled (with ``seed``) before capping so label-ordered source datasets
+    (e.g. IMDb, which stores all negatives then all positives) do not collapse
+    to a single class.
     """
     if cfg.text_field not in dataset.column_names:
         raise ValueError(
@@ -110,7 +114,8 @@ def normalize_hub_dataset(
     if max_rows is not None:
         if max_rows <= 0:
             raise ValueError("max_rows must be positive.")
-        dataset = dataset.select(range(min(max_rows, len(dataset))))
+        if len(dataset) > max_rows:
+            dataset = dataset.shuffle(seed=seed).select(range(max_rows))
 
     df = pd.DataFrame(
         {
@@ -132,11 +137,19 @@ def normalize_hub_dataset(
         df["label"] = df["label_id"].map(_name_for)
         df["label_id"] = df["label_id"].astype(int)
     else:
-        df["label"] = df["label_id"].astype(str)
-        # Keep numeric label_id if it was numeric; else encode by sorted unique.
-        unique = sorted(df["label"].unique())
-        mapping = {value: idx for idx, value in enumerate(unique)}
-        df["label_id"] = df["label"].map(mapping).astype(int)
+        coerced = pd.to_numeric(df["label_id"], errors="coerce")
+        if coerced.notna().all():
+            # Labels are already integer IDs — preserve them rather than
+            # re-encoding (a string sort would scramble 0,1,10,2,... and could
+            # differ across splits).
+            df["label_id"] = coerced.astype(int)
+            df["label"] = df["label_id"].astype(str)
+        else:
+            # Genuinely non-numeric labels: encode by sorted unique value.
+            df["label"] = df["label_id"].astype(str)
+            unique = sorted(df["label"].unique())
+            mapping = {value: idx for idx, value in enumerate(unique)}
+            df["label_id"] = df["label"].map(mapping).astype(int)
 
     return df[["text", "label", "label_id"]]
 
@@ -146,6 +159,7 @@ def normalize_hub_dataset_dict(
     cfg: HubDatasetConfig,
     max_rows_per_split: int | None = None,
     splits: Iterable[str] | None = None,
+    seed: int = 42,
 ) -> dict[str, pd.DataFrame]:
     """Normalize each requested split into a DataFrame keyed by canonical split name."""
     split_map = cfg.splits()
@@ -156,7 +170,7 @@ def normalize_hub_dataset_dict(
         if source not in dataset_dict:
             continue
         output[canonical] = normalize_hub_dataset(
-            dataset_dict[source], cfg, max_rows=max_rows_per_split
+            dataset_dict[source], cfg, max_rows=max_rows_per_split, seed=seed
         )
     if not output:
         raise ValueError(
@@ -170,6 +184,7 @@ def load_hub_dataset(
     name_or_config: str | HubDatasetConfig,
     max_rows_per_split: int | None = None,
     splits: Iterable[str] | None = None,
+    seed: int = 42,
     **load_dataset_kwargs: Any,
 ) -> dict[str, pd.DataFrame]:
     """Download a Hub dataset and return canonical-split-name -> DataFrame.
@@ -200,20 +215,27 @@ def load_hub_dataset(
         dataset_dict = load_dataset(cfg.name, cfg.config, **load_dataset_kwargs)
     else:
         dataset_dict = load_dataset(cfg.name, **load_dataset_kwargs)
-    return normalize_hub_dataset_dict(dataset_dict, cfg, max_rows_per_split=max_rows_per_split, splits=splits)
+    return normalize_hub_dataset_dict(
+        dataset_dict,
+        cfg,
+        max_rows_per_split=max_rows_per_split,
+        splits=splits,
+        seed=seed,
+    )
 
 
 def write_hub_dataset_csv(
     name_or_config: str | HubDatasetConfig,
     output_dir: Any,
     max_rows_per_split: int | None = None,
+    seed: int = 42,
 ) -> dict[str, Any]:
     """Download a Hub dataset and write one CSV per split into ``output_dir``."""
     from pathlib import Path
 
     destination = Path(output_dir)
     destination.mkdir(parents=True, exist_ok=True)
-    frames = load_hub_dataset(name_or_config, max_rows_per_split=max_rows_per_split)
+    frames = load_hub_dataset(name_or_config, max_rows_per_split=max_rows_per_split, seed=seed)
     paths: dict[str, Path] = {}
     name = name_or_config if isinstance(name_or_config, str) else name_or_config.name
     for split, frame in frames.items():

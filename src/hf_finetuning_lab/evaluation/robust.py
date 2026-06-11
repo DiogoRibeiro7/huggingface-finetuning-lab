@@ -188,9 +188,10 @@ def prediction_share_drift(
     """Compare label-share distributions between two prediction sets.
 
     Returns one row per label with ``share_a``, ``share_b``, ``delta`` and a
-    Population Stability Index (PSI) contribution. The PSI total is recorded
-    in the ``psi_total`` attribute of the DataFrame (``frame.attrs``) and
-    written to a single ``__total__`` row labelled ``total`` for visibility.
+    Population Stability Index (PSI) contribution. The PSI total (the sum of the
+    per-label contributions) is recorded in ``frame.attrs["psi_total"]``. Note
+    that ``attrs`` does not survive a CSV round-trip, so persist the total
+    separately if you need it downstream.
     """
     a = np.asarray(predictions_a)
     b = np.asarray(predictions_b)

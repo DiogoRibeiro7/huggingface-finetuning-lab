@@ -15,6 +15,7 @@ from typing import TYPE_CHECKING, Any
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
+from starlette.routing import Match
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     from fastapi import FastAPI
@@ -27,6 +28,24 @@ class MetricsMiddleware(BaseHTTPMiddleware):
         super().__init__(app)
         self._counter = request_counter
         self._histogram = latency_histogram
+
+    @staticmethod
+    def _route_template(request: Request) -> str:
+        """Return the matched route's path template, or ``"unmatched"``.
+
+        Labelling by the template (e.g. ``/predict``) rather than the raw URL
+        path keeps Prometheus label cardinality bounded: 404 probes and random
+        scan paths all collapse into a single ``"unmatched"`` series instead of
+        minting a new time series each.
+        """
+        for route in request.app.routes:
+            try:
+                match, _ = route.matches(request.scope)
+            except Exception:  # pragma: no cover - defensive against odd routes
+                continue
+            if match == Match.FULL:
+                return getattr(route, "path", request.url.path)
+        return "unmatched"
 
     async def dispatch(
         self,
@@ -41,13 +60,14 @@ class MetricsMiddleware(BaseHTTPMiddleware):
             return response
         finally:
             elapsed = time.perf_counter() - start
+            path = self._route_template(request)
             labels = {
                 "method": request.method,
-                "path": request.url.path,
+                "path": path,
                 "status": str(status_code),
             }
             self._counter.labels(**labels).inc()
-            self._histogram.labels(method=labels["method"], path=labels["path"]).observe(elapsed)
+            self._histogram.labels(method=labels["method"], path=path).observe(elapsed)
 
 
 def install_metrics(app: FastAPI) -> tuple[Any, Any]:

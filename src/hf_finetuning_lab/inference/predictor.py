@@ -39,7 +39,10 @@ class TextClassificationPredictor:
         """Predict labels and probabilities for a list of texts."""
         if not texts:
             return []
-        raw_outputs = self.pipeline(texts)
+        # Truncate to the model's positional limit so long inputs (e.g. full
+        # reviews) are clipped rather than raising an index error, mirroring the
+        # truncation applied during training.
+        raw_outputs = self.pipeline(texts, truncation=True)
         predictions: list[dict[str, Any]] = []
         for text, outputs in zip(texts, raw_outputs, strict=True):
             # The pipeline returns a list of dictionaries per example when top_k=None.

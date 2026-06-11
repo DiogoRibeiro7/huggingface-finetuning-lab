@@ -85,14 +85,29 @@ def test_readiness_503_when_predictor_factory_raises(tmp_path: Path) -> None:
         assert "model artefact missing" in body["detail"]["startup_error"]
 
 
-def test_readiness_503_when_warm_up_fails(tmp_path: Path) -> None:
+def test_readiness_ok_when_warm_up_fails_but_predictor_loads(tmp_path: Path) -> None:
+    # Warm-up is a best-effort latency optimisation: if it fails but the
+    # predictor loaded (and can still serve), readiness must not be pinned to
+    # 503 forever, which would keep the pod out of rotation.
     predictor = FakePredictor()
     predictor.fail_warm_up = True
-    client, _ = _build_client(tmp_path, predictor=predictor)
+    client, predictor = _build_client(tmp_path, predictor=predictor)
     with client:
         response = client.get("/health/ready")
-        assert response.status_code == 503
-        assert response.json()["detail"]["status"] == "warming"
+        assert response.status_code == 200
+        assert response.json()["status"] == "ready"
+        # The predictor still serves real requests despite the warm-up failure.
+        predict = client.post("/predict", json={"texts": ["hello"]})
+        assert predict.status_code == 200
+
+
+def test_readiness_ok_when_warm_up_skipped(tmp_path: Path) -> None:
+    # warm_up_texts=None must not leave the app stuck in a "warming" state.
+    client, _ = _build_client(tmp_path, warm_up_texts=None)
+    with client:
+        response = client.get("/health/ready")
+        assert response.status_code == 200
+        assert response.json()["status"] == "ready"
 
 
 def test_predict_returns_predictions_and_model_version(tmp_path: Path) -> None:

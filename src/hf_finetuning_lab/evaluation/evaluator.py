@@ -30,8 +30,18 @@ def evaluate_model(
     df = load_table(input_path)
     validate_text_classification_frame(df, text_col=text_col, label_col=label_col)
 
-    label2id, id2label = build_label_mapping(df[label_col])
     predictor = TextClassificationPredictor(model_dir=model_dir)
+
+    # Use the model's persisted label space (label_mapping.json) as the source
+    # of truth so evaluation indices match training, regardless of which labels
+    # happen to appear in this evaluation file. Only fall back to deriving the
+    # mapping from the data when the artifact has no mapping.
+    if predictor.id2label:
+        id2label = dict(predictor.id2label)
+        label2id = {label: idx for idx, label in id2label.items()}
+    else:
+        label2id, id2label = build_label_mapping(df[label_col])
+
     predictions = predictor.predict(df[text_col].astype(str).tolist())
     pred_df = pd.DataFrame(predictions)
 
@@ -46,6 +56,13 @@ def evaluate_model(
             normalized_pred_labels.append(id2label.get(idx, label))
         else:
             normalized_pred_labels.append(label)
+
+    unknown_true = sorted({label for label in y_true_labels if label not in label2id})
+    if unknown_true:
+        raise ValueError(
+            "Evaluation data contains labels the model was not trained on: "
+            f"{unknown_true}. Known labels: {sorted(label2id)}."
+        )
 
     y_true = np.array([label2id[label] for label in y_true_labels])
     y_pred = np.array([label2id.get(label, -1) for label in normalized_pred_labels])

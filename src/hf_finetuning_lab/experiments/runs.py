@@ -5,7 +5,8 @@ from __future__ import annotations
 import hashlib
 import json
 import secrets
-from dataclasses import asdict, dataclass, field
+import warnings
+from dataclasses import asdict, dataclass, field, fields
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -68,8 +69,13 @@ class RunRecord:
 
     @classmethod
     def from_dict(cls, payload: dict[str, Any]) -> RunRecord:
-        """Rebuild a :class:`RunRecord` from a dictionary."""
-        return cls(**payload)
+        """Rebuild a :class:`RunRecord` from a dictionary.
+
+        Unknown keys are ignored so a record written by a newer version (with
+        extra fields) still loads instead of raising ``TypeError``.
+        """
+        known = {f.name for f in fields(cls)}
+        return cls(**{k: v for k, v in payload.items() if k in known})
 
 
 def save_run(record: RunRecord, runs_dir: str | Path) -> Path:
@@ -92,8 +98,13 @@ def load_runs(runs_dir: str | Path) -> list[RunRecord]:
 
     records: list[RunRecord] = []
     for path in sorted(directory.glob("*.json")):
-        payload = json.loads(path.read_text(encoding="utf-8"))
-        records.append(RunRecord.from_dict(payload))
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            records.append(RunRecord.from_dict(payload))
+        except (json.JSONDecodeError, TypeError, ValueError):
+            # Skip unparseable/foreign JSON rather than failing the whole load.
+            warnings.warn(f"Skipping unreadable run record: {path}", stacklevel=2)
+            continue
     records.sort(key=lambda r: r.created_at_utc)
     return records
 

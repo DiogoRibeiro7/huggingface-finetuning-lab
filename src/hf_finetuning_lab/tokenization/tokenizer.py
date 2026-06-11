@@ -18,9 +18,10 @@ def tokenize_dataset(dataset: Any, tokenizer: Any, text_col: str, max_length: in
         raise ValueError("max_length must be positive.")
 
     def _tokenize(batch: dict[str, list[str]]) -> dict[str, Any]:
+        # Truncate only; the Trainer's DataCollatorWithPadding pads each batch
+        # dynamically, so static "max_length" padding here is wasted compute.
         encoding = tokenizer(
             batch[text_col],
-            padding="max_length",
             truncation=True,
             max_length=max_length,
         )

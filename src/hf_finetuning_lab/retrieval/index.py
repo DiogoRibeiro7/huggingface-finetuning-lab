@@ -79,6 +79,11 @@ class EmbeddingIndex:
         query = np.asarray(query_embedding, dtype=np.float32)
         if query.ndim == 1:
             query = query.reshape(1, -1)
+        if query.shape[0] != 1:
+            raise ValueError(
+                f"search expects a single query vector; got {query.shape[0]} rows. "
+                "Use search_batch for multiple queries."
+            )
         if query.shape[1] != self._embeddings.shape[1]:
             raise ValueError(
                 f"query dim {query.shape[1]} does not match index dim "
@@ -89,9 +94,11 @@ class EmbeddingIndex:
         top = min(k, len(scores))
         if top == 0:
             return []
-        # argpartition then sort the partitioned slice for stable descending order.
-        partition = np.argpartition(-scores, top - 1)[:top]
-        ordered = partition[np.argsort(-scores[partition])]
+        # argpartition selects the top-`top` scores; sorting the partitioned
+        # indices first and then stable-sorting by descending score makes ties
+        # resolve deterministically by original index (reproducible ranking).
+        partition = np.sort(np.argpartition(-scores, top - 1)[:top])
+        ordered = partition[np.argsort(-scores[partition], kind="stable")]
         return [(self._entries[idx], float(scores[idx])) for idx in ordered]
 
     def search_batch(

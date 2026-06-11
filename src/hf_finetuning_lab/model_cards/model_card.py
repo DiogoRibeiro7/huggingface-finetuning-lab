@@ -22,6 +22,18 @@ def write_model_card(
     limitation_lines = "\n".join(f"- {item}" for item in limitations)
     created = datetime.now(UTC).strftime("%Y-%m-%d")
 
+    intended_use = {
+        "text-classification": "This model classifies text into one of the labels listed above.",
+        "token-classification": (
+            "This model assigns a label to each token (e.g. named-entity "
+            "recognition) using the labels listed above."
+        ),
+        "retrieval": (
+            "This model produces embeddings for semantic search and retrieval "
+            "over the documented corpus."
+        ),
+    }.get(task, f"This model is intended for {task} experiments and workflow demonstrations.")
+
     content = f"""
 # Model Card: {model_name}
 
@@ -41,7 +53,7 @@ def write_model_card(
 
 ## Intended Use
 
-This model is intended for text-classification experiments and workflow demonstrations. Real deployment requires validation on the target domain.
+{intended_use} Real deployment requires validation on the target domain.
 
 ## Limitations
 

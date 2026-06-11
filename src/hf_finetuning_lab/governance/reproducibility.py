@@ -62,7 +62,7 @@ class ReproducibilityRecord:
 
     run_id: str
     task: str
-    seed: int
+    seed: int | None
     dataset_hash: str
     model_name: str
     config: dict[str, Any] = field(default_factory=dict)

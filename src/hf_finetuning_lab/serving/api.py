@@ -17,6 +17,7 @@ from typing import Any, Protocol
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel, Field
 
+from hf_finetuning_lab import __version__
 from hf_finetuning_lab.serving.logging import StructuredRequestLogger, get_request_logger
 
 
@@ -100,15 +101,16 @@ def create_app(
         try:
             predictor = factory(model_path)
             app.state.predictor = predictor
+            # Warm-up is a best-effort latency optimisation, not a readiness
+            # gate: once the predictor loads the app can serve, so readiness is
+            # keyed on predictor availability and a failed or skipped warm-up
+            # must not pin the app in a permanent "warming" state.
             if warm_up_texts:
                 try:
                     predictor.predict(list(warm_up_texts))
-                    app.state.warmed_up = True
                 except Exception:
-                    app.state.warmed_up = False
-                    logger.exception("model warm-up failed")
-            else:
-                app.state.warmed_up = False
+                    logger.exception("model warm-up failed; serving without warm-up")
+            app.state.warmed_up = True
             app.state.startup_error = None
         except Exception as exc:
             app.state.predictor = None
@@ -119,7 +121,7 @@ def create_app(
 
     app = FastAPI(
         title="Hugging Face Fine-Tuning Lab API",
-        version="0.1.0",
+        version=__version__,
         lifespan=lifespan,
     )
     app.state.model_dir = str(model_path)

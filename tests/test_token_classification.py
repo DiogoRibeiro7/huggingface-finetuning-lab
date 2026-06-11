@@ -107,11 +107,22 @@ def test_sequence_tagging_report_rejects_length_mismatch() -> None:
         sequence_tagging_report([["O"]], [["O"], ["O"]])
 
 
-def test_align_first_strategy_marks_continuation_subwords_special() -> None:
+def test_align_first_strategy_masks_continuation_and_special_subwords() -> None:
+    # Special tokens (None) and continuation subwords are masked with -100 so
+    # the loss ignores them, rather than being mislabelled "O".
     word_labels = ["B-PER", "O"]
     word_ids = [None, 0, 0, 1, None]
     aligned = align_word_labels_to_subwords(word_labels, word_ids, strategy="first")
-    assert aligned == ["O", "B-PER", "O", "O", "O"]
+    assert aligned == [-100, "B-PER", -100, "O", -100]
+
+
+def test_align_first_strategy_keeps_multiword_entity_intact() -> None:
+    # A multi-subword word inside a multi-word entity must not fragment into two
+    # entities: the continuation subword is masked, not labelled "O".
+    word_labels = ["B-PER", "I-PER"]
+    word_ids = [0, 0, 1]  # first word split into two subwords
+    aligned = align_word_labels_to_subwords(word_labels, word_ids, strategy="first")
+    assert aligned == ["B-PER", -100, "I-PER"]
 
 
 def test_align_all_strategy_propagates_with_bio_consistency() -> None:

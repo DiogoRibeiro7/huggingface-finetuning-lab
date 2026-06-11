@@ -36,7 +36,8 @@ RECOMMENDED_FILES: tuple[str, ...] = (
     "tokenizer_config.json",
     "special_tokens_map.json",
     "model_card.md",
-    "metrics.json",
+    "label_mapping.json",
+    "test_metrics.json",
 )
 
 
