@@ -19,6 +19,18 @@ from hf_finetuning_lab.evaluation.metrics import (
 from hf_finetuning_lab.inference.predictor import TextClassificationPredictor
 
 
+def _normalize_predicted_label(label: str, id2label: dict[int, str]) -> str:
+    """Map raw predictor output back into the model label space."""
+    if label.startswith("LABEL_"):
+        raw_idx = label.removeprefix("LABEL_")
+        try:
+            idx = int(raw_idx)
+        except ValueError:
+            return label
+        return id2label.get(idx, label)
+    return label
+
+
 def evaluate_model(
     model_dir: str | Path,
     input_path: str | Path,
@@ -48,14 +60,9 @@ def evaluate_model(
     y_true_labels = df[label_col].astype(str).tolist()
     y_pred_labels = pred_df["predicted_label"].astype(str).tolist()
 
-    # For models that use LABEL_0 style outputs, map IDs back if possible.
-    normalized_pred_labels = []
-    for label in y_pred_labels:
-        if label.startswith("LABEL_"):
-            idx = int(label.replace("LABEL_", ""))
-            normalized_pred_labels.append(id2label.get(idx, label))
-        else:
-            normalized_pred_labels.append(label)
+    normalized_pred_labels = [
+        _normalize_predicted_label(label, id2label) for label in y_pred_labels
+    ]
 
     unknown_true = sorted({label for label in y_true_labels if label not in label2id})
     if unknown_true:
@@ -64,8 +71,15 @@ def evaluate_model(
             f"{unknown_true}. Known labels: {sorted(label2id)}."
         )
 
+    unknown_pred = sorted({label for label in normalized_pred_labels if label not in label2id})
+    if unknown_pred:
+        raise ValueError(
+            "Model predictions contain labels outside the trained label space: "
+            f"{unknown_pred}. Known labels: {sorted(label2id)}."
+        )
+
     y_true = np.array([label2id[label] for label in y_true_labels])
-    y_pred = np.array([label2id.get(label, -1) for label in normalized_pred_labels])
+    y_pred = np.array([label2id[label] for label in normalized_pred_labels])
     metrics = compute_classification_metrics(y_true, y_pred)
     report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
     cm = confusion_matrix_frame(y_true, y_pred, id2label)
