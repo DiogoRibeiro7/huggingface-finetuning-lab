@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Annotated
 
 import click
 import typer
@@ -14,7 +15,7 @@ from hf_finetuning_lab.inference.predictor import batch_predict
 from hf_finetuning_lab.sample_data import write_sample_data
 from hf_finetuning_lab.training.trainer import train_text_classifier
 
-app = typer.Typer(help="Hugging Face fine-tuning lab CLI.")
+app = typer.Typer(help="Hugging Face fine-tuning lab CLI.", rich_markup_mode=None)
 
 
 @app.command("version")
@@ -39,9 +40,10 @@ def list_commands() -> None:
 @app.command("verify-artifact")
 def verify_artifact_cmd(
     model_dir: Path = typer.Option(..., help="Local model directory to inspect."),
-    strict: bool = typer.Option(
-        False, help="Exit with code 1 if any recommended file is missing."
-    ),
+    strict: Annotated[
+        bool,
+        typer.Option("--strict", help="Exit with code 1 if any recommended file is missing."),
+    ] = False,
 ) -> None:
     """Verify that a model directory follows the stable v1.0 artifact layout."""
     report = verify_artifact(model_dir)
@@ -99,7 +101,10 @@ def train(
     learning_rate: float = typer.Option(2e-5, help="Learning rate."),
     max_length: int = typer.Option(160, help="Maximum tokenized length."),
     config_file: Path | None = typer.Option(None, help="Optional YAML config."),
-    use_lora: bool = typer.Option(False, help="Enable PEFT/LoRA fine-tuning."),
+    use_lora: Annotated[
+        bool,
+        typer.Option("--use-lora", help="Enable PEFT/LoRA fine-tuning."),
+    ] = False,
 ) -> None:
     """Fine-tune a transformer for text classification."""
     if config_file is not None:

@@ -86,6 +86,12 @@ def test_cli_version_matches_package_version() -> None:
     assert result.output.strip() == __version__
 
 
+def test_cli_help_renders() -> None:
+    result = runner.invoke(app, ["--help"])
+    assert result.exit_code == 0, result.output
+    assert "Hugging Face fine-tuning lab CLI." in result.output
+
+
 def test_cli_list_commands_lists_known_subcommands() -> None:
     result = runner.invoke(app, ["list-commands"])
     assert result.exit_code == 0, result.output

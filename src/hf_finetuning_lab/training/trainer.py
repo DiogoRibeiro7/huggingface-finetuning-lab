@@ -58,6 +58,50 @@ def _maybe_apply_lora(model: Any, config: TrainingConfig) -> Any:
     return get_peft_model(model, lora_config)
 
 
+def _wrap_missing_optimizer_mode(
+    optimizer_wrapper: Any,
+    method_name: str,
+) -> None:
+    """Install a no-op mode method when the wrapped optimizer lacks one.
+
+    Newer Transformers/Accelerate stacks may call ``optimizer.train()`` /
+    ``optimizer.eval()`` on the accelerator wrapper even when the wrapped
+    PyTorch optimizer is a plain ``torch.optim.AdamW`` without those methods.
+    """
+    wrapped = getattr(optimizer_wrapper, "optimizer", None)
+    shim_flag = f"_hf_lab_{method_name}_shim"
+    if wrapped is None or hasattr(wrapped, method_name) or hasattr(optimizer_wrapper, shim_flag):
+        return
+
+    def _noop() -> None:
+        return None
+
+    setattr(optimizer_wrapper, method_name, _noop)
+    setattr(optimizer_wrapper, shim_flag, True)
+
+
+def _ensure_optimizer_mode_compatibility(optimizer_wrapper: Any) -> None:
+    """Patch accelerator optimizer wrappers to tolerate plain PyTorch optimizers."""
+    _wrap_missing_optimizer_mode(optimizer_wrapper, "train")
+    _wrap_missing_optimizer_mode(optimizer_wrapper, "eval")
+
+
+class CompatibleTrainer:
+    """Mixin that patches optimizer mode hooks for broader HF stack compatibility."""
+
+    def create_optimizer(self) -> None:
+        super().create_optimizer()  # type: ignore[misc]
+        optimizer = getattr(self, "optimizer", None)
+        if optimizer is not None:
+            _ensure_optimizer_mode_compatibility(optimizer)
+
+    def training_step(self, model: Any, inputs: dict[str, Any], num_items_in_batch: int | None = None):
+        optimizer = getattr(self, "optimizer", None)
+        if optimizer is not None:
+            _ensure_optimizer_mode_compatibility(optimizer)
+        return super().training_step(model, inputs, num_items_in_batch=num_items_in_batch)  # type: ignore[misc]
+
+
 def train_text_classifier(input_path: str | Path, output_dir: str | Path, config: TrainingConfig) -> Path:
     """Fine-tune a Hugging Face text-classification model from a local dataset."""
     try:
@@ -111,7 +155,10 @@ def train_text_classifier(input_path: str | Path, output_dir: str | Path, config
         seed=config.seed,
     )
 
-    trainer = Trainer(
+    class _TrainerWithCompat(CompatibleTrainer, Trainer):
+        """Trainer variant that tolerates plain optimizers behind accelerate wrappers."""
+
+    trainer = _TrainerWithCompat(
         model=model,
         args=args,
         train_dataset=train_ds,
