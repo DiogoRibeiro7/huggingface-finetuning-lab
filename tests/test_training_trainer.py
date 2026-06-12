@@ -1,6 +1,13 @@
 from __future__ import annotations
 
-from hf_finetuning_lab.training.trainer import _ensure_optimizer_mode_compatibility
+from pathlib import Path
+
+import pandas as pd
+
+from hf_finetuning_lab.training.trainer import (
+    _ensure_optimizer_mode_compatibility,
+    _write_heldout_test_split,
+)
 
 
 class _BaseOptimizer:
@@ -55,3 +62,19 @@ def test_ensure_optimizer_mode_compatibility_preserves_existing_hooks() -> None:
     assert wrapped.train() == "wrapped-train"
     assert wrapped.eval() == "wrapped-eval"
     assert wrapped.optimizer.called == ["train", "eval"]
+
+
+def test_write_heldout_test_split_persists_rows(tmp_path: Path) -> None:
+    frame = pd.DataFrame(
+        {
+            "text": ["alpha", "beta"],
+            "label": ["account", "billing"],
+            "label_id": [0, 1],
+        }
+    )
+
+    written = _write_heldout_test_split(frame, tmp_path)
+
+    assert written == tmp_path / "heldout_test.csv"
+    restored = pd.read_csv(written)
+    assert restored.to_dict(orient="records") == frame.to_dict(orient="records")

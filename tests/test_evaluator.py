@@ -54,6 +54,8 @@ def test_evaluate_model_normalizes_label_n_predictions(
 
     payload = json.loads(written.read_text(encoding="utf-8"))
     assert payload["metrics"]["accuracy"] == pytest.approx(1.0)
+    assert "account" in payload["classification_report"]
+    assert "billing" in payload["classification_report"]
     assert payload["confusion_matrix"]["account"]["account"] == 1
     assert payload["confusion_matrix"]["billing"]["billing"] == 1
 

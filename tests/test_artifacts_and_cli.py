@@ -63,6 +63,14 @@ def test_verify_artifact_promotes_recommended_files_when_present(tmp_path: Path)
     assert statuses["model_card.md"] == "ok"
 
 
+def test_verify_artifact_marks_training_config_as_required(tmp_path: Path) -> None:
+    _write_minimal_artifact(tmp_path)
+    (tmp_path / "training_config.json").unlink()
+    report = verify_artifact(tmp_path)
+    assert not report.ok
+    assert "training_config.json" in report.missing
+
+
 def test_verify_artifact_rejects_missing_directory(tmp_path: Path) -> None:
     with pytest.raises(FileNotFoundError):
         verify_artifact(tmp_path / "does-not-exist")
@@ -136,7 +144,7 @@ def test_cli_verify_artifact_strict_flag_treats_warnings_as_failure(tmp_path: Pa
 
 def test_cli_verify_artifact_strict_passes_when_recommended_present(tmp_path: Path) -> None:
     _write_minimal_artifact(tmp_path)
-    for name in ["tokenizer_config.json", "special_tokens_map.json", "model_card.md", "label_mapping.json", "test_metrics.json"]:
+    for name in ["tokenizer_config.json", "special_tokens_map.json", "model_card.md", "test_metrics.json"]:
         (tmp_path / name).write_text("{}", encoding="utf-8")
     result = runner.invoke(
         app, ["verify-artifact", "--model-dir", str(tmp_path), "--strict"]

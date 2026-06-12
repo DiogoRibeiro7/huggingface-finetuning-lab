@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import cast
 
 import numpy as np
 import pandas as pd
@@ -29,6 +30,27 @@ def _normalize_predicted_label(label: str, id2label: dict[int, str]) -> str:
             return label
         return id2label.get(idx, label)
     return label
+
+
+def _classification_report_with_label_names(
+    y_true: np.ndarray,
+    y_pred: np.ndarray,
+    id2label: dict[int, str],
+) -> dict[str, object]:
+    """Return sklearn's classification report keyed by human-readable labels."""
+    labels = sorted(id2label)
+    target_names = [id2label[idx] for idx in labels]
+    return cast(
+        dict[str, object],
+        classification_report(
+            y_true,
+            y_pred,
+            labels=labels,
+            target_names=target_names,
+            output_dict=True,
+            zero_division=0,
+        ),
+    )
 
 
 def evaluate_model(
@@ -81,7 +103,7 @@ def evaluate_model(
     y_true = np.array([label2id[label] for label in y_true_labels])
     y_pred = np.array([label2id[label] for label in normalized_pred_labels])
     metrics = compute_classification_metrics(y_true, y_pred)
-    report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
+    report = _classification_report_with_label_names(y_true, y_pred, id2label)
     cm = confusion_matrix_frame(y_true, y_pred, id2label)
 
     destination = Path(output_path)

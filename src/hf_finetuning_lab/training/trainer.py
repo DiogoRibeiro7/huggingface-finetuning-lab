@@ -102,6 +102,13 @@ class CompatibleTrainer:
         return super().training_step(model, inputs, num_items_in_batch=num_items_in_batch)  # type: ignore[misc]
 
 
+def _write_heldout_test_split(test_df: Any, output_path: Path) -> Path:
+    """Persist the held-out test split used for final evaluation."""
+    destination = output_path / "heldout_test.csv"
+    test_df.to_csv(destination, index=False)
+    return destination
+
+
 def train_text_classifier(input_path: str | Path, output_dir: str | Path, config: TrainingConfig) -> Path:
     """Fine-tune a Hugging Face text-classification model from a local dataset."""
     try:
@@ -193,6 +200,7 @@ def train_text_classifier(input_path: str | Path, output_dir: str | Path, config
         json.dumps(eval_metrics, indent=2),
         encoding="utf-8",
     )
+    _write_heldout_test_split(test_df, output_path)
     write_model_card(
         output_path=output_path / "model_card.md",
         model_name=config.model_name,

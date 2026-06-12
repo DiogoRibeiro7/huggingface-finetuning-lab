@@ -23,6 +23,9 @@ CheckStatus = Literal["ok", "missing", "warning"]
 
 REQUIRED_FILES: tuple[str, ...] = (
     "config.json",
+    "label_mapping.json",
+    "training_config.json",
+    "heldout_test.csv",
 )
 
 ALTERNATIVE_REQUIRED_FILES: tuple[tuple[str, ...], ...] = (
@@ -36,7 +39,6 @@ RECOMMENDED_FILES: tuple[str, ...] = (
     "tokenizer_config.json",
     "special_tokens_map.json",
     "model_card.md",
-    "label_mapping.json",
     "test_metrics.json",
 )
 

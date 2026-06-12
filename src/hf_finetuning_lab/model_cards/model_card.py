@@ -3,6 +3,12 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from pathlib import Path
 
+DEFAULT_LIMITATIONS: tuple[str, ...] = (
+    "This artifact may be trained or evaluated on synthetic or simplified data.",
+    "Performance on the target domain, subgroups, and edge cases must be validated separately.",
+    "This model is not validated for clinical, legal, safety-critical, or other high-stakes decisions.",
+)
+
 
 def write_model_card(
     output_path: str | Path,
@@ -13,7 +19,7 @@ def write_model_card(
     limitations: list[str] | None = None,
 ) -> Path:
     """Write a lightweight Hugging Face-style model card."""
-    limitations = limitations or []
+    limitations = limitations or list(DEFAULT_LIMITATIONS)
     destination = Path(output_path)
     destination.parent.mkdir(parents=True, exist_ok=True)
 
