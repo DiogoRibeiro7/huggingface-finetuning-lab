@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -8,6 +9,42 @@ DEFAULT_LIMITATIONS: tuple[str, ...] = (
     "Performance on the target domain, subgroups, and edge cases must be validated separately.",
     "This model is not validated for clinical, legal, safety-critical, or other high-stakes decisions.",
 )
+
+
+#: Trainer keys that measure throughput or bookkeeping rather than model quality.
+OPERATIONAL_METRIC_MARKERS: tuple[str, ...] = (
+    "runtime",
+    "samples_per_second",
+    "steps_per_second",
+    "epoch",
+    "total_flos",
+    "train_loss",
+    "num_input_tokens_seen",
+    "step",
+)
+
+
+def is_quality_metric(name: str) -> bool:
+    """True when a Trainer metric key describes model quality.
+
+    ``Trainer.evaluate`` returns throughput and bookkeeping entries alongside
+    the task metrics. Presenting ``eval_samples_per_second`` next to macro F1
+    invites reading a runtime number as a quality result.
+    """
+    stripped = name.removeprefix("eval_").removeprefix("test_").removeprefix("train_")
+    return not any(marker in stripped or marker in name for marker in OPERATIONAL_METRIC_MARKERS)
+
+
+def quality_metrics(metrics: Mapping[str, object]) -> dict[str, float]:
+    """Keep only the finite, numeric, quality-describing entries."""
+    selected: dict[str, float] = {}
+    for name, value in metrics.items():
+        if not isinstance(value, int | float) or isinstance(value, bool):
+            continue
+        if not is_quality_metric(name):
+            continue
+        selected[name] = float(value)
+    return selected
 
 
 def write_model_card(

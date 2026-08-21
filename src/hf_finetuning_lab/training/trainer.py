@@ -14,7 +14,7 @@ from hf_finetuning_lab.data.io import (
 )
 from hf_finetuning_lab.data.splits import stratified_train_valid_test_split
 from hf_finetuning_lab.evaluation.metrics import trainer_compute_metrics
-from hf_finetuning_lab.model_cards.model_card import write_model_card
+from hf_finetuning_lab.model_cards.model_card import quality_metrics, write_model_card
 from hf_finetuning_lab.tokenization.preprocessing import (
     PreprocessingConfig,
     write_preprocessing_config,
@@ -227,7 +227,7 @@ def train_text_classifier(input_path: str | Path, output_dir: str | Path, config
         model_name=config.model_name,
         task="text-classification",
         label_names=list(label2id),
-        metrics={key: float(value) for key, value in eval_metrics.items() if isinstance(value, int | float)},
+        metrics=quality_metrics(eval_metrics),
         limitations=[
             "The sample workflow uses synthetic data unless replaced by a real dataset.",
             "Subgroup performance and calibration must be validated before production use.",

@@ -9,6 +9,7 @@ matrix in.
 
 from __future__ import annotations
 
+from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Any
@@ -50,6 +51,13 @@ class EmbeddingIndex:
                 f"entries length ({len(entries)}) does not match embeddings rows "
                 f"({embeddings.shape[0]})."
             )
+        # Ranking metrics such as nDCG@k treat a doc_id as identifying one
+        # document. A duplicate would let a single relevant document be counted
+        # more than once within the same ranking.
+        counts = Counter(entry.doc_id for entry in entries)
+        duplicates = sorted(doc_id for doc_id, count in counts.items() if count > 1)
+        if duplicates:
+            raise ValueError(f"doc_id values must be unique; repeated: {duplicates}.")
         self._embeddings = l2_normalize(np.asarray(embeddings, dtype=np.float32))
         self._entries: list[IndexEntry] = list(entries)
 
