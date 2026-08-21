@@ -15,6 +15,10 @@ from hf_finetuning_lab.data.io import (
 from hf_finetuning_lab.data.splits import stratified_train_valid_test_split
 from hf_finetuning_lab.evaluation.metrics import trainer_compute_metrics
 from hf_finetuning_lab.model_cards.model_card import write_model_card
+from hf_finetuning_lab.tokenization.preprocessing import (
+    PreprocessingConfig,
+    write_preprocessing_config,
+)
 from hf_finetuning_lab.tokenization.tokenizer import load_tokenizer, tokenize_dataset
 
 
@@ -204,6 +208,10 @@ def train_text_classifier(input_path: str | Path, output_dir: str | Path, config
     (output_path / "label_mapping.json").write_text(
         json.dumps({"label2id": label2id, "id2label": id2label}, indent=2),
         encoding="utf-8",
+    )
+    write_preprocessing_config(
+        output_path,
+        PreprocessingConfig(max_length=config.max_length, truncation=True),
     )
     (output_path / "training_config.json").write_text(
         json.dumps(config.to_dict(), indent=2),

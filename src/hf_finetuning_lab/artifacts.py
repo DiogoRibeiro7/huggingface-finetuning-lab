@@ -40,6 +40,7 @@ RECOMMENDED_FILES: tuple[str, ...] = (
     "special_tokens_map.json",
     "model_card.md",
     "test_metrics.json",
+    "preprocessing.json",
 )
 
 

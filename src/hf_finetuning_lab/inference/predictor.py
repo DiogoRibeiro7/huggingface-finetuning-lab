@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 from hf_finetuning_lab.data.io import load_table
+from hf_finetuning_lab.tokenization.preprocessing import load_preprocessing_config
 
 
 class TextClassificationPredictor:
@@ -18,6 +19,9 @@ class TextClassificationPredictor:
         if not self.model_dir.exists():
             raise FileNotFoundError(f"Model directory not found: {self.model_dir}")
         self.device = device
+        # Inference must encode text exactly as training did; otherwise the
+        # model sees input lengths it was never evaluated on.
+        self.preprocessing = load_preprocessing_config(self.model_dir)
         self.pipeline = self._load_pipeline()
         self.id2label = self._load_id2label()
 
@@ -39,10 +43,9 @@ class TextClassificationPredictor:
         """Predict labels and probabilities for a list of texts."""
         if not texts:
             return []
-        # Truncate to the model's positional limit so long inputs (e.g. full
-        # reviews) are clipped rather than raising an index error, mirroring the
-        # truncation applied during training.
-        raw_outputs = self.pipeline(texts, truncation=True)
+        # Apply the persisted training-time contract so long inputs are clipped
+        # at the same boundary the model was trained and evaluated on.
+        raw_outputs = self.pipeline(texts, **self.preprocessing.tokenizer_kwargs())
         predictions: list[dict[str, Any]] = []
         for text, outputs in zip(texts, raw_outputs, strict=True):
             # The pipeline returns a list of dictionaries per example when top_k=None.
