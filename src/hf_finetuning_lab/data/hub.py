@@ -84,39 +84,19 @@ def _resolve_label_names(dataset: Dataset, cfg: HubDatasetConfig) -> list[str] |
     return None
 
 
-def normalize_hub_dataset(
+
+def _encode_split(
     dataset: Dataset,
     cfg: HubDatasetConfig,
-    max_rows: int | None = None,
-    seed: int = 42,
-) -> pd.DataFrame:
-    """Normalize a single ``Dataset`` split into a ``text`` / ``label`` DataFrame.
+    label_names: list[str] | None,
+    label_mapping: Mapping[str, int] | None,
+) -> tuple[pd.DataFrame, bool]:
+    """Build the normalized frame, reporting whether label IDs are split-local.
 
-    The returned frame has ``text`` (str), ``label`` (human-readable label name
-    when available, else the raw value as a string) and ``label_id`` (int)
-    columns. ``max_rows`` caps the output so smoke runs stay quick; the split is
-    shuffled (with ``seed``) before capping so label-ordered source datasets
-    (e.g. IMDb, which stores all negatives then all positives) do not collapse
-    to a single class.
+    The second element is ``True`` only when IDs were derived by sorting this
+    split's own label strings. Those IDs are meaningless across splits, so the
+    caller must re-encode them against a dataset-wide mapping.
     """
-    if cfg.text_field not in dataset.column_names:
-        raise ValueError(
-            f"Dataset '{cfg.name}' is missing expected text field '{cfg.text_field}'. "
-            f"Available columns: {list(dataset.column_names)}"
-        )
-    if cfg.label_field not in dataset.column_names:
-        raise ValueError(
-            f"Dataset '{cfg.name}' is missing expected label field '{cfg.label_field}'. "
-            f"Available columns: {list(dataset.column_names)}"
-        )
-
-    label_names = _resolve_label_names(dataset, cfg)
-    if max_rows is not None:
-        if max_rows <= 0:
-            raise ValueError("max_rows must be positive.")
-        if len(dataset) > max_rows:
-            dataset = dataset.shuffle(seed=seed).select(range(max_rows))
-
     df = pd.DataFrame(
         {
             "text": [str(value) for value in dataset[cfg.text_field]],
@@ -136,6 +116,7 @@ def normalize_hub_dataset(
 
         df["label"] = df["label_id"].map(_name_for)
         df["label_id"] = df["label_id"].astype(int)
+        split_local = False
     else:
         coerced = pd.to_numeric(df["label_id"], errors="coerce")
         if coerced.notna().all():
@@ -144,14 +125,78 @@ def normalize_hub_dataset(
             # differ across splits).
             df["label_id"] = coerced.astype(int)
             df["label"] = df["label_id"].astype(str)
+            split_local = False
         else:
             # Genuinely non-numeric labels: encode by sorted unique value.
             df["label"] = df["label_id"].astype(str)
-            unique = sorted(df["label"].unique())
-            mapping = {value: idx for idx, value in enumerate(unique)}
+            mapping = dict(label_mapping) if label_mapping is not None else None
+            if mapping is None:
+                unique = sorted(df["label"].unique())
+                mapping = {value: idx for idx, value in enumerate(unique)}
+                split_local = True
+            else:
+                unknown = sorted(set(df["label"]) - set(mapping))
+                if unknown:
+                    raise ValueError(
+                        f"Labels {unknown} are missing from the supplied label_mapping."
+                    )
+                split_local = False
             df["label_id"] = df["label"].map(mapping).astype(int)
 
-    return df[["text", "label", "label_id"]]
+    return df[["text", "label", "label_id"]], split_local
+
+
+def normalize_hub_dataset(
+    dataset: Dataset,
+    cfg: HubDatasetConfig,
+    max_rows: int | None = None,
+    seed: int = 42,
+    label_mapping: Mapping[str, int] | None = None,
+) -> pd.DataFrame:
+    """Normalize a single ``Dataset`` split into a ``text`` / ``label`` DataFrame.
+
+    The returned frame has ``text`` (str), ``label`` (human-readable label name
+    when available, else the raw value as a string) and ``label_id`` (int)
+    columns. ``max_rows`` caps the output so smoke runs stay quick; the split is
+    shuffled (with ``seed``) before capping so label-ordered source datasets
+    (e.g. IMDb, which stores all negatives then all positives) do not collapse
+    to a single class.
+
+    ``label_mapping`` pins the label-name to label-ID encoding. Pass it when
+    normalizing several splits of one dataset so the same name means the same
+    ID everywhere; without it the encoding is derived from this split alone.
+    """
+    if cfg.text_field not in dataset.column_names:
+        raise ValueError(
+            f"Dataset '{cfg.name}' is missing expected text field '{cfg.text_field}'. "
+            f"Available columns: {list(dataset.column_names)}"
+        )
+    if cfg.label_field not in dataset.column_names:
+        raise ValueError(
+            f"Dataset '{cfg.name}' is missing expected label field '{cfg.label_field}'. "
+            f"Available columns: {list(dataset.column_names)}"
+        )
+
+    df, _ = _normalize_split(dataset, cfg, max_rows, seed, label_mapping)
+    return df
+
+
+def _normalize_split(
+    dataset: Dataset,
+    cfg: HubDatasetConfig,
+    max_rows: int | None,
+    seed: int,
+    label_mapping: Mapping[str, int] | None,
+) -> tuple[pd.DataFrame, bool]:
+    """Cap and normalize one split, reporting whether its IDs are split-local."""
+    label_names = _resolve_label_names(dataset, cfg)
+    if max_rows is not None:
+        if max_rows <= 0:
+            raise ValueError("max_rows must be positive.")
+        if len(dataset) > max_rows:
+            dataset = dataset.shuffle(seed=seed).select(range(max_rows))
+
+    return _encode_split(dataset, cfg, label_names, label_mapping)
 
 
 def normalize_hub_dataset_dict(
@@ -164,14 +209,32 @@ def normalize_hub_dataset_dict(
     """Normalize each requested split into a DataFrame keyed by canonical split name."""
     split_map = cfg.splits()
     if splits is not None:
-        split_map = {k: v for k, v in split_map.items() if k in set(splits)}
+        # Materialize once: `splits` may be a generator, which a repeated
+        # `set(splits)` inside the comprehension would exhaust after the
+        # first membership test.
+        requested = set(splits)
+        split_map = {k: v for k, v in split_map.items() if k in requested}
     output: dict[str, pd.DataFrame] = {}
+    split_local: list[str] = []
     for canonical, source in split_map.items():
         if source not in dataset_dict:
             continue
-        output[canonical] = normalize_hub_dataset(
-            dataset_dict[source], cfg, max_rows=max_rows_per_split, seed=seed
+        frame, is_split_local = _normalize_split(
+            dataset_dict[source], cfg, max_rows_per_split, seed, None
         )
+        output[canonical] = frame
+        if is_split_local:
+            split_local.append(canonical)
+
+    if split_local:
+        # Each of these splits encoded its own label strings independently, so
+        # the same ID can mean different classes in different splits. Re-encode
+        # them all against one mapping built from the labels actually present.
+        names = sorted({label for frame in output.values() for label in frame["label"]})
+        mapping = {name: idx for idx, name in enumerate(names)}
+        for frame in output.values():
+            frame["label_id"] = frame["label"].map(mapping).astype(int)
+
     if not output:
         raise ValueError(
             f"None of the requested splits ({list(split_map.values())}) were found in the "
