@@ -63,17 +63,18 @@ def test_skipped_criterion_marks_status() -> None:
     assert c.status == "skip"
 
 
-def test_promotion_report_should_promote_only_when_no_failures() -> None:
+def test_promotion_report_promotes_when_every_required_check_passed() -> None:
     report = PromotionReport(
         run_id="r1",
         model_name="tfidf-logreg",
         criteria=[
             boolean_criterion("a", True),
             boolean_criterion("b", True),
-            skipped_criterion("c"),
+            skipped_criterion("c", severity="advisory"),
         ],
     )
     assert report.should_promote
+    assert report.blocking_reasons == []
     assert report.failed == []
     assert len(report.passed) == 2
     assert len(report.skipped) == 1
@@ -151,3 +152,72 @@ def test_promotion_criterion_to_dict_round_trip() -> None:
     payload = c.to_dict()
     assert payload["status"] == "pass"
     assert payload["value"] == pytest.approx(0.05)
+
+
+def test_empty_report_blocks_promotion() -> None:
+    """No evidence is not evidence of readiness."""
+    report = PromotionReport(run_id="r0", model_name="tfidf-logreg", criteria=[])
+
+    assert not report.should_promote
+    assert report.blocking_reasons == ["no required criteria were evaluated"]
+
+
+def test_skipped_required_criterion_blocks_promotion() -> None:
+    report = PromotionReport(
+        run_id="r1",
+        model_name="tfidf-logreg",
+        criteria=[boolean_criterion("a", True), skipped_criterion("gpu_smoke")],
+    )
+
+    assert not report.should_promote
+    assert report.blocking_reasons == ["required criterion 'gpu_smoke' was not evaluated"]
+
+
+def test_advisory_criteria_alone_cannot_authorize_promotion() -> None:
+    report = PromotionReport(
+        run_id="r1",
+        model_name="tfidf-logreg",
+        criteria=[
+            boolean_criterion("nice_to_have", True, severity="advisory"),
+            boolean_criterion("also_advisory", True, severity="advisory"),
+        ],
+    )
+
+    assert not report.should_promote
+    assert report.blocking_reasons == ["no required criteria were evaluated"]
+
+
+def test_failing_advisory_criterion_does_not_block() -> None:
+    report = PromotionReport(
+        run_id="r1",
+        model_name="tfidf-logreg",
+        criteria=[
+            boolean_criterion("macro_f1", True),
+            boolean_criterion("nice_to_have", False, severity="advisory"),
+        ],
+    )
+
+    assert report.should_promote
+    assert len(report.failed) == 1
+
+
+def test_threshold_criterion_accepts_advisory_severity() -> None:
+    criterion = threshold_criterion(
+        "latency_ms", 120.0, 100.0, direction="le", severity="advisory"
+    )
+
+    assert criterion.status == "fail"
+    assert criterion.severity == "advisory"
+
+
+def test_report_records_blocking_reasons_in_its_payload() -> None:
+    report = PromotionReport(
+        run_id="r1",
+        model_name="tfidf-logreg",
+        criteria=[boolean_criterion("macro_f1", False)],
+    )
+
+    payload = report.to_dict()
+
+    assert payload["should_promote"] is False
+    assert payload["blocking_reasons"] == ["required criterion 'macro_f1' failed"]
