@@ -11,12 +11,67 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+#: Packages whose version changes the numbers a run produces.
+TRACKED_PACKAGES: tuple[str, ...] = (
+    "torch",
+    "transformers",
+    "datasets",
+    "accelerate",
+    "peft",
+    "safetensors",
+    "tokenizers",
+    "huggingface-hub",
+    "numpy",
+    "pandas",
+    "scikit-learn",
+)
+
+
+def _package_versions() -> dict[str, str | None]:
+    """Resolve the installed version of each tracked package.
+
+    A dependency range is not a record of what ran. Two installs of the same
+    commit can resolve different Transformers or PyTorch versions and produce
+    different numbers, so the archival record pins what was actually imported.
+    """
+    from importlib.metadata import PackageNotFoundError, version
+
+    resolved: dict[str, str | None] = {}
+    for name in TRACKED_PACKAGES:
+        try:
+            resolved[name] = version(name)
+        except PackageNotFoundError:
+            resolved[name] = None
+    return resolved
+
+
+def _accelerator_info() -> dict[str, Any]:
+    """Describe the compute device, when torch is importable."""
+    try:
+        import torch
+    except ImportError:
+        return {"torch_available": False}
+
+    info: dict[str, Any] = {
+        "torch_available": True,
+        "cuda_available": bool(torch.cuda.is_available()),
+        "cuda_version": getattr(torch.version, "cuda", None),
+    }
+    if info["cuda_available"]:
+        info["device_count"] = int(torch.cuda.device_count())
+        info["device_name"] = torch.cuda.get_device_name(0)
+    return info
+
 
 def _git_head_commit(cwd: Path | None = None) -> str | None:
-    """Return the current git HEAD short hash, or ``None`` if unavailable."""
+    """Return the full git HEAD hash, or ``None`` if unavailable.
+
+    The full hash rather than the short one: short hashes are not stable
+    against repository growth, and an archival record should stay resolvable.
+    """
     try:
         result = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"],
+            ["git", "rev-parse", "HEAD"],
             cwd=str(cwd) if cwd is not None else None,
             check=True,
             capture_output=True,
@@ -53,6 +108,8 @@ def capture_environment(cwd: Path | None = None) -> dict[str, Any]:
         "captured_at_utc": datetime.now(UTC).isoformat(timespec="seconds"),
         "git_commit": _git_head_commit(cwd),
         "git_dirty": _git_is_dirty(cwd),
+        "packages": _package_versions(),
+        "accelerator": _accelerator_info(),
     }
 
 
@@ -65,6 +122,14 @@ class ReproducibilityRecord:
     seed: int | None
     dataset_hash: str
     model_name: str
+    #: Commit SHA of the base model repository. A Hub id alone is mutable —
+    #: the same name can resolve to different weights next week.
+    model_revision: str | None = None
+    tokenizer_revision: str | None = None
+    #: Hub id, config name and revision of the source dataset.
+    dataset_id: str | None = None
+    dataset_config: str | None = None
+    dataset_revision: str | None = None
     config: dict[str, Any] = field(default_factory=dict)
     metrics: dict[str, float] = field(default_factory=dict)
     environment: dict[str, Any] = field(default_factory=dict)
