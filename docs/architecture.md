@@ -39,14 +39,18 @@ Data Source (CSV / JSONL / HF Hub)
 
 A model directory produced by `hf-lab train` should contain:
 
-- **Required:** `config.json`, weights (`model.safetensors` *or* `pytorch_model.bin`), tokenizer (`tokenizer.json` *or* `vocab.txt` / `vocab.json`).
-- **Recommended:** `tokenizer_config.json`, `special_tokens_map.json`, `model_card.md`, `metrics.json`.
+- **Required:** `config.json`, `label_mapping.json`, `training_config.json`, `heldout_manifest.json`, weights (`model.safetensors`, `pytorch_model.bin`, or a sharded `*.index.json` manifest), tokenizer (`tokenizer.json`, `vocab.txt` / `vocab.json`, or a SentencePiece `spiece.model` / `tokenizer.model` / `sentencepiece.bpe.model`).
+- **Recommended:** `tokenizer_config.json`, `special_tokens_map.json`, `model_card.md`, `test_metrics.json`, `preprocessing.json`.
+
+The held-out split is described by `heldout_manifest.json` — size, label distribution, seed, fingerprint and one-way row hashes — rather than by its raw rows, so a shared model directory does not carry the evaluation text. Raw rows are opt-in through `TrainingConfig.persist_heldout_rows`.
 
 `verify_artifact(model_dir)` (or `hf-lab verify-artifact --model-dir <path>`) walks a directory and reports each required and recommended slot with `[OK ]`, `[WARN]`, or `[MISS]`. CI can gate releases on `--strict` to also fail on warnings.
 
+The layout pass inspects file names only, so it is fast and needs no ML dependencies — but it cannot tell a real checkpoint from placeholder files. `--deep` additionally parses the JSON, checks weight files are non-empty, compares the label mapping with the model config, rejects non-finite metrics, and asks transformers to load the tokenizer and model.
+
 ## Notebook stack
 
-The eight notebooks under `notebooks/` walk the stack end to end:
+The ten notebooks under `notebooks/` walk the stack end to end:
 
 1. End-to-end text-classification workflow (sklearn baseline + opt-in HF CLI commands).
 2. Experiment management: repeated runs, dataset hashes, comparison tables.
@@ -56,6 +60,8 @@ The eight notebooks under `notebooks/` walk the stack end to end:
 6. Semantic search: cosine index, Recall@k / MRR / nDCG@k, opt-in sentence-transformer.
 7. Governance template: dataset card, task model card, reproducibility checklist.
 8. Serving hardening: live/ready probes, request logs, warm-up, optional Prometheus.
+9. v1.0 capstone: CLI surface, artifact verification, module map, release checklist.
+10. Promotion gate: composes robust evaluation, governance artifacts and artifact verification into one fail-closed verdict.
 
 ## Runtime boundaries
 

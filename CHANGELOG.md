@@ -6,6 +6,67 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 ## [Unreleased]
 
+### Fixed
+
+- Hub datasets with non-numeric labels encoded each split independently, so the same
+  `label_id` could mean different classes in train and test. One mapping is now built
+  across all splits.
+- The `splits` filter re-evaluated `set(splits)` per item, silently dropping splits when
+  passed a generator.
+- The promotion gate treated "nothing failed" as approval, so an empty report — or one
+  whose checks were all skipped — authorized promotion. Criteria now carry a severity, and
+  promotion requires every required criterion to have been evaluated and passed.
+- Inference called the pipeline without the training `max_length`, so it could clip at a
+  different boundary than training and evaluation.
+- `hf-lab serve` ignored the `HF_LAB_*` variables `docker-compose.yml` declares, leaving
+  `HF_LAB_MODEL_VERSION` and `HF_LAB_ENABLE_METRICS` inert.
+- Notebook 03 selected a threshold on the test split and reported the result on the same
+  rows, which is optimistic by construction.
+- `CompatibleTrainer.create_optimizer` did not match the signature it overrides.
+
+### Security
+
+- The readiness endpoint returned `repr(exc)` on startup failure, which can carry local
+  paths and configuration values. The detail is now logged and the response is opaque.
+- `/predict` bounds per-text size; the batch cap limited how many texts arrived, not how
+  large they were.
+- The held-out split is recorded as a manifest (size, label distribution, seed,
+  fingerprint, one-way row hashes) instead of raw rows, so a shared or published model
+  directory no longer carries its evaluation text. Raw rows are opt-in through
+  `TrainingConfig.persist_heldout_rows`.
+- The container runs as an unprivileged user and no longer ships a compiler in the runtime
+  stage.
+
+### Added
+
+- `hf-lab verify-artifact --deep`: parses the JSON, checks weights are non-empty, compares
+  the label space with the model config, and loads the tokenizer and model. The layout pass
+  accepted placeholder files.
+- A train, save, verify, reload and predict regression test covering both the standard and
+  LoRA paths, against a locally built tiny transformer so it needs no network.
+- `preprocessing.json` in the model artifact, carrying the training-time tokenizer contract.
+- `label_noise` and `ambiguity` on the sample generator, and `group_col` on the split
+  helper so near-duplicate phrasings cannot span splits. `duplicate_text_report` surfaces
+  repeats before splitting.
+- `stratify=True` on `bootstrap_metric`, plus input validation across the robust-evaluation
+  helpers and a `low_support` flag on subgroup metrics.
+- Resolved package versions, accelerator details, the full git commit, and model and
+  dataset revisions in the reproducibility record.
+- `make check-fast` / `make check` / `make check-full`, and notebook lint in the release
+  workflow.
+
+### Changed
+
+- The artifact contract accepts sharded checkpoints and SentencePiece tokenizers.
+- Model cards report quality metrics only, not `Trainer` throughput and bookkeeping.
+- `EmbeddingIndex` requires unique `doc_id` values, which ranking metrics assume.
+- `TrainingConfig.validate` covers `weight_decay`, the seed, the metric name and every LoRA
+  setting, so an invalid value fails before the base model is fetched.
+- `run_training_pipeline` takes a `TrainingConfig` instead of duplicating a subset of it.
+- The Docker image ships no model and mounts one at `/models`; Compose previously claimed
+  an example model was baked in, which it never was.
+- `prometheus-client` is a declared `metrics` extra rather than a manual install.
+
 ## [1.0.0] - 2026-08-21
 
 ### Security
@@ -38,7 +99,7 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 - `hf_finetuning_lab.serving` deployment hardening: `create_app` now accepts a `predictor_factory` (lazy/injectable predictor), runs model warm-up on startup, and exposes `/health/live` + `/health/ready` (with 503 + diagnostic payload when the predictor cannot load). `StructuredRequestLogger` emits one JSON log line per request; `install_metrics(app)` mounts a Prometheus `/metrics` endpoint when `prometheus-client` is installed.
 - `docker-compose.yml` at the repo root plus a `HEALTHCHECK` in the Dockerfile wired to `/health/ready` so orchestrators only route traffic to healthy instances.
 - `notebooks/08_serving_hardening.ipynb`: drives the hardened API offline via `TestClient` + a fake predictor; demonstrates warm-up evidence, structured logs, a 503 readiness failure, and the optional Prometheus metrics endpoint.
-- `hf_finetuning_lab.artifacts` module: `ArtifactCheck`, `ArtifactReport`, and `verify_artifact(model_dir)` enforcing the stable v1.0 model-artifact layout (`config.json`, weights, tokenizer, plus recommended `tokenizer_config.json` / `special_tokens_map.json` / `model_card.md` / `metrics.json`).
+- `hf_finetuning_lab.artifacts` module: `ArtifactCheck`, `ArtifactReport`, and `verify_artifact(model_dir)` enforcing the stable v1.0 model-artifact layout (`config.json`, weights, tokenizer, plus recommended `tokenizer_config.json` / `special_tokens_map.json` / `model_card.md` / `test_metrics.json`).
 - CLI commands `hf-lab version`, `hf-lab list-commands`, and `hf-lab verify-artifact --model-dir <path> [--strict]`.
 - `notebooks/09_v1_capstone.ipynb`: enumerates the CLI surface, demonstrates `verify_artifact` on a synthetic artifact, lists the v1.0 module map and the notebook stack, and includes the release checklist.
 - `docs/architecture.md` refreshed with the v1.0 module map, the artifact contract, and the notebook stack.
