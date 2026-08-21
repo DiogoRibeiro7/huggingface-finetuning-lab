@@ -52,7 +52,7 @@ python = ">=3.11,<3.13"
 pandas = "^2.2.0"
 numpy = "^2.4.6"
 scikit-learn = "^1.4.0"
-typer = { version = "^0.12.0", extras = ["all"] }
+typer = { version = "^0.27.1", extras = ["all"] }
 pyyaml = "^6.0.1"
 matplotlib = "^3.8.0"
 fastapi = "^0.141.0"
