@@ -58,6 +58,32 @@ class TrainingConfig:
             raise ValueError("batch_size must be positive.")
         if self.learning_rate <= 0:
             raise ValueError("learning_rate must be positive.")
+        if self.weight_decay < 0:
+            raise ValueError("weight_decay must not be negative.")
+        if not self.metric_for_best_model:
+            raise ValueError("metric_for_best_model must not be empty.")
+        if not isinstance(self.seed, int) or isinstance(self.seed, bool):
+            raise ValueError("seed must be an integer.")
+        if self.use_lora:
+            self._validate_lora()
+
+    def _validate_lora(self) -> None:
+        """Validate the PEFT/LoRA settings.
+
+        Checked before the base model is fetched, so a bad rank fails in
+        milliseconds rather than after a multi-gigabyte download.
+        """
+        if self.lora_r <= 0:
+            raise ValueError("lora_r must be positive.")
+        if self.lora_alpha <= 0:
+            raise ValueError("lora_alpha must be positive.")
+        if not 0 <= self.lora_dropout < 1:
+            raise ValueError("lora_dropout must be in [0, 1).")
+        for module in self.lora_target_modules:
+            if not isinstance(module, str) or not module.strip():
+                raise ValueError(
+                    f"lora_target_modules entries must be non-empty strings, got {module!r}."
+                )
 
     @classmethod
     def from_yaml(cls, path: str | Path) -> TrainingConfig:
