@@ -6,6 +6,30 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 ## [Unreleased]
 
+### Added
+
+- Hub publication lifecycle: `hf-lab push-to-hub`, `promote-to-hub` and `pull-model`.
+  Publication lands on a `staging` branch and promotion points a release revision at that
+  already-evaluated commit, so released weights are the reviewed ones — promotion never
+  re-uploads. `--dry-run` runs every check and renders the card without contacting the Hub.
+- Publication enforces the artifact contracts, because it is the last point they matter: an
+  incomplete artifact is refused, and so is a **public** repository carrying raw held-out
+  rows. Private repositories are allowed; training scratch is never uploaded.
+- Hub-native model card. A repository renders `README.md` as its card and reads the YAML
+  block for the task filter, base-model and dataset links, and the metrics table, so the
+  lab now writes one with a `model-index` results block. The internal `model_card.md`
+  report is unchanged — it describes a run, the repository card describes the published
+  model.
+- `provenance.json`, written during training: the base model and its resolved commit, the
+  dataset id, revision and fingerprint, and the source commit. A repository id is mutable,
+  so a run recorded by name alone cannot be reconstructed later. Resolution is best effort
+  — a local checkpoint or an offline machine records what is known rather than failing.
+- Serving from a pinned Hub revision: `hf-lab serve --model-repo owner/name
+  --model-revision <sha>`. The revision is fetched at startup, health reports
+  `repo@revision`, and the server warns when handed a branch, which can change under a
+  running deployment.
+- `docs/hub_lifecycle.md` covering the path from training to a served, pinned revision.
+
 ### Fixed
 
 - Hub dataset presets used bare repository ids (`ag_news`, `imdb`, `banking77`,
