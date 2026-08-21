@@ -1,0 +1,47 @@
+name: Hub presets
+
+# Resolves every dataset preset against the real Hugging Face Hub.
+#
+# Deliberately not part of pull-request CI: it needs network, so it would make
+# merges flaky and slow. But preset breakage is invisible to the rest of the
+# suite — the other Hub tests build datasets in memory, so a dependency bump
+# that makes every preset unresolvable still passes CI. huggingface-hub 1.28
+# did exactly that when it began rejecting bare repository ids.
+#
+# Running weekly catches it against the Hub's current state rather than at
+# merge time, and an upstream dataset that moves or is withdrawn shows up here
+# rather than in someone's first run.
+
+on:
+  schedule:
+    # Mondays, after the dependency update run.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hub-presets-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v4
+        with:
+          poetry-version: 2.2.1
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: "poetry"
+      - name: Install dependencies
+        run: poetry install --with dev
+      - name: Resolve presets
+        env:
+          HF_HUB_DISABLE_SYMLINKS_WARNING: "1"
+        run: poetry run pytest -m network
