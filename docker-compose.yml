@@ -6,9 +6,9 @@ services:
     image: hf-finetuning-lab:latest
     container_name: hf-lab-serve
     environment:
-      # Override these from a .env file or your secrets manager. The defaults
-      # point at the example artifact baked into the image so the container
-      # starts; mount a real model artifact for production.
+      # Read by `hf-lab serve` through ServingConfig.from_env. The image
+      # ships no model, so the bind-mount below supplies the artifact these
+      # paths point at.
       HF_LAB_MODEL_DIR: "/app/artifacts/models/support-triage"
       HF_LAB_MODEL_VERSION: "1.0.0"
       HF_LAB_ENABLE_METRICS: "false"

@@ -4110,19 +4110,18 @@ virtualenv = ">=20.10.0"
 
 [[package]]
 name = "prometheus-client"
-version = "0.26.0"
+version = "0.21.1"
 description = "Python client for the Prometheus monitoring system."
 optional = false
-python-versions = ">=3.9"
-groups = ["dev"]
+python-versions = ">=3.8"
+groups = ["main", "dev"]
 files = [
-    {file = "prometheus_client-0.26.0-py3-none-any.whl", hash = "sha256:fa93d06737aa02bacd05794768508bb97d2fbee28cb3bca04eaae92f0ca953d6"},
-    {file = "prometheus_client-0.26.0.tar.gz", hash = "sha256:04a91bcf94e2cf74a44a1a874d651a2e853ed354b6e822f3b7487751465d5c2b"},
+    {file = "prometheus_client-0.21.1-py3-none-any.whl", hash = "sha256:594b45c410d6f4f8888940fe80b5cc2521b305a1fafe1c58609ef715a001f301"},
+    {file = "prometheus_client-0.21.1.tar.gz", hash = "sha256:252505a722ac04b0456be05c05f75f45d760c2911ffc45f2a06bcaed9f3ae3fb"},
 ]
+markers = {main = "extra == \"metrics\""}
 
 [package.extras]
-aiohttp = ["aiohttp"]
-django = ["django"]
 twisted = ["twisted"]
 
 [[package]]
@@ -6816,7 +6815,10 @@ idna = ">=2.0"
 multidict = ">=4.0"
 propcache = ">=0.2.1"
 
+[extras]
+metrics = ["prometheus-client"]
+
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.13"
-content-hash = "d40761172fb2cf16314fcc4c887d7960acb8dd444791ea01f07af37602029224"
+content-hash = "abdf8b8b34cb5acbbd5c93dc601d1078959cf0beeef21dd13078630dec11e91c"

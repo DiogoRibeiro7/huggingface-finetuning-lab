@@ -86,8 +86,8 @@ def install_metrics(app: FastAPI) -> tuple[Any, Any]:
         )
     except ImportError as exc:  # pragma: no cover - optional dependency
         raise ImportError(
-            "Install `prometheus-client` to enable serving metrics "
-            "(e.g. `pip install prometheus-client`)."
+            "Install the `metrics` extra to enable serving metrics "
+            "(`poetry install --extras metrics`)."
         ) from exc
 
     registry = CollectorRegistry()

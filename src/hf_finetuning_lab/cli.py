@@ -168,14 +168,24 @@ def predict(
 
 @app.command("serve")
 def serve(
-    model_dir: Path = typer.Option(..., help="Local model directory."),
-    host: str = typer.Option("127.0.0.1", help="Server host."),
-    port: int = typer.Option(8000, help="Server port."),
+    model_dir: Path | None = typer.Option(None, help="Local model directory."),
+    host: str | None = typer.Option(None, help="Server host."),
+    port: int | None = typer.Option(None, help="Server port."),
 ) -> None:
-    """Serve a local text-classification model with FastAPI."""
+    """Serve a local text-classification model with FastAPI.
+
+    Unset options fall back to the HF_LAB_* environment variables, so the same
+    image can be configured by flags locally and by Compose in deployment.
+    """
     import uvicorn
 
-    from hf_finetuning_lab.serving.api import create_app
+    from hf_finetuning_lab.serving.api import create_app_from_config
+    from hf_finetuning_lab.serving.config import ServingConfig
 
-    app_instance = create_app(model_dir=model_dir)
-    uvicorn.run(app_instance, host=host, port=port)
+    try:
+        config = ServingConfig.from_env(model_dir=model_dir, host=host, port=port)
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc)) from exc
+
+    app_instance = create_app_from_config(config)
+    uvicorn.run(app_instance, host=config.host, port=config.port)

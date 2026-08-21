@@ -37,6 +37,10 @@ dynamic = ["dependencies"]
 "Bug Tracker" = "https://github.com/DiogoRibeiro7/huggingface-finetuning-lab/issues"
 "Changelog" = "https://github.com/DiogoRibeiro7/huggingface-finetuning-lab/blob/main/CHANGELOG.md"
 
+[project.optional-dependencies]
+# poetry install --extras metrics
+metrics = ["prometheus-client>=0.21.0,<0.22.0"]
+
 [project.scripts]
 hf-lab = "hf_finetuning_lab.cli:app"
 
