@@ -42,23 +42,28 @@ class HubDatasetConfig:
         return out
 
 
+# Preset repository ids are namespaced (``owner/name``). Bare ids such as
+# ``ag_news`` used to resolve through Hub redirects, but huggingface-hub >=1.14
+# rejects them outright: "Repository id must be 'namespace/name'". banking77
+# points at the parquet mirror because the PolyAI copy is still script-based,
+# and datasets >=4 no longer runs dataset scripts.
 HUB_PRESETS: dict[str, HubDatasetConfig] = {
     "ag_news": HubDatasetConfig(
-        name="ag_news",
+        name="fancyzhx/ag_news",
         label_names=("World", "Sports", "Business", "Sci/Tech"),
         description="AG News topic classification (4 classes).",
     ),
     "imdb": HubDatasetConfig(
-        name="imdb",
+        name="stanfordnlp/imdb",
         label_names=("negative", "positive"),
         description="IMDb sentiment classification (2 classes).",
     ),
     "banking77": HubDatasetConfig(
-        name="banking77",
+        name="legacy-datasets/banking77",
         description="Banking customer-intent classification (77 fine-grained classes).",
     ),
     "tweet_eval_sentiment": HubDatasetConfig(
-        name="tweet_eval",
+        name="cardiffnlp/tweet_eval",
         config="sentiment",
         train_split="train",
         test_split="test",
