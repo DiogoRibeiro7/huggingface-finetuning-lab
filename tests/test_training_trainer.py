@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pandas as pd
 
+from hf_finetuning_lab.config import TrainingConfig
 from hf_finetuning_lab.training.trainer import (
     CompatibleTrainer,
     _ensure_optimizer_mode_compatibility,
@@ -65,8 +67,8 @@ def test_ensure_optimizer_mode_compatibility_preserves_existing_hooks() -> None:
     assert wrapped.optimizer.called == ["train", "eval"]
 
 
-def test_write_heldout_test_split_persists_rows(tmp_path: Path) -> None:
-    frame = pd.DataFrame(
+def _heldout_frame() -> pd.DataFrame:
+    return pd.DataFrame(
         {
             "text": ["alpha", "beta"],
             "label": ["account", "billing"],
@@ -74,10 +76,25 @@ def test_write_heldout_test_split_persists_rows(tmp_path: Path) -> None:
         }
     )
 
-    written = _write_heldout_test_split(frame, tmp_path)
 
-    assert written == tmp_path / "heldout_test.csv"
-    restored = pd.read_csv(written)
+def test_write_heldout_test_split_writes_a_manifest_by_default(tmp_path: Path) -> None:
+    frame = _heldout_frame()
+
+    written = _write_heldout_test_split(frame, tmp_path, TrainingConfig())
+
+    assert written == tmp_path / "heldout_manifest.json"
+    payload = json.loads(written.read_text(encoding="utf-8"))
+    assert payload["n_rows"] == 2
+    # The evaluation text must not travel with the model directory.
+    assert not (tmp_path / "heldout_test.csv").exists()
+
+
+def test_write_heldout_test_split_can_persist_rows(tmp_path: Path) -> None:
+    frame = _heldout_frame()
+
+    _write_heldout_test_split(frame, tmp_path, TrainingConfig(persist_heldout_rows=True))
+
+    restored = pd.read_csv(tmp_path / "heldout_test.csv")
     assert restored.to_dict(orient="records") == frame.to_dict(orient="records")
 
 

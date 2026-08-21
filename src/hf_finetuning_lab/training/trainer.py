@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, cast
 
 from hf_finetuning_lab.config import TrainingConfig
+from hf_finetuning_lab.data.heldout import write_heldout_manifest
 from hf_finetuning_lab.data.io import (
     build_label_mapping,
     encode_labels,
@@ -117,11 +118,24 @@ class CompatibleTrainer:
         return super().training_step(model, inputs, num_items_in_batch=num_items_in_batch)  # type: ignore[misc]
 
 
-def _write_heldout_test_split(test_df: Any, output_path: Path) -> Path:
-    """Persist the held-out test split used for final evaluation."""
-    destination = output_path / "heldout_test.csv"
-    test_df.to_csv(destination, index=False)
-    return destination
+def _write_heldout_test_split(
+    test_df: Any,
+    output_path: Path,
+    config: TrainingConfig,
+) -> Path:
+    """Describe the held-out test split used for final evaluation.
+
+    Writes a manifest by default; the rows themselves only when the config
+    opts in, so a shared model directory does not carry the evaluation text.
+    """
+    return write_heldout_manifest(
+        test_df,
+        output_path,
+        text_col=config.text_col,
+        label_col=config.label_col,
+        seed=config.seed,
+        persist_rows=config.persist_heldout_rows,
+    )
 
 
 def train_text_classifier(input_path: str | Path, output_dir: str | Path, config: TrainingConfig) -> Path:
@@ -221,7 +235,7 @@ def train_text_classifier(input_path: str | Path, output_dir: str | Path, config
         json.dumps(eval_metrics, indent=2),
         encoding="utf-8",
     )
-    _write_heldout_test_split(test_df, output_path)
+    _write_heldout_test_split(test_df, output_path, config)
     write_model_card(
         output_path=output_path / "model_card.md",
         model_name=config.model_name,

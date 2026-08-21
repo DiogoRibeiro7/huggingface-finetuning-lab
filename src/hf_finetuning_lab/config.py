@@ -28,6 +28,10 @@ class TrainingConfig:
     lora_alpha: int = 16
     lora_dropout: float = 0.05
     lora_target_modules: list[str] = field(default_factory=list)
+    #: Write the raw held-out rows into the model directory alongside the
+    #: manifest. Off by default: a model directory is shareable, and the
+    #: held-out text may not be.
+    persist_heldout_rows: bool = False
 
     def validate(self) -> None:
         """Validate user-provided configuration values."""
