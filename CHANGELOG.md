@@ -6,6 +6,48 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 ## [Unreleased]
 
+### Fixed
+
+- Hub dataset presets used bare repository ids (`ag_news`, `imdb`, `banking77`,
+  `tweet_eval`). Those resolved through Hub redirects until `huggingface-hub` 1.14,
+  which rejects them: *Repository id must be 'namespace/name'*. All four are now
+  namespaced, with `banking77` pointing at the parquet mirror because the PolyAI copy
+  is still script-based and `datasets` >=4 no longer runs dataset scripts.
+- `hf-lab train --config-file <file>` rejected every training flag as
+  "explicitly passed" when none were. The guard compared a `ParameterSource` from the
+  command context against one imported from `click`; typer ships its own copy of click,
+  so those can be different enum classes that never compare equal. The comparison is now
+  by name, and the package no longer imports click at all.
+
+### Changed
+
+- The serving image installs the CPU build of PyTorch. The default Linux `torch` wheel
+  bundles CUDA, so the container carried 17 nvidia/triton packages it could never use:
+  **8.66 GB to 2.59 GB**. The lock stays GPU-capable, since `poetry install` is also how a
+  training environment is set up.
+- Dependency updates: `typer` 0.27.1, `uvicorn` 0.52.3, `huggingface-hub` 1.28.0,
+  `ruff` 0.16.3, `httpx` 0.28.1.
+- `click` is no longer a direct dependency. Nothing imports it, and typer 0.27 does not
+  require it either, so the `<8.2` cap that tied the two together is gone.
+- Dependabot no longer groups pre-1.0 packages into the minor/patch pull request. A
+  0.12 to 0.27 bump is classified as "minor" but is where breaking changes live for a 0.x
+  project — that is how a typer upgrade that broke the CLI arrived inside a green grouped
+  PR. Python base images above the supported range are ignored, since nothing in CI builds
+  the Dockerfile and such a bump also arrives green.
+
+### Added
+
+- Architecture diagrams in the README and `docs/architecture.md`, replacing an ASCII
+  sketch that drew the flow as a straight line and so could not show that the validation
+  and test splits play different roles, or that the artifact is read by every downstream
+  stage rather than being one step among many.
+- A scheduled `Hub presets` workflow resolves every preset against the real Hub. Preset
+  breakage is invisible to the rest of the suite, which builds datasets in memory — the
+  `huggingface-hub` 1.28 failure above passed CI on both Python versions. The checks are
+  marked `network` and excluded from the default run, so merges stay fast.
+- Regression coverage for the `--config-file` path, which previously had none, and a test
+  asserting every preset id is namespaced.
+
 ## [1.0.1] - 2026-08-21
 
 ### Fixed
