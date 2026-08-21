@@ -45,7 +45,7 @@ packages = [{ include = "hf_finetuning_lab", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.13"
-pandas = "^2.2.0"
+pandas = "^3.0.5"
 numpy = "^1.26.0"
 scikit-learn = "^1.4.0"
 typer = { version = "^0.12.0", extras = ["all"] }
