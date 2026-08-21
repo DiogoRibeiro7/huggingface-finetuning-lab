@@ -25,7 +25,7 @@ REQUIRED_FILES: tuple[str, ...] = (
     "config.json",
     "label_mapping.json",
     "training_config.json",
-    "heldout_test.csv",
+    "heldout_manifest.json",
 )
 
 ALTERNATIVE_REQUIRED_FILES: tuple[tuple[str, ...], ...] = (
