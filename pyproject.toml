@@ -58,10 +58,6 @@ matplotlib = "^3.8.0"
 fastapi = "^0.141.0"
 uvicorn = { version = "^0.30.0", extras = ["standard"] }
 pydantic = "^2.7.0"
-# Tied to typer 0.12: that release breaks against click 8.2+, so the two
-# must be raised together. tests/test_cli_config_file.py covers the guard
-# this protects.
-click = ">=8.1,<8.2"
 transformers = "^5.5.0"
 datasets = "^5.0.0"
 evaluate = "^0.4.6"
