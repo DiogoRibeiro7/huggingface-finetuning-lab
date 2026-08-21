@@ -2,18 +2,44 @@
 
 ## High-level flow
 
-```text
-Data Source (CSV / JSONL / HF Hub)
-  -> Data IO + Validation
-  -> Label Mapping + Splits
-  -> Tokenization (or feature engineering)
-  -> Trainer (full fine-tune or LoRA)
-  -> Stable Artifact Directory (weights, tokenizer, config, model card, metrics)
-  -> Evaluation + Robust Evaluation (calibration, thresholds, CIs, drift)
-  -> Experiment Records (run IDs, dataset hashes, comparison tables)
-  -> Governance Artifacts (dataset card, model card, reproducibility checklist)
-  -> Batch Inference and FastAPI Serving (live/ready probes, structured logs, metrics)
+```mermaid
+flowchart TD
+    LOCAL["Local CSV / JSONL"] --> VALIDATE
+    HUBSRC["Hub preset<br/>data.hub"] --> VALIDATE
+    VALIDATE["Validate schema, build label mapping<br/>data.io"] --> SPLIT
+    SPLIT["Stratified split<br/>data.splits, optional group_col"]
+
+    SPLIT --> TRAINSET["train"]
+    SPLIT --> VALIDSET["validation"]
+    SPLIT --> TESTSET["test"]
+
+    TRAINSET --> TOKENIZE["Tokenize to max_length<br/>tokenization"]
+    TOKENIZE --> FIT["Trainer, optional LoRA merge<br/>training.trainer"]
+    FIT --> ARTIFACT["Model artifact directory<br/>weights, tokenizer, label map,<br/>preprocessing and held-out contracts"]
+
+    VALIDSET --> SELECT["Choose threshold and policy<br/>evaluation.robust"]
+    TESTSET --> SCORE["Score the frozen result once<br/>evaluation.evaluator"]
+    ARTIFACT --> SCORE
+    ARTIFACT --> VERIFY["verify_artifact --deep<br/>artifacts"]
+    GOVERNANCE["Dataset and model cards,<br/>reproducibility record<br/>governance"] --> GATE
+
+    SELECT --> GATE
+    SCORE --> GATE
+    VERIFY --> GATE
+
+    GATE{"Promotion gate<br/>governance.promotion"}
+    GATE -->|"every required criterion<br/>evaluated and passed"| SERVING["FastAPI serving<br/>serving.api, serving.config"]
+    GATE -->|"missing or failed evidence"| BLOCKED["Blocked"]
+
+    ARTIFACT -->|"preprocessing.json pins max_length"| PREDICT["Predictor<br/>inference.predictor"]
+    PREDICT --> SERVING
 ```
+
+Two things the earlier linear sketch could not show. The **validation split feeds selection
+and the test split feeds scoring** — they are not interchangeable, and the test split is
+never used to choose anything. And the **artifact is the hub**, not a step: evaluation,
+verification, inference and the promotion gate all read the same directory, which is why its
+contract is enforced rather than assumed.
 
 ## Module map (v1.0)
 

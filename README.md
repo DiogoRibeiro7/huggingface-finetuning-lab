@@ -25,6 +25,33 @@ The project focuses on a practical end-to-end workflow:
 
 The default example uses a synthetic customer-support triage dataset. It is intentionally small so the full workflow can be tested locally before switching to a real Hugging Face Hub dataset or internal CSV export.
 
+## Architecture
+
+```mermaid
+flowchart LR
+    D["Data<br/>local file or Hub preset"]
+    T["Train<br/>full fine-tune or LoRA"]
+    A["Model artifact<br/>weights + contracts"]
+    E["Evaluate<br/>metrics, calibration, subgroups"]
+    V["Verify<br/>layout, then deep checks"]
+    G{"Promotion gate<br/>fail-closed"}
+    S["Serve<br/>FastAPI or batch inference"]
+    H["Blocked"]
+
+    D --> T --> A
+    A --> E --> G
+    A --> V --> G
+    G -->|"required criteria passed"| S
+    G -->|"missing or failed evidence"| H
+```
+
+A model artifact is the unit that moves through the lifecycle: training writes it, evaluation
+and verification read it, the promotion gate decides on it, and serving loads it. The gate
+fails closed — a criterion that was never evaluated blocks promotion, because a check that
+did not run produced no evidence.
+
+See [docs/architecture.md](docs/architecture.md) for the module-level view.
+
 ## Repository structure
 
 ```text
