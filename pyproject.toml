@@ -56,7 +56,7 @@ typer = { version = "^0.27.1", extras = ["all"] }
 pyyaml = "^6.0.1"
 matplotlib = "^3.8.0"
 fastapi = "^0.141.0"
-uvicorn = { version = "^0.30.0", extras = ["standard"] }
+uvicorn = { version = "^0.52.3", extras = ["standard"] }
 pydantic = "^2.7.0"
 transformers = "^5.5.0"
 datasets = "^5.0.0"
