@@ -48,27 +48,27 @@ python = ">=3.11,<3.13"
 pandas = "^2.2.0"
 numpy = "^1.26.0"
 scikit-learn = "^1.4.0"
-typer = { version = "^0.12.0", extras = ["all"] }
+typer = { version = "^0.27.1", extras = ["all"] }
 pyyaml = "^6.0.1"
 matplotlib = "^3.8.0"
 fastapi = "^0.141.0"
-uvicorn = { version = "^0.30.0", extras = ["standard"] }
+uvicorn = { version = "^0.52.3", extras = ["standard"] }
 pydantic = "^2.7.0"
-click = ">=8.1,<8.2"
+click = ">=8.4.2,<8.5"
 transformers = "^5.5.0"
 datasets = "^5.0.0"
 evaluate = "^0.4.6"
 accelerate = "^1.1.0"
 torch = "^2.13.0"
 safetensors = "^0.8.0"
-huggingface-hub = "^1.5.0"
+huggingface-hub = "^1.27.0"
 peft = "^0.20.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.3"
-ruff = "^0.5.0"
+ruff = "^0.16.3"
 mypy = "^1.10.0"
-httpx = "^0.27.0"
+httpx = "^0.28.1"
 pre-commit = "^4.2.0"
 nbqa = "^1.9.1"
 jupyter = "^1.1.1"
