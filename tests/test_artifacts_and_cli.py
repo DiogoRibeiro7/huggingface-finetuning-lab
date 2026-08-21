@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 from hf_finetuning_lab import __version__
 from hf_finetuning_lab.artifacts import (
     ALTERNATIVE_REQUIRED_FILES,
+    RECOMMENDED_FILES,
     REQUIRED_FILES,
     ArtifactCheck,
     ArtifactReport,
@@ -144,7 +145,9 @@ def test_cli_verify_artifact_strict_flag_treats_warnings_as_failure(tmp_path: Pa
 
 def test_cli_verify_artifact_strict_passes_when_recommended_present(tmp_path: Path) -> None:
     _write_minimal_artifact(tmp_path)
-    for name in ["tokenizer_config.json", "special_tokens_map.json", "model_card.md", "test_metrics.json"]:
+    # Derived from the contract so adding a recommended file cannot silently
+    # break this test.
+    for name in RECOMMENDED_FILES:
         (tmp_path / name).write_text("{}", encoding="utf-8")
     result = runner.invoke(
         app, ["verify-artifact", "--model-dir", str(tmp_path), "--strict"]
