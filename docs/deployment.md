@@ -24,6 +24,12 @@ docker run -p 8000:8000 \
 The image runs as an unprivileged user (`serve`, uid 10001) and is built in two stages,
 so the compiler toolchain used to install dependencies is not present at runtime.
 
+It installs the CPU build of PyTorch. The default Linux `torch` wheel bundles CUDA, which
+adds 17 nvidia/triton packages and about 6 GB that a CPU serving container can never use.
+Versions still come from `poetry.lock`, so the image matches what CI resolved; the lock
+itself stays GPU-capable, because `poetry install` is also how a training environment is
+set up. For GPU serving, build from the lock without the CPU index override.
+
 ## Configuration
 
 Every setting is resolved by `ServingConfig.from_env`. A CLI flag always beats the
