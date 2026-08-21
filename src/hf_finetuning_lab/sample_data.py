@@ -55,8 +55,19 @@ NOISE_PHRASES = [
 ]
 
 
-def generate_support_ticket_data(rows: int = 2000, seed: int = 42) -> pd.DataFrame:
+def generate_support_ticket_data(
+    rows: int = 2000,
+    seed: int = 42,
+    label_noise: float = 0.0,
+    ambiguity: float = 0.0,
+) -> pd.DataFrame:
     """Generate a synthetic text-classification dataset for support triage.
+
+    With the default settings each class has its own distinct templates, so the
+    task is close to separable and most metrics land near 1.0. That is fine for
+    demonstrating a workflow, but it makes calibration, confidence intervals and
+    drift look trivially perfect. The two difficulty knobs make the benchmark
+    informative enough to exercise those tools.
 
     Parameters
     ----------
@@ -64,14 +75,27 @@ def generate_support_ticket_data(rows: int = 2000, seed: int = 42) -> pd.DataFra
         Number of examples to generate.
     seed:
         Random seed for reproducibility.
+    label_noise:
+        Fraction of rows whose label is flipped to a different class,
+        simulating annotation error. The resulting ceiling on achievable
+        accuracy is roughly ``1 - label_noise``.
+    ambiguity:
+        Fraction of rows that blend a second class's template into the text,
+        so the correct label is genuinely uncertain from the wording alone.
 
     Returns
     -------
     pandas.DataFrame
-        Dataset with `text` and `label` columns.
+        Dataset with `id`, `text`, `label` and `template_family` columns.
+        ``template_family`` identifies the template a row was generated from,
+        so a group-aware split can keep near-duplicate phrasings together.
     """
     if rows <= 0:
         raise ValueError("rows must be positive.")
+    if not 0 <= label_noise < 1:
+        raise ValueError("label_noise must be in [0, 1).")
+    if not 0 <= ambiguity <= 1:
+        raise ValueError("ambiguity must be in [0, 1].")
 
     rng = np.random.default_rng(seed)
     labels = list(LABEL_TEMPLATES)
@@ -81,20 +105,49 @@ def generate_support_ticket_data(rows: int = 2000, seed: int = 42) -> pd.DataFra
     records: list[dict[str, str | int]] = []
     for row_id in range(rows):
         label = str(rng.choice(labels, p=probabilities))
-        template = str(rng.choice(LABEL_TEMPLATES[label]))
+        template_index = int(rng.integers(0, len(LABEL_TEMPLATES[label])))
+        template = LABEL_TEMPLATES[label][template_index]
         n_noise = int(rng.integers(0, 3))
         noise = " ".join(rng.choice(NOISE_PHRASES, size=n_noise, replace=False))
         urgency = " urgent" if rng.random() < 0.12 else ""
+
+        if ambiguity and rng.random() < ambiguity:
+            # Blend in another class's phrasing so the wording genuinely
+            # supports more than one label.
+            other = str(rng.choice([lbl for lbl in labels if lbl != label]))
+            other_template = str(rng.choice(LABEL_TEMPLATES[other]))
+            template = f"{template}. {other_template}"
+
         text = f"{template}{urgency}. {noise}".strip()
-        records.append({"id": row_id, "text": text, "label": label})
+
+        observed = label
+        if label_noise and rng.random() < label_noise:
+            observed = str(rng.choice([lbl for lbl in labels if lbl != label]))
+
+        records.append(
+            {
+                "id": row_id,
+                "text": text,
+                "label": observed,
+                "template_family": f"{label}:{template_index}",
+            }
+        )
 
     return pd.DataFrame.from_records(records)
 
 
-def write_sample_data(output: str | Path, rows: int = 2000, seed: int = 42) -> Path:
+def write_sample_data(
+    output: str | Path,
+    rows: int = 2000,
+    seed: int = 42,
+    label_noise: float = 0.0,
+    ambiguity: float = 0.0,
+) -> Path:
     """Write synthetic support-ticket data to CSV."""
     output_path = Path(output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    df = generate_support_ticket_data(rows=rows, seed=seed)
+    df = generate_support_ticket_data(
+        rows=rows, seed=seed, label_noise=label_noise, ambiguity=ambiguity
+    )
     df.to_csv(output_path, index=False)
     return output_path

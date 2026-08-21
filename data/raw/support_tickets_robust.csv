@@ -1,0 +1,801 @@
+id,text,label,template_family
+0,I cancelled but I still received a renewal notice. I received a login alert from an unknown location. I already contacted support,cancellation,cancellation:2
+1,I need confirmation that my membership was cancelled. please respond quickly,cancellation,cancellation:3
+2,The package was marked delivered but I did not receive it. I need a refund for an incorrect billing charge. thank you I already contacted support,delivery,delivery:1
+3,I need confirmation that my membership was cancelled. I am using the mobile app please respond quickly,cancellation,cancellation:3
+4,The export button does not work on my browser.,technical,technical:1
+5,Someone changed my password without permission.,security,security:1
+6,The login page keeps rejecting my credentials. I am using the mobile app,account,account:2
+7,My order has not arrived and tracking has not updated.,delivery,delivery:0
+8,The invoice amount is wrong this month. I need confirmation that my membership was cancelled.,billing,billing:1
+9,My order has not arrived and tracking has not updated. the issue started yesterday,delivery,delivery:0
+10,I cannot log into my account after resetting my password.,account,account:0
+11,I cancelled but I still received a renewal notice. I already contacted support,technical,cancellation:2
+12,The system is slow and sometimes freezes.,technical,technical:3
+13,I need help changing the email address on my account.,account,account:3
+14,I need confirmation that my membership was cancelled. The export button does not work on my browser. I am using the mobile app,account,cancellation:3
+15,I need to change the delivery address for my order. My profile is locked and I need access again. I can provide screenshots,delivery,delivery:2
+16,I receive an error when uploading a file.,billing,technical:2
+17,My profile is locked and I need access again. thank you I am using the mobile app,account,account:1
+18,I need to change the delivery address for my order urgent. I can provide screenshots I am using the mobile app,delivery,delivery:2
+19,My payment failed but the money left my account. The shipment is delayed and I need an update.,billing,billing:2
+20,I need to change the delivery address for my order. I am using the mobile app,cancellation,delivery:2
+21,The system is slow and sometimes freezes.,cancellation,technical:3
+22,My order has not arrived and tracking has not updated. this has happened before I am using the mobile app,delivery,delivery:0
+23,I cannot log into my account after resetting my password urgent. I already contacted support I am using the mobile app,account,account:0
+24,Please help me secure my account immediately.,security,security:3
+25,I receive an error when uploading a file. this has happened before I am using the mobile app,billing,technical:2
+26,The login page keeps rejecting my credentials. the issue started yesterday,account,account:2
+27,Please stop my plan at the end of the month. I was charged twice for the same subscription.,cancellation,cancellation:1
+28,The export button does not work on my browser. I am using the mobile app I can provide screenshots,technical,technical:1
+29,The invoice amount is wrong this month urgent. this has happened before I can provide screenshots,billing,billing:1
+30,I saw suspicious activity on my account. thank you I can provide screenshots,security,security:0
+31,The shipment is delayed and I need an update urgent. I am using the mobile app,delivery,delivery:3
+32,Please help me secure my account immediately.,security,security:3
+33,My profile is locked and I need access again. I can provide screenshots,account,account:1
+34,Please help me secure my account immediately. I cannot log into my account after resetting my password. I already contacted support,account,security:3
+35,The login page keeps rejecting my credentials.,account,account:2
+36,I cancelled but I still received a renewal notice. The package was marked delivered but I did not receive it.,cancellation,cancellation:2
+37,The app crashes every time I open the dashboard. please respond quickly this has happened before,technical,technical:0
+38,Someone changed my password without permission.,delivery,security:1
+39,The app crashes every time I open the dashboard.,technical,technical:0
+40,The system is slow and sometimes freezes. I need a refund for an incorrect billing charge urgent. I can provide screenshots,technical,technical:3
+41,The invoice amount is wrong this month. I can provide screenshots,billing,billing:1
+42,I receive an error when uploading a file. I am using the mobile app please respond quickly,technical,technical:2
+43,I need a refund for an incorrect billing charge urgent. I can provide screenshots thank you,account,billing:3
+44,Please stop my plan at the end of the month.,cancellation,cancellation:1
+45,My payment failed but the money left my account. I want to cancel my subscription before renewal urgent.,billing,billing:2
+46,My profile is locked and I need access again. I already contacted support,account,account:1
+47,I received a login alert from an unknown location. I was charged twice for the same subscription. I already contacted support I can provide screenshots,security,security:2
+48,The export button does not work on my browser.,account,technical:1
+49,I need help changing the email address on my account urgent. thank you,account,account:3
+50,Someone changed my password without permission. The shipment is delayed and I need an update. I already contacted support I can provide screenshots,security,security:1
+51,I received a login alert from an unknown location. I can provide screenshots I am using the mobile app,technical,security:2
+52,The export button does not work on my browser. this has happened before,technical,technical:1
+53,The app crashes every time I open the dashboard. this has happened before I am using the mobile app,technical,technical:0
+54,The system is slow and sometimes freezes. I can provide screenshots I already contacted support,technical,technical:3
+55,I was charged twice for the same subscription. I need confirmation that my membership was cancelled. please respond quickly this has happened before,cancellation,billing:0
+56,I need to change the delivery address for my order. Please help me secure my account immediately.,delivery,delivery:2
+57,The package was marked delivered but I did not receive it. I can provide screenshots thank you,security,delivery:1
+58,My order has not arrived and tracking has not updated.,delivery,delivery:0
+59,I receive an error when uploading a file. I can provide screenshots thank you,delivery,technical:2
+60,The login page keeps rejecting my credentials.,account,account:2
+61,I need to change the delivery address for my order. I can provide screenshots,delivery,delivery:2
+62,I need a refund for an incorrect billing charge.,billing,billing:3
+63,The app crashes every time I open the dashboard.,technical,technical:0
+64,I receive an error when uploading a file.,technical,technical:2
+65,My profile is locked and I need access again. Someone changed my password without permission.,account,account:1
+66,The login page keeps rejecting my credentials.,account,account:2
+67,The export button does not work on my browser.,billing,technical:1
+68,I saw suspicious activity on my account urgent. the issue started yesterday this has happened before,security,security:0
+69,The shipment is delayed and I need an update. I was charged twice for the same subscription. please respond quickly,security,delivery:3
+70,I need a refund for an incorrect billing charge. I saw suspicious activity on my account.,account,billing:3
+71,The shipment is delayed and I need an update urgent. this has happened before I can provide screenshots,delivery,delivery:3
+72,I need confirmation that my membership was cancelled. I cannot log into my account after resetting my password urgent. the issue started yesterday I can provide screenshots,cancellation,cancellation:3
+73,I cancelled but I still received a renewal notice. please respond quickly,cancellation,cancellation:2
+74,I need a refund for an incorrect billing charge.,cancellation,billing:3
+75,My order has not arrived and tracking has not updated.,delivery,delivery:0
+76,I need help changing the email address on my account.,account,account:3
+77,The shipment is delayed and I need an update. I already contacted support,delivery,delivery:3
+78,My order has not arrived and tracking has not updated. Please stop my plan at the end of the month.,delivery,delivery:0
+79,I receive an error when uploading a file.,technical,technical:2
+80,The app crashes every time I open the dashboard. I already contacted support I am using the mobile app,technical,technical:0
+81,I need to change the delivery address for my order urgent.,delivery,delivery:2
+82,I was charged twice for the same subscription. I am using the mobile app,billing,billing:0
+83,My payment failed but the money left my account.,billing,billing:2
+84,The system is slow and sometimes freezes. I already contacted support I can provide screenshots,technical,technical:3
+85,The export button does not work on my browser. I saw suspicious activity on my account. this has happened before I am using the mobile app,technical,technical:1
+86,I cannot log into my account after resetting my password. I receive an error when uploading a file.,account,account:0
+87,My profile is locked and I need access again. I can provide screenshots,account,account:1
+88,I need to change the delivery address for my order.,delivery,delivery:2
+89,Please stop my plan at the end of the month.,cancellation,cancellation:1
+90,The package was marked delivered but I did not receive it.,delivery,delivery:1
+91,My profile is locked and I need access again. I can provide screenshots thank you,delivery,account:1
+92,The system is slow and sometimes freezes. I am using the mobile app,technical,technical:3
+93,I cannot log into my account after resetting my password. My payment failed but the money left my account.,account,account:0
+94,The app crashes every time I open the dashboard. Please help me secure my account immediately urgent. I can provide screenshots I already contacted support,technical,technical:0
+95,The package was marked delivered but I did not receive it. the issue started yesterday I can provide screenshots,delivery,delivery:1
+96,I want to cancel my subscription before renewal.,cancellation,cancellation:0
+97,Someone changed my password without permission.,security,security:1
+98,I receive an error when uploading a file. please respond quickly,technical,technical:2
+99,I cannot log into my account after resetting my password urgent. I am using the mobile app,account,account:0
+100,I was charged twice for the same subscription urgent.,billing,billing:0
+101,I need to change the delivery address for my order. I can provide screenshots thank you,delivery,delivery:2
+102,The package was marked delivered but I did not receive it urgent. I can provide screenshots I already contacted support,delivery,delivery:1
+103,The system is slow and sometimes freezes. I already contacted support I am using the mobile app,technical,technical:3
+104,I cancelled but I still received a renewal notice urgent. please respond quickly,cancellation,cancellation:2
+105,I saw suspicious activity on my account. I am using the mobile app thank you,billing,security:0
+106,I cancelled but I still received a renewal notice. I saw suspicious activity on my account.,billing,cancellation:2
+107,I need help changing the email address on my account. the issue started yesterday thank you,account,account:3
+108,I need help changing the email address on my account. I received a login alert from an unknown location. this has happened before please respond quickly,account,account:3
+109,I need help changing the email address on my account. Someone changed my password without permission. the issue started yesterday,account,account:3
+110,Please help me secure my account immediately. this has happened before the issue started yesterday,security,security:3
+111,My payment failed but the money left my account.,billing,billing:2
+112,I received a login alert from an unknown location. The login page keeps rejecting my credentials.,security,security:2
+113,I need to change the delivery address for my order. please respond quickly,billing,delivery:2
+114,The app crashes every time I open the dashboard. The invoice amount is wrong this month.,technical,technical:0
+115,The invoice amount is wrong this month. thank you,billing,billing:1
+116,Please help me secure my account immediately. this has happened before,security,security:3
+117,I want to cancel my subscription before renewal. The package was marked delivered but I did not receive it. the issue started yesterday,cancellation,cancellation:0
+118,Someone changed my password without permission.,security,security:1
+119,The export button does not work on my browser. I am using the mobile app thank you,technical,technical:1
+120,Please stop my plan at the end of the month. I receive an error when uploading a file.,cancellation,cancellation:1
+121,The system is slow and sometimes freezes. My profile is locked and I need access again. please respond quickly,technical,technical:3
+122,I cannot log into my account after resetting my password. I saw suspicious activity on my account. I am using the mobile app this has happened before,account,account:0
+123,I need help changing the email address on my account. I am using the mobile app this has happened before,technical,account:3
+124,My profile is locked and I need access again. thank you please respond quickly,account,account:1
+125,I cancelled but I still received a renewal notice. I can provide screenshots,cancellation,cancellation:2
+126,The system is slow and sometimes freezes. The invoice amount is wrong this month. I am using the mobile app this has happened before,technical,technical:3
+127,My profile is locked and I need access again. please respond quickly,security,account:1
+128,I cannot log into my account after resetting my password. I was charged twice for the same subscription.,account,account:0
+129,I cancelled but I still received a renewal notice. please respond quickly,cancellation,cancellation:2
+130,I need confirmation that my membership was cancelled. thank you this has happened before,cancellation,cancellation:3
+131,The system is slow and sometimes freezes. this has happened before the issue started yesterday,technical,technical:3
+132,I receive an error when uploading a file. Please stop my plan at the end of the month urgent.,cancellation,technical:2
+133,My order has not arrived and tracking has not updated. the issue started yesterday I am using the mobile app,delivery,delivery:0
+134,I need help changing the email address on my account. I cancelled but I still received a renewal notice.,account,account:3
+135,I need help changing the email address on my account.,delivery,account:3
+136,Please help me secure my account immediately. I already contacted support,technical,security:3
+137,My payment failed but the money left my account. The login page keeps rejecting my credentials. the issue started yesterday,billing,billing:2
+138,Please help me secure my account immediately.,security,security:3
+139,I need to change the delivery address for my order. I already contacted support the issue started yesterday,delivery,delivery:2
+140,I need help changing the email address on my account.,cancellation,account:3
+141,I received a login alert from an unknown location. this has happened before,security,security:2
+142,My payment failed but the money left my account. I can provide screenshots thank you,billing,billing:2
+143,I received a login alert from an unknown location. I am using the mobile app,security,security:2
+144,I receive an error when uploading a file. please respond quickly,technical,technical:2
+145,I cannot log into my account after resetting my password. The system is slow and sometimes freezes.,account,account:0
+146,The shipment is delayed and I need an update. I already contacted support I am using the mobile app,delivery,delivery:3
+147,The package was marked delivered but I did not receive it. The invoice amount is wrong this month. thank you,delivery,delivery:1
+148,My profile is locked and I need access again.,account,account:1
+149,I was charged twice for the same subscription.,billing,billing:0
+150,I need a refund for an incorrect billing charge.,billing,billing:3
+151,I cannot log into my account after resetting my password. please respond quickly,security,account:0
+152,I was charged twice for the same subscription.,billing,billing:0
+153,I received a login alert from an unknown location. I am using the mobile app thank you,security,security:2
+154,I cannot log into my account after resetting my password. The invoice amount is wrong this month. I can provide screenshots thank you,account,account:0
+155,Someone changed my password without permission. I already contacted support,security,security:1
+156,I cancelled but I still received a renewal notice.,delivery,cancellation:2
+157,I received a login alert from an unknown location.,security,security:2
+158,The app crashes every time I open the dashboard. this has happened before,technical,technical:0
+159,I was charged twice for the same subscription. The app crashes every time I open the dashboard. I already contacted support,billing,billing:0
+160,I saw suspicious activity on my account. I already contacted support this has happened before,security,security:0
+161,My profile is locked and I need access again. please respond quickly,account,account:1
+162,My profile is locked and I need access again. The export button does not work on my browser. thank you,account,account:1
+163,I was charged twice for the same subscription. please respond quickly I already contacted support,billing,billing:0
+164,I saw suspicious activity on my account. I can provide screenshots the issue started yesterday,security,security:0
+165,My profile is locked and I need access again. I am using the mobile app please respond quickly,account,account:1
+166,I was charged twice for the same subscription urgent. thank you I already contacted support,billing,billing:0
+167,The login page keeps rejecting my credentials. I cancelled but I still received a renewal notice. I already contacted support,account,account:2
+168,I received a login alert from an unknown location.,security,security:2
+169,My order has not arrived and tracking has not updated. I saw suspicious activity on my account. the issue started yesterday,delivery,delivery:0
+170,The login page keeps rejecting my credentials. I am using the mobile app thank you,account,account:2
+171,My order has not arrived and tracking has not updated.,delivery,delivery:0
+172,The system is slow and sometimes freezes. this has happened before,technical,technical:3
+173,I need to change the delivery address for my order. I am using the mobile app,security,delivery:2
+174,My order has not arrived and tracking has not updated. I need confirmation that my membership was cancelled.,delivery,delivery:0
+175,Please stop my plan at the end of the month. Someone changed my password without permission. thank you I can provide screenshots,billing,cancellation:1
+176,The package was marked delivered but I did not receive it. thank you I can provide screenshots,delivery,delivery:1
+177,I need to change the delivery address for my order.,delivery,delivery:2
+178,The export button does not work on my browser. I already contacted support please respond quickly,technical,technical:1
+179,Someone changed my password without permission. I am using the mobile app I can provide screenshots,security,security:1
+180,I need a refund for an incorrect billing charge.,billing,billing:3
+181,I saw suspicious activity on my account. thank you I can provide screenshots,security,security:0
+182,The shipment is delayed and I need an update. I am using the mobile app,delivery,delivery:3
+183,My payment failed but the money left my account urgent. this has happened before thank you,billing,billing:2
+184,I want to cancel my subscription before renewal. I cannot log into my account after resetting my password.,cancellation,cancellation:0
+185,The invoice amount is wrong this month. thank you please respond quickly,billing,billing:1
+186,I need help changing the email address on my account.,account,account:3
+187,The package was marked delivered but I did not receive it. My profile is locked and I need access again.,delivery,delivery:1
+188,The export button does not work on my browser. thank you the issue started yesterday,security,technical:1
+189,My order has not arrived and tracking has not updated. The export button does not work on my browser. I am using the mobile app this has happened before,delivery,delivery:0
+190,I cancelled but I still received a renewal notice. the issue started yesterday thank you,cancellation,cancellation:2
+191,I want to cancel my subscription before renewal. this has happened before,security,cancellation:0
+192,My profile is locked and I need access again. I was charged twice for the same subscription urgent. this has happened before,account,account:1
+193,My profile is locked and I need access again. I was charged twice for the same subscription. the issue started yesterday,account,account:1
+194,I cancelled but I still received a renewal notice urgent. I already contacted support,cancellation,cancellation:2
+195,I need a refund for an incorrect billing charge.,billing,billing:3
+196,The system is slow and sometimes freezes. this has happened before,cancellation,technical:3
+197,I cannot log into my account after resetting my password.,account,account:0
+198,I cannot log into my account after resetting my password. this has happened before I already contacted support,account,account:0
+199,Someone changed my password without permission.,security,security:1
+200,I want to cancel my subscription before renewal. I can provide screenshots,technical,cancellation:0
+201,I need help changing the email address on my account. I am using the mobile app,account,account:3
+202,Please stop my plan at the end of the month. I already contacted support,cancellation,cancellation:1
+203,The invoice amount is wrong this month. I want to cancel my subscription before renewal urgent. the issue started yesterday,billing,billing:1
+204,My order has not arrived and tracking has not updated. this has happened before I can provide screenshots,delivery,delivery:0
+205,My profile is locked and I need access again. I receive an error when uploading a file.,account,account:1
+206,My profile is locked and I need access again. I was charged twice for the same subscription.,account,account:1
+207,The invoice amount is wrong this month. this has happened before,billing,billing:1
+208,I was charged twice for the same subscription. I cannot log into my account after resetting my password urgent. I can provide screenshots please respond quickly,billing,billing:0
+209,I cannot log into my account after resetting my password. thank you I can provide screenshots,security,account:0
+210,The app crashes every time I open the dashboard.,technical,technical:0
+211,I need help changing the email address on my account. this has happened before I already contacted support,account,account:3
+212,The package was marked delivered but I did not receive it. I saw suspicious activity on my account. please respond quickly,delivery,delivery:1
+213,I need to change the delivery address for my order. the issue started yesterday,delivery,delivery:2
+214,Someone changed my password without permission. I can provide screenshots I am using the mobile app,security,security:1
+215,The package was marked delivered but I did not receive it. I am using the mobile app,billing,delivery:1
+216,The login page keeps rejecting my credentials. I can provide screenshots I am using the mobile app,account,account:2
+217,I want to cancel my subscription before renewal. The shipment is delayed and I need an update. I can provide screenshots this has happened before,cancellation,cancellation:0
+218,Please help me secure my account immediately urgent. thank you,security,security:3
+219,I cannot log into my account after resetting my password. I can provide screenshots,account,account:0
+220,The login page keeps rejecting my credentials. I can provide screenshots I am using the mobile app,account,account:2
+221,I need help changing the email address on my account. I can provide screenshots,account,account:3
+222,Please help me secure my account immediately. I can provide screenshots this has happened before,technical,security:3
+223,I cancelled but I still received a renewal notice. this has happened before,cancellation,cancellation:2
+224,I receive an error when uploading a file urgent.,technical,technical:2
+225,The invoice amount is wrong this month urgent. this has happened before I can provide screenshots,billing,billing:1
+226,I need to change the delivery address for my order.,delivery,delivery:2
+227,The login page keeps rejecting my credentials. I need to change the delivery address for my order. thank you,account,account:2
+228,I cannot log into my account after resetting my password. thank you,account,account:0
+229,The login page keeps rejecting my credentials. thank you,account,account:2
+230,I need help changing the email address on my account.,delivery,account:3
+231,I need to change the delivery address for my order. I need a refund for an incorrect billing charge.,delivery,delivery:2
+232,My profile is locked and I need access again. I cancelled but I still received a renewal notice.,account,account:1
+233,I receive an error when uploading a file urgent. I can provide screenshots,technical,technical:2
+234,The invoice amount is wrong this month. I need confirmation that my membership was cancelled. I am using the mobile app,billing,billing:1
+235,I want to cancel my subscription before renewal. I can provide screenshots I already contacted support,cancellation,cancellation:0
+236,The system is slow and sometimes freezes. I can provide screenshots this has happened before,technical,technical:3
+237,The export button does not work on my browser. My payment failed but the money left my account urgent. this has happened before,technical,technical:1
+238,Please help me secure my account immediately. I need a refund for an incorrect billing charge. please respond quickly I already contacted support,security,security:3
+239,I receive an error when uploading a file. I need a refund for an incorrect billing charge urgent. thank you I can provide screenshots,technical,technical:2
+240,The app crashes every time I open the dashboard. thank you,technical,technical:0
+241,I need confirmation that my membership was cancelled. the issue started yesterday,security,cancellation:3
+242,The invoice amount is wrong this month. the issue started yesterday,billing,billing:1
+243,I need a refund for an incorrect billing charge. I am using the mobile app,billing,billing:3
+244,I need a refund for an incorrect billing charge. I received a login alert from an unknown location. I can provide screenshots this has happened before,billing,billing:3
+245,The export button does not work on my browser. I am using the mobile app this has happened before,technical,technical:1
+246,The login page keeps rejecting my credentials. I receive an error when uploading a file. this has happened before,account,account:2
+247,Please help me secure my account immediately urgent.,security,security:3
+248,Please stop my plan at the end of the month. I am using the mobile app I already contacted support,cancellation,cancellation:1
+249,The shipment is delayed and I need an update. I can provide screenshots thank you,delivery,delivery:3
+250,Please stop my plan at the end of the month. I already contacted support,billing,cancellation:1
+251,My order has not arrived and tracking has not updated.,cancellation,delivery:0
+252,Please help me secure my account immediately.,security,security:3
+253,I received a login alert from an unknown location. this has happened before the issue started yesterday,account,security:2
+254,I was charged twice for the same subscription.,billing,billing:0
+255,My profile is locked and I need access again. this has happened before,account,account:1
+256,I need confirmation that my membership was cancelled. I was charged twice for the same subscription.,cancellation,cancellation:3
+257,The invoice amount is wrong this month. My profile is locked and I need access again. this has happened before the issue started yesterday,billing,billing:1
+258,The system is slow and sometimes freezes.,technical,technical:3
+259,My order has not arrived and tracking has not updated. thank you I already contacted support,delivery,delivery:0
+260,I receive an error when uploading a file. the issue started yesterday please respond quickly,technical,technical:2
+261,The system is slow and sometimes freezes. I saw suspicious activity on my account urgent. the issue started yesterday,technical,technical:3
+262,Please help me secure my account immediately. I can provide screenshots please respond quickly,security,security:3
+263,I need to change the delivery address for my order. The app crashes every time I open the dashboard. I am using the mobile app thank you,account,delivery:2
+264,Please help me secure my account immediately. I cancelled but I still received a renewal notice. please respond quickly,security,security:3
+265,I was charged twice for the same subscription. thank you I can provide screenshots,billing,billing:0
+266,The invoice amount is wrong this month. this has happened before I already contacted support,billing,billing:1
+267,Please stop my plan at the end of the month. My order has not arrived and tracking has not updated. I am using the mobile app,cancellation,cancellation:1
+268,Please help me secure my account immediately.,security,security:3
+269,I cannot log into my account after resetting my password. I want to cancel my subscription before renewal. I am using the mobile app,account,account:0
+270,The app crashes every time I open the dashboard. I can provide screenshots I already contacted support,technical,technical:0
+271,The app crashes every time I open the dashboard. Please stop my plan at the end of the month. please respond quickly this has happened before,technical,technical:0
+272,The invoice amount is wrong this month. I already contacted support,billing,billing:1
+273,I cancelled but I still received a renewal notice.,account,cancellation:2
+274,The system is slow and sometimes freezes. I cannot log into my account after resetting my password. this has happened before I am using the mobile app,technical,technical:3
+275,I want to cancel my subscription before renewal.,cancellation,cancellation:0
+276,My payment failed but the money left my account.,billing,billing:2
+277,I cancelled but I still received a renewal notice.,cancellation,cancellation:2
+278,The app crashes every time I open the dashboard. this has happened before I already contacted support,technical,technical:0
+279,The login page keeps rejecting my credentials. this has happened before I am using the mobile app,account,account:2
+280,I need confirmation that my membership was cancelled. the issue started yesterday this has happened before,cancellation,cancellation:3
+281,I cancelled but I still received a renewal notice. thank you,cancellation,cancellation:2
+282,The invoice amount is wrong this month. I need to change the delivery address for my order. the issue started yesterday,billing,billing:1
+283,The invoice amount is wrong this month. I can provide screenshots,billing,billing:1
+284,I was charged twice for the same subscription. I am using the mobile app this has happened before,cancellation,billing:0
+285,I need a refund for an incorrect billing charge urgent. this has happened before I already contacted support,billing,billing:3
+286,My profile is locked and I need access again urgent. I am using the mobile app thank you,account,account:1
+287,I saw suspicious activity on my account. thank you the issue started yesterday,security,security:0
+288,I was charged twice for the same subscription. please respond quickly,billing,billing:0
+289,I need confirmation that my membership was cancelled. please respond quickly,cancellation,cancellation:3
+290,Someone changed my password without permission. I need a refund for an incorrect billing charge. please respond quickly the issue started yesterday,security,security:1
+291,Please help me secure my account immediately. I cannot log into my account after resetting my password.,billing,security:3
+292,I saw suspicious activity on my account.,security,security:0
+293,I want to cancel my subscription before renewal.,cancellation,cancellation:0
+294,I need to change the delivery address for my order. I already contacted support,delivery,delivery:2
+295,I need confirmation that my membership was cancelled. The shipment is delayed and I need an update.,cancellation,cancellation:3
+296,I need to change the delivery address for my order. Please stop my plan at the end of the month. I can provide screenshots please respond quickly,delivery,delivery:2
+297,My payment failed but the money left my account. this has happened before I already contacted support,billing,billing:2
+298,The shipment is delayed and I need an update.,delivery,delivery:3
+299,I need help changing the email address on my account. The package was marked delivered but I did not receive it urgent. please respond quickly,account,account:3
+300,The invoice amount is wrong this month. the issue started yesterday I already contacted support,billing,billing:1
+301,I need to change the delivery address for my order. I can provide screenshots I already contacted support,technical,delivery:2
+302,I receive an error when uploading a file. I already contacted support,technical,technical:2
+303,The system is slow and sometimes freezes. My order has not arrived and tracking has not updated. this has happened before,technical,technical:3
+304,I cancelled but I still received a renewal notice. please respond quickly the issue started yesterday,cancellation,cancellation:2
+305,I need to change the delivery address for my order.,delivery,delivery:2
+306,The invoice amount is wrong this month.,billing,billing:1
+307,Please help me secure my account immediately. I can provide screenshots this has happened before,security,security:3
+308,I saw suspicious activity on my account. I already contacted support please respond quickly,security,security:0
+309,I receive an error when uploading a file. this has happened before the issue started yesterday,technical,technical:2
+310,I received a login alert from an unknown location. this has happened before I can provide screenshots,security,security:2
+311,The package was marked delivered but I did not receive it. I am using the mobile app,delivery,delivery:1
+312,My profile is locked and I need access again.,account,account:1
+313,I need confirmation that my membership was cancelled. My profile is locked and I need access again. this has happened before,cancellation,cancellation:3
+314,The login page keeps rejecting my credentials. I was charged twice for the same subscription.,account,account:2
+315,The shipment is delayed and I need an update. The export button does not work on my browser.,delivery,delivery:3
+316,I need help changing the email address on my account. this has happened before,account,account:3
+317,I need a refund for an incorrect billing charge. please respond quickly,billing,billing:3
+318,My payment failed but the money left my account. My profile is locked and I need access again. I can provide screenshots I am using the mobile app,billing,billing:2
+319,My profile is locked and I need access again. I already contacted support,account,account:1
+320,I need to change the delivery address for my order.,delivery,delivery:2
+321,I cannot log into my account after resetting my password. I need a refund for an incorrect billing charge. the issue started yesterday this has happened before,account,account:0
+322,My payment failed but the money left my account. Please help me secure my account immediately. please respond quickly I already contacted support,billing,billing:2
+323,Please help me secure my account immediately. I want to cancel my subscription before renewal.,security,security:3
+324,The shipment is delayed and I need an update. I cancelled but I still received a renewal notice. I am using the mobile app,cancellation,delivery:3
+325,I cancelled but I still received a renewal notice. I already contacted support,cancellation,cancellation:2
+326,I want to cancel my subscription before renewal. thank you,cancellation,cancellation:0
+327,I want to cancel my subscription before renewal.,cancellation,cancellation:0
+328,I was charged twice for the same subscription. the issue started yesterday,billing,billing:0
+329,I received a login alert from an unknown location urgent.,security,security:2
+330,My profile is locked and I need access again. I can provide screenshots,account,account:1
+331,The system is slow and sometimes freezes.,technical,technical:3
+332,I need help changing the email address on my account. The app crashes every time I open the dashboard. thank you,account,account:3
+333,The login page keeps rejecting my credentials.,account,account:2
+334,The export button does not work on my browser urgent.,technical,technical:1
+335,The shipment is delayed and I need an update. The invoice amount is wrong this month urgent.,delivery,delivery:3
+336,I want to cancel my subscription before renewal. I receive an error when uploading a file. I can provide screenshots,cancellation,cancellation:0
+337,I receive an error when uploading a file. I received a login alert from an unknown location. please respond quickly thank you,technical,technical:2
+338,I need a refund for an incorrect billing charge. Someone changed my password without permission. the issue started yesterday I already contacted support,billing,billing:3
+339,My profile is locked and I need access again urgent. I am using the mobile app please respond quickly,account,account:1
+340,I was charged twice for the same subscription. I saw suspicious activity on my account. this has happened before,billing,billing:0
+341,I was charged twice for the same subscription. please respond quickly I already contacted support,billing,billing:0
+342,Please help me secure my account immediately.,security,security:3
+343,The invoice amount is wrong this month. I need to change the delivery address for my order. I am using the mobile app I can provide screenshots,technical,billing:1
+344,I receive an error when uploading a file. I need to change the delivery address for my order.,technical,technical:2
+345,The invoice amount is wrong this month. I am using the mobile app,billing,billing:1
+346,I receive an error when uploading a file.,billing,technical:2
+347,I receive an error when uploading a file.,billing,technical:2
+348,Please help me secure my account immediately.,security,security:3
+349,My payment failed but the money left my account. this has happened before,billing,billing:2
+350,The package was marked delivered but I did not receive it.,security,delivery:1
+351,I was charged twice for the same subscription urgent. this has happened before,billing,billing:0
+352,The export button does not work on my browser. My payment failed but the money left my account. thank you,technical,technical:1
+353,I want to cancel my subscription before renewal. thank you,cancellation,cancellation:0
+354,I was charged twice for the same subscription. please respond quickly I can provide screenshots,billing,billing:0
+355,I need confirmation that my membership was cancelled urgent. this has happened before please respond quickly,cancellation,cancellation:3
+356,My profile is locked and I need access again. please respond quickly,account,account:1
+357,I saw suspicious activity on my account. please respond quickly,delivery,security:0
+358,The invoice amount is wrong this month. I can provide screenshots I am using the mobile app,billing,billing:1
+359,The system is slow and sometimes freezes.,technical,technical:3
+360,The app crashes every time I open the dashboard.,technical,technical:0
+361,I need confirmation that my membership was cancelled.,cancellation,cancellation:3
+362,I want to cancel my subscription before renewal. I need a refund for an incorrect billing charge.,cancellation,cancellation:0
+363,I was charged twice for the same subscription. The package was marked delivered but I did not receive it. please respond quickly I can provide screenshots,billing,billing:0
+364,The login page keeps rejecting my credentials. I already contacted support,technical,account:2
+365,Please help me secure my account immediately.,security,security:3
+366,The app crashes every time I open the dashboard urgent. this has happened before,technical,technical:0
+367,Someone changed my password without permission. I cancelled but I still received a renewal notice urgent. I can provide screenshots,security,security:1
+368,I need a refund for an incorrect billing charge.,billing,billing:3
+369,Someone changed my password without permission. The login page keeps rejecting my credentials urgent. this has happened before I already contacted support,security,security:1
+370,The package was marked delivered but I did not receive it.,delivery,delivery:1
+371,I need help changing the email address on my account.,account,account:3
+372,My profile is locked and I need access again. I receive an error when uploading a file. I already contacted support,account,account:1
+373,The export button does not work on my browser.,technical,technical:1
+374,The package was marked delivered but I did not receive it.,delivery,delivery:1
+375,I need help changing the email address on my account. I am using the mobile app thank you,delivery,account:3
+376,The login page keeps rejecting my credentials. the issue started yesterday please respond quickly,account,account:2
+377,The package was marked delivered but I did not receive it urgent. I already contacted support I can provide screenshots,delivery,delivery:1
+378,Please help me secure my account immediately. thank you I already contacted support,security,security:3
+379,My payment failed but the money left my account.,billing,billing:2
+380,I was charged twice for the same subscription. please respond quickly the issue started yesterday,cancellation,billing:0
+381,I need to change the delivery address for my order urgent.,delivery,delivery:2
+382,I want to cancel my subscription before renewal. this has happened before,cancellation,cancellation:0
+383,The export button does not work on my browser.,delivery,technical:1
+384,The app crashes every time I open the dashboard.,technical,technical:0
+385,I need confirmation that my membership was cancelled. I saw suspicious activity on my account urgent. the issue started yesterday,technical,cancellation:3
+386,The invoice amount is wrong this month. thank you this has happened before,billing,billing:1
+387,The app crashes every time I open the dashboard.,technical,technical:0
+388,Please help me secure my account immediately. My order has not arrived and tracking has not updated urgent. I am using the mobile app I already contacted support,security,security:3
+389,I was charged twice for the same subscription. Someone changed my password without permission. please respond quickly thank you,account,billing:0
+390,I received a login alert from an unknown location.,security,security:2
+391,The app crashes every time I open the dashboard. thank you,security,technical:0
+392,The app crashes every time I open the dashboard. please respond quickly the issue started yesterday,technical,technical:0
+393,I receive an error when uploading a file.,technical,technical:2
+394,The export button does not work on my browser.,account,technical:1
+395,The shipment is delayed and I need an update. My profile is locked and I need access again urgent. this has happened before please respond quickly,delivery,delivery:3
+396,I need help changing the email address on my account urgent. I can provide screenshots,account,account:3
+397,My payment failed but the money left my account.,billing,billing:2
+398,My payment failed but the money left my account.,billing,billing:2
+399,Please stop my plan at the end of the month. I can provide screenshots I am using the mobile app,cancellation,cancellation:1
+400,I saw suspicious activity on my account. the issue started yesterday,security,security:0
+401,The export button does not work on my browser.,security,technical:1
+402,I need help changing the email address on my account. I was charged twice for the same subscription.,account,account:3
+403,I need help changing the email address on my account.,account,account:3
+404,I need to change the delivery address for my order. thank you I already contacted support,delivery,delivery:2
+405,The package was marked delivered but I did not receive it. I want to cancel my subscription before renewal. the issue started yesterday,delivery,delivery:1
+406,The app crashes every time I open the dashboard. please respond quickly I already contacted support,technical,technical:0
+407,I need to change the delivery address for my order. the issue started yesterday this has happened before,delivery,delivery:2
+408,I need help changing the email address on my account.,account,account:3
+409,My profile is locked and I need access again. the issue started yesterday,account,account:1
+410,The shipment is delayed and I need an update. I am using the mobile app,delivery,delivery:3
+411,The export button does not work on my browser. The invoice amount is wrong this month urgent.,technical,technical:1
+412,I saw suspicious activity on my account. The invoice amount is wrong this month. I already contacted support,security,security:0
+413,The system is slow and sometimes freezes. the issue started yesterday I can provide screenshots,technical,technical:3
+414,I cannot log into my account after resetting my password. I can provide screenshots thank you,account,account:0
+415,I cancelled but I still received a renewal notice. this has happened before,cancellation,cancellation:2
+416,I was charged twice for the same subscription. please respond quickly the issue started yesterday,billing,billing:0
+417,I receive an error when uploading a file. My profile is locked and I need access again urgent. thank you,security,technical:2
+418,I need a refund for an incorrect billing charge. thank you,billing,billing:3
+419,My order has not arrived and tracking has not updated.,delivery,delivery:0
+420,I need confirmation that my membership was cancelled.,cancellation,cancellation:3
+421,The login page keeps rejecting my credentials.,account,account:2
+422,I need help changing the email address on my account. I already contacted support I am using the mobile app,account,account:3
+423,The system is slow and sometimes freezes. please respond quickly,technical,technical:3
+424,The system is slow and sometimes freezes.,technical,technical:3
+425,The package was marked delivered but I did not receive it. I received a login alert from an unknown location. this has happened before please respond quickly,delivery,delivery:1
+426,I want to cancel my subscription before renewal. I need to change the delivery address for my order. the issue started yesterday,cancellation,cancellation:0
+427,I saw suspicious activity on my account. please respond quickly,security,security:0
+428,The app crashes every time I open the dashboard. I want to cancel my subscription before renewal. this has happened before,security,technical:0
+429,Please stop my plan at the end of the month. The package was marked delivered but I did not receive it.,cancellation,cancellation:1
+430,I cannot log into my account after resetting my password. please respond quickly,account,account:0
+431,My profile is locked and I need access again urgent. this has happened before I can provide screenshots,account,account:1
+432,Someone changed my password without permission. I can provide screenshots,delivery,security:1
+433,My profile is locked and I need access again. I can provide screenshots,account,account:1
+434,I want to cancel my subscription before renewal. I already contacted support,cancellation,cancellation:0
+435,The invoice amount is wrong this month. I already contacted support I can provide screenshots,billing,billing:1
+436,Please help me secure my account immediately. this has happened before I already contacted support,security,security:3
+437,I need a refund for an incorrect billing charge.,billing,billing:3
+438,The app crashes every time I open the dashboard. this has happened before,technical,technical:0
+439,The package was marked delivered but I did not receive it. the issue started yesterday thank you,delivery,delivery:1
+440,The shipment is delayed and I need an update. the issue started yesterday please respond quickly,delivery,delivery:3
+441,I need confirmation that my membership was cancelled.,cancellation,cancellation:3
+442,My profile is locked and I need access again. this has happened before I am using the mobile app,account,account:1
+443,I receive an error when uploading a file. I am using the mobile app thank you,technical,technical:2
+444,The app crashes every time I open the dashboard.,technical,technical:0
+445,The export button does not work on my browser. the issue started yesterday thank you,technical,technical:1
+446,I cannot log into my account after resetting my password. I receive an error when uploading a file. the issue started yesterday,account,account:0
+447,I receive an error when uploading a file.,technical,technical:2
+448,Please help me secure my account immediately. I need help changing the email address on my account.,security,security:3
+449,The package was marked delivered but I did not receive it. please respond quickly I already contacted support,delivery,delivery:1
+450,Someone changed my password without permission.,security,security:1
+451,The invoice amount is wrong this month.,billing,billing:1
+452,I receive an error when uploading a file. please respond quickly I am using the mobile app,technical,technical:2
+453,I receive an error when uploading a file. this has happened before,account,technical:2
+454,Someone changed my password without permission. the issue started yesterday please respond quickly,security,security:1
+455,The system is slow and sometimes freezes.,technical,technical:3
+456,My profile is locked and I need access again. this has happened before I already contacted support,account,account:1
+457,I need a refund for an incorrect billing charge. thank you I am using the mobile app,billing,billing:3
+458,The login page keeps rejecting my credentials. I am using the mobile app I can provide screenshots,account,account:2
+459,The shipment is delayed and I need an update. The system is slow and sometimes freezes. the issue started yesterday I can provide screenshots,delivery,delivery:3
+460,My order has not arrived and tracking has not updated. thank you the issue started yesterday,account,delivery:0
+461,I cancelled but I still received a renewal notice. the issue started yesterday,delivery,cancellation:2
+462,I need help changing the email address on my account.,account,account:3
+463,My order has not arrived and tracking has not updated. the issue started yesterday I already contacted support,security,delivery:0
+464,I want to cancel my subscription before renewal. I can provide screenshots the issue started yesterday,cancellation,cancellation:0
+465,I cancelled but I still received a renewal notice. I receive an error when uploading a file. thank you,billing,cancellation:2
+466,I was charged twice for the same subscription. I cannot log into my account after resetting my password. I can provide screenshots,billing,billing:0
+467,The package was marked delivered but I did not receive it urgent.,delivery,delivery:1
+468,The package was marked delivered but I did not receive it. please respond quickly,security,delivery:1
+469,Please help me secure my account immediately. thank you I can provide screenshots,security,security:3
+470,The invoice amount is wrong this month. I already contacted support I am using the mobile app,billing,billing:1
+471,The package was marked delivered but I did not receive it. I need help changing the email address on my account.,delivery,delivery:1
+472,The system is slow and sometimes freezes.,technical,technical:3
+473,I cannot log into my account after resetting my password. the issue started yesterday I am using the mobile app,account,account:0
+474,Please stop my plan at the end of the month.,cancellation,cancellation:1
+475,The system is slow and sometimes freezes. The package was marked delivered but I did not receive it. I am using the mobile app the issue started yesterday,security,technical:3
+476,The export button does not work on my browser urgent.,technical,technical:1
+477,I need help changing the email address on my account. The invoice amount is wrong this month urgent. this has happened before,account,account:3
+478,I receive an error when uploading a file. My payment failed but the money left my account.,technical,technical:2
+479,The export button does not work on my browser urgent.,cancellation,technical:1
+480,I cannot log into my account after resetting my password. I can provide screenshots I already contacted support,technical,account:0
+481,I need a refund for an incorrect billing charge. thank you I already contacted support,delivery,billing:3
+482,The system is slow and sometimes freezes urgent. I already contacted support I am using the mobile app,technical,technical:3
+483,The shipment is delayed and I need an update.,delivery,delivery:3
+484,I need help changing the email address on my account. I receive an error when uploading a file.,account,account:3
+485,I need help changing the email address on my account. My payment failed but the money left my account.,account,account:3
+486,The package was marked delivered but I did not receive it. I need confirmation that my membership was cancelled. I am using the mobile app,delivery,delivery:1
+487,I need to change the delivery address for my order. I want to cancel my subscription before renewal urgent. I can provide screenshots I am using the mobile app,delivery,delivery:2
+488,I was charged twice for the same subscription. I can provide screenshots this has happened before,billing,billing:0
+489,Someone changed my password without permission. thank you,technical,security:1
+490,The system is slow and sometimes freezes. The invoice amount is wrong this month.,technical,technical:3
+491,I want to cancel my subscription before renewal urgent. thank you,cancellation,cancellation:0
+492,The export button does not work on my browser.,technical,technical:1
+493,The app crashes every time I open the dashboard. this has happened before,technical,technical:0
+494,My order has not arrived and tracking has not updated. the issue started yesterday this has happened before,delivery,delivery:0
+495,The login page keeps rejecting my credentials. I need a refund for an incorrect billing charge. this has happened before,account,account:2
+496,I need to change the delivery address for my order. I can provide screenshots,delivery,delivery:2
+497,The app crashes every time I open the dashboard. I can provide screenshots,cancellation,technical:0
+498,I cancelled but I still received a renewal notice. The invoice amount is wrong this month. I already contacted support,cancellation,cancellation:2
+499,I need help changing the email address on my account.,account,account:3
+500,I want to cancel my subscription before renewal. the issue started yesterday,cancellation,cancellation:0
+501,The login page keeps rejecting my credentials.,account,account:2
+502,The app crashes every time I open the dashboard. this has happened before,technical,technical:0
+503,The package was marked delivered but I did not receive it. The invoice amount is wrong this month. I am using the mobile app,delivery,delivery:1
+504,I saw suspicious activity on my account. the issue started yesterday thank you,security,security:0
+505,I saw suspicious activity on my account. I already contacted support the issue started yesterday,security,security:0
+506,I need to change the delivery address for my order urgent. this has happened before the issue started yesterday,delivery,delivery:2
+507,The shipment is delayed and I need an update. The export button does not work on my browser. I am using the mobile app I already contacted support,delivery,delivery:3
+508,The app crashes every time I open the dashboard.,technical,technical:0
+509,I receive an error when uploading a file.,delivery,technical:2
+510,I need confirmation that my membership was cancelled. I can provide screenshots,cancellation,cancellation:3
+511,My order has not arrived and tracking has not updated. I was charged twice for the same subscription. I can provide screenshots,delivery,delivery:0
+512,I cancelled but I still received a renewal notice. I am using the mobile app,cancellation,cancellation:2
+513,Someone changed my password without permission. thank you this has happened before,cancellation,security:1
+514,My profile is locked and I need access again. the issue started yesterday,account,account:1
+515,Someone changed my password without permission. the issue started yesterday I am using the mobile app,security,security:1
+516,I was charged twice for the same subscription. this has happened before I am using the mobile app,billing,billing:0
+517,The package was marked delivered but I did not receive it.,delivery,delivery:1
+518,I cannot log into my account after resetting my password. I want to cancel my subscription before renewal. I can provide screenshots this has happened before,account,account:0
+519,The login page keeps rejecting my credentials. I need to change the delivery address for my order. thank you the issue started yesterday,account,account:2
+520,I want to cancel my subscription before renewal urgent. I can provide screenshots,cancellation,cancellation:0
+521,My payment failed but the money left my account. The system is slow and sometimes freezes.,billing,billing:2
+522,I want to cancel my subscription before renewal urgent. thank you please respond quickly,cancellation,cancellation:0
+523,I cannot log into my account after resetting my password. I saw suspicious activity on my account. this has happened before,account,account:0
+524,I need a refund for an incorrect billing charge. please respond quickly thank you,billing,billing:3
+525,I cannot log into my account after resetting my password urgent.,account,account:0
+526,My order has not arrived and tracking has not updated.,cancellation,delivery:0
+527,I received a login alert from an unknown location. the issue started yesterday,security,security:2
+528,The app crashes every time I open the dashboard urgent. please respond quickly this has happened before,technical,technical:0
+529,The login page keeps rejecting my credentials. I receive an error when uploading a file.,account,account:2
+530,The shipment is delayed and I need an update. I receive an error when uploading a file urgent. this has happened before,delivery,delivery:3
+531,Please help me secure my account immediately. I can provide screenshots thank you,billing,security:3
+532,I cannot log into my account after resetting my password. the issue started yesterday please respond quickly,account,account:0
+533,I need help changing the email address on my account. this has happened before I am using the mobile app,account,account:3
+534,I want to cancel my subscription before renewal. The shipment is delayed and I need an update.,cancellation,cancellation:0
+535,I need a refund for an incorrect billing charge.,cancellation,billing:3
+536,The export button does not work on my browser. The shipment is delayed and I need an update.,technical,technical:1
+537,My payment failed but the money left my account.,billing,billing:2
+538,I was charged twice for the same subscription.,billing,billing:0
+539,Someone changed my password without permission. please respond quickly,security,security:1
+540,I need help changing the email address on my account urgent.,account,account:3
+541,I need help changing the email address on my account. I was charged twice for the same subscription.,account,account:3
+542,The invoice amount is wrong this month. this has happened before,security,billing:1
+543,The shipment is delayed and I need an update.,delivery,delivery:3
+544,I receive an error when uploading a file. I cancelled but I still received a renewal notice. I already contacted support,account,technical:2
+545,My profile is locked and I need access again.,account,account:1
+546,I cannot log into my account after resetting my password.,account,account:0
+547,The export button does not work on my browser.,technical,technical:1
+548,The export button does not work on my browser.,technical,technical:1
+549,I saw suspicious activity on my account. My order has not arrived and tracking has not updated urgent.,security,security:0
+550,I cannot log into my account after resetting my password.,account,account:0
+551,I need a refund for an incorrect billing charge. I cannot log into my account after resetting my password. please respond quickly,billing,billing:3
+552,I need help changing the email address on my account. I can provide screenshots,account,account:3
+553,I receive an error when uploading a file. I saw suspicious activity on my account.,technical,technical:2
+554,I need help changing the email address on my account.,account,account:3
+555,I saw suspicious activity on my account. this has happened before thank you,security,security:0
+556,The login page keeps rejecting my credentials. I already contacted support,account,account:2
+557,I receive an error when uploading a file urgent. I already contacted support please respond quickly,technical,technical:2
+558,My payment failed but the money left my account. thank you,billing,billing:2
+559,The invoice amount is wrong this month.,billing,billing:1
+560,I need to change the delivery address for my order.,delivery,delivery:2
+561,The login page keeps rejecting my credentials. please respond quickly I can provide screenshots,cancellation,account:2
+562,The system is slow and sometimes freezes.,technical,technical:3
+563,The system is slow and sometimes freezes. this has happened before,technical,technical:3
+564,The app crashes every time I open the dashboard.,technical,technical:0
+565,I cannot log into my account after resetting my password urgent. I can provide screenshots thank you,account,account:0
+566,I cannot log into my account after resetting my password. I can provide screenshots,account,account:0
+567,Please stop my plan at the end of the month. I need a refund for an incorrect billing charge. I am using the mobile app,delivery,cancellation:1
+568,I receive an error when uploading a file. I need to change the delivery address for my order.,technical,technical:2
+569,I cannot log into my account after resetting my password. thank you this has happened before,account,account:0
+570,The export button does not work on my browser. please respond quickly thank you,technical,technical:1
+571,The system is slow and sometimes freezes. I am using the mobile app this has happened before,technical,technical:3
+572,I cannot log into my account after resetting my password. I was charged twice for the same subscription. the issue started yesterday,account,account:0
+573,I saw suspicious activity on my account. please respond quickly,security,security:0
+574,I need to change the delivery address for my order urgent. the issue started yesterday I already contacted support,delivery,delivery:2
+575,I saw suspicious activity on my account. thank you please respond quickly,delivery,security:0
+576,My payment failed but the money left my account. I can provide screenshots please respond quickly,billing,billing:2
+577,I receive an error when uploading a file. I already contacted support,technical,technical:2
+578,The system is slow and sometimes freezes. thank you I am using the mobile app,technical,technical:3
+579,I need confirmation that my membership was cancelled. I already contacted support thank you,cancellation,cancellation:3
+580,My payment failed but the money left my account urgent. I am using the mobile app,billing,billing:2
+581,The login page keeps rejecting my credentials. I can provide screenshots,account,account:2
+582,Please help me secure my account immediately urgent. thank you,security,security:3
+583,I receive an error when uploading a file. I am using the mobile app I already contacted support,technical,technical:2
+584,My order has not arrived and tracking has not updated. thank you this has happened before,delivery,delivery:0
+585,The system is slow and sometimes freezes. The package was marked delivered but I did not receive it. the issue started yesterday I already contacted support,technical,technical:3
+586,I receive an error when uploading a file.,technical,technical:2
+587,I need help changing the email address on my account. I cancelled but I still received a renewal notice.,account,account:3
+588,My payment failed but the money left my account. I can provide screenshots,billing,billing:2
+589,I saw suspicious activity on my account. this has happened before,security,security:0
+590,I saw suspicious activity on my account.,security,security:0
+591,I was charged twice for the same subscription. this has happened before,billing,billing:0
+592,The package was marked delivered but I did not receive it. I already contacted support,delivery,delivery:1
+593,The invoice amount is wrong this month. this has happened before I can provide screenshots,billing,billing:1
+594,I need confirmation that my membership was cancelled. this has happened before please respond quickly,cancellation,cancellation:3
+595,Please stop my plan at the end of the month. I need help changing the email address on my account.,cancellation,cancellation:1
+596,I receive an error when uploading a file. I am using the mobile app thank you,technical,technical:2
+597,I need a refund for an incorrect billing charge. I can provide screenshots,technical,billing:3
+598,I saw suspicious activity on my account. thank you,security,security:0
+599,The invoice amount is wrong this month. The shipment is delayed and I need an update.,delivery,billing:1
+600,I was charged twice for the same subscription. this has happened before,billing,billing:0
+601,My order has not arrived and tracking has not updated. I need confirmation that my membership was cancelled. I can provide screenshots the issue started yesterday,delivery,delivery:0
+602,The package was marked delivered but I did not receive it.,delivery,delivery:1
+603,The export button does not work on my browser. I was charged twice for the same subscription. I can provide screenshots this has happened before,technical,technical:1
+604,The shipment is delayed and I need an update urgent. I already contacted support,delivery,delivery:3
+605,I cancelled but I still received a renewal notice. I need help changing the email address on my account. I already contacted support,cancellation,cancellation:2
+606,The login page keeps rejecting my credentials. I am using the mobile app this has happened before,account,account:2
+607,The invoice amount is wrong this month. My order has not arrived and tracking has not updated. I already contacted support this has happened before,billing,billing:1
+608,I received a login alert from an unknown location.,security,security:2
+609,The package was marked delivered but I did not receive it. I was charged twice for the same subscription.,delivery,delivery:1
+610,The system is slow and sometimes freezes. I can provide screenshots,technical,technical:3
+611,I received a login alert from an unknown location. I am using the mobile app,account,security:2
+612,The login page keeps rejecting my credentials. The package was marked delivered but I did not receive it. I can provide screenshots I am using the mobile app,account,account:2
+613,The package was marked delivered but I did not receive it. I need help changing the email address on my account. the issue started yesterday,delivery,delivery:1
+614,I receive an error when uploading a file. I was charged twice for the same subscription urgent.,technical,technical:2
+615,The invoice amount is wrong this month. I cannot log into my account after resetting my password. the issue started yesterday,billing,billing:1
+616,The shipment is delayed and I need an update. thank you,delivery,delivery:3
+617,I cancelled but I still received a renewal notice. I can provide screenshots thank you,cancellation,cancellation:2
+618,The app crashes every time I open the dashboard. I already contacted support,technical,technical:0
+619,I cancelled but I still received a renewal notice. the issue started yesterday I can provide screenshots,cancellation,cancellation:2
+620,Someone changed my password without permission. the issue started yesterday,security,security:1
+621,I need to change the delivery address for my order. I need help changing the email address on my account. I can provide screenshots the issue started yesterday,delivery,delivery:2
+622,I cannot log into my account after resetting my password. Please help me secure my account immediately. this has happened before thank you,account,account:0
+623,The app crashes every time I open the dashboard.,technical,technical:0
+624,I need a refund for an incorrect billing charge.,billing,billing:3
+625,I need help changing the email address on my account urgent.,account,account:3
+626,I was charged twice for the same subscription.,billing,billing:0
+627,I need to change the delivery address for my order. I can provide screenshots,delivery,delivery:2
+628,I need help changing the email address on my account. please respond quickly thank you,account,account:3
+629,The app crashes every time I open the dashboard. I can provide screenshots this has happened before,technical,technical:0
+630,My payment failed but the money left my account. The login page keeps rejecting my credentials urgent.,billing,billing:2
+631,The package was marked delivered but I did not receive it. I was charged twice for the same subscription urgent. I am using the mobile app I already contacted support,delivery,delivery:1
+632,My profile is locked and I need access again.,account,account:1
+633,I want to cancel my subscription before renewal. The package was marked delivered but I did not receive it. I can provide screenshots I already contacted support,cancellation,cancellation:0
+634,The app crashes every time I open the dashboard.,technical,technical:0
+635,My order has not arrived and tracking has not updated. I already contacted support,delivery,delivery:0
+636,I was charged twice for the same subscription. I can provide screenshots the issue started yesterday,billing,billing:0
+637,The export button does not work on my browser.,cancellation,technical:1
+638,I need a refund for an incorrect billing charge. the issue started yesterday,billing,billing:3
+639,Please help me secure my account immediately. My order has not arrived and tracking has not updated. I am using the mobile app,security,security:3
+640,The invoice amount is wrong this month. The system is slow and sometimes freezes. I can provide screenshots I am using the mobile app,billing,billing:1
+641,The package was marked delivered but I did not receive it. I received a login alert from an unknown location.,delivery,delivery:1
+642,I received a login alert from an unknown location.,security,security:2
+643,The app crashes every time I open the dashboard. My payment failed but the money left my account urgent. I can provide screenshots,technical,technical:0
+644,I need help changing the email address on my account urgent.,account,account:3
+645,Please help me secure my account immediately. the issue started yesterday,technical,security:3
+646,I need confirmation that my membership was cancelled. I am using the mobile app I can provide screenshots,cancellation,cancellation:3
+647,The system is slow and sometimes freezes. My payment failed but the money left my account. I can provide screenshots the issue started yesterday,account,technical:3
+648,I need confirmation that my membership was cancelled. I already contacted support this has happened before,cancellation,cancellation:3
+649,The export button does not work on my browser. the issue started yesterday this has happened before,technical,technical:1
+650,The app crashes every time I open the dashboard.,technical,technical:0
+651,The export button does not work on my browser.,technical,technical:1
+652,The invoice amount is wrong this month. My order has not arrived and tracking has not updated. this has happened before,billing,billing:1
+653,The shipment is delayed and I need an update urgent.,delivery,delivery:3
+654,My payment failed but the money left my account. Please stop my plan at the end of the month.,billing,billing:2
+655,I was charged twice for the same subscription.,billing,billing:0
+656,The login page keeps rejecting my credentials. thank you I can provide screenshots,account,account:2
+657,My order has not arrived and tracking has not updated.,delivery,delivery:0
+658,I cannot log into my account after resetting my password. I am using the mobile app,account,account:0
+659,The invoice amount is wrong this month. My profile is locked and I need access again. please respond quickly,cancellation,billing:1
+660,I need help changing the email address on my account. I saw suspicious activity on my account urgent. I can provide screenshots I already contacted support,cancellation,account:3
+661,The package was marked delivered but I did not receive it. please respond quickly,delivery,delivery:1
+662,The app crashes every time I open the dashboard.,technical,technical:0
+663,Please help me secure my account immediately. I cannot log into my account after resetting my password. I already contacted support I am using the mobile app,account,security:3
+664,I receive an error when uploading a file. please respond quickly,technical,technical:2
+665,I was charged twice for the same subscription.,billing,billing:0
+666,The login page keeps rejecting my credentials. I want to cancel my subscription before renewal.,security,account:2
+667,The export button does not work on my browser. The invoice amount is wrong this month. the issue started yesterday,technical,technical:1
+668,My payment failed but the money left my account. I am using the mobile app,billing,billing:2
+669,I need to change the delivery address for my order. the issue started yesterday,delivery,delivery:2
+670,The package was marked delivered but I did not receive it.,delivery,delivery:1
+671,I cancelled but I still received a renewal notice. I am using the mobile app,cancellation,cancellation:2
+672,The login page keeps rejecting my credentials. the issue started yesterday I already contacted support,account,account:2
+673,The package was marked delivered but I did not receive it. thank you,delivery,delivery:1
+674,Please stop my plan at the end of the month. I am using the mobile app this has happened before,cancellation,cancellation:1
+675,The shipment is delayed and I need an update urgent. please respond quickly I already contacted support,delivery,delivery:3
+676,The shipment is delayed and I need an update. I can provide screenshots this has happened before,delivery,delivery:3
+677,My profile is locked and I need access again. Someone changed my password without permission. I am using the mobile app I already contacted support,account,account:1
+678,The invoice amount is wrong this month. I am using the mobile app please respond quickly,billing,billing:1
+679,The login page keeps rejecting my credentials. I already contacted support this has happened before,account,account:2
+680,I was charged twice for the same subscription.,billing,billing:0
+681,Someone changed my password without permission.,security,security:1
+682,I received a login alert from an unknown location.,security,security:2
+683,The export button does not work on my browser.,technical,technical:1
+684,Please stop my plan at the end of the month.,cancellation,cancellation:1
+685,I receive an error when uploading a file. I already contacted support I can provide screenshots,technical,technical:2
+686,The system is slow and sometimes freezes. I am using the mobile app I already contacted support,technical,technical:3
+687,The app crashes every time I open the dashboard urgent. this has happened before,technical,technical:0
+688,I need to change the delivery address for my order.,cancellation,delivery:2
+689,I receive an error when uploading a file urgent. I am using the mobile app,technical,technical:2
+690,The export button does not work on my browser. this has happened before I already contacted support,technical,technical:1
+691,My profile is locked and I need access again. please respond quickly thank you,account,account:1
+692,Someone changed my password without permission. My payment failed but the money left my account.,security,security:1
+693,The app crashes every time I open the dashboard. I already contacted support,technical,technical:0
+694,My payment failed but the money left my account. I already contacted support please respond quickly,billing,billing:2
+695,I need to change the delivery address for my order. please respond quickly thank you,delivery,delivery:2
+696,I need help changing the email address on my account urgent.,delivery,account:3
+697,I receive an error when uploading a file. I can provide screenshots,account,technical:2
+698,I need help changing the email address on my account. My payment failed but the money left my account. the issue started yesterday please respond quickly,account,account:3
+699,I want to cancel my subscription before renewal urgent.,cancellation,cancellation:0
+700,My order has not arrived and tracking has not updated urgent. please respond quickly,delivery,delivery:0
+701,The package was marked delivered but I did not receive it. please respond quickly,delivery,delivery:1
+702,The login page keeps rejecting my credentials. I already contacted support,account,account:2
+703,I cannot log into my account after resetting my password. I need to change the delivery address for my order. I am using the mobile app I already contacted support,account,account:0
+704,The login page keeps rejecting my credentials.,account,account:2
+705,I need to change the delivery address for my order. thank you I can provide screenshots,delivery,delivery:2
+706,Someone changed my password without permission.,security,security:1
+707,I cannot log into my account after resetting my password.,billing,account:0
+708,The login page keeps rejecting my credentials. I already contacted support,account,account:2
+709,I need a refund for an incorrect billing charge. I can provide screenshots,billing,billing:3
+710,I cancelled but I still received a renewal notice. please respond quickly I can provide screenshots,cancellation,cancellation:2
+711,I need a refund for an incorrect billing charge. I already contacted support please respond quickly,billing,billing:3
+712,I need help changing the email address on my account. please respond quickly,account,account:3
+713,I received a login alert from an unknown location. I was charged twice for the same subscription. this has happened before the issue started yesterday,delivery,security:2
+714,I cancelled but I still received a renewal notice. I am using the mobile app,cancellation,cancellation:2
+715,The shipment is delayed and I need an update. this has happened before,cancellation,delivery:3
+716,My profile is locked and I need access again. this has happened before,account,account:1
+717,Please stop my plan at the end of the month. The invoice amount is wrong this month.,cancellation,cancellation:1
+718,I cancelled but I still received a renewal notice.,cancellation,cancellation:2
+719,The shipment is delayed and I need an update. The login page keeps rejecting my credentials. I can provide screenshots please respond quickly,delivery,delivery:3
+720,Please help me secure my account immediately. Please stop my plan at the end of the month.,security,security:3
+721,My profile is locked and I need access again urgent.,account,account:1
+722,I cannot log into my account after resetting my password. I need to change the delivery address for my order.,account,account:0
+723,Please stop my plan at the end of the month. I received a login alert from an unknown location. I already contacted support the issue started yesterday,delivery,cancellation:1
+724,I saw suspicious activity on my account. I can provide screenshots thank you,security,security:0
+725,The export button does not work on my browser. The invoice amount is wrong this month. I already contacted support thank you,technical,technical:1
+726,The login page keeps rejecting my credentials urgent. please respond quickly,account,account:2
+727,The package was marked delivered but I did not receive it. The login page keeps rejecting my credentials.,security,delivery:1
+728,The system is slow and sometimes freezes.,technical,technical:3
+729,I received a login alert from an unknown location.,security,security:2
+730,I was charged twice for the same subscription. I already contacted support this has happened before,billing,billing:0
+731,I cancelled but I still received a renewal notice. this has happened before,cancellation,cancellation:2
+732,The login page keeps rejecting my credentials.,account,account:2
+733,The export button does not work on my browser urgent. this has happened before the issue started yesterday,technical,technical:1
+734,The invoice amount is wrong this month. I cancelled but I still received a renewal notice urgent. the issue started yesterday thank you,billing,billing:1
+735,My payment failed but the money left my account. this has happened before,billing,billing:2
+736,I cannot log into my account after resetting my password urgent.,account,account:0
+737,I want to cancel my subscription before renewal.,cancellation,cancellation:0
+738,The invoice amount is wrong this month. The export button does not work on my browser.,billing,billing:1
+739,Someone changed my password without permission. please respond quickly,security,security:1
+740,I receive an error when uploading a file.,technical,technical:2
+741,The package was marked delivered but I did not receive it. this has happened before,billing,delivery:1
+742,I cancelled but I still received a renewal notice. the issue started yesterday,cancellation,cancellation:2
+743,My profile is locked and I need access again. this has happened before,account,account:1
+744,Please help me secure my account immediately. Please stop my plan at the end of the month.,security,security:3
+745,The system is slow and sometimes freezes.,technical,technical:3
+746,The shipment is delayed and I need an update. this has happened before the issue started yesterday,security,delivery:3
+747,I need a refund for an incorrect billing charge. thank you,delivery,billing:3
+748,I was charged twice for the same subscription. thank you,billing,billing:0
+749,My profile is locked and I need access again. The package was marked delivered but I did not receive it. I am using the mobile app I can provide screenshots,account,account:1
+750,The invoice amount is wrong this month. please respond quickly I am using the mobile app,delivery,billing:1
+751,I cannot log into my account after resetting my password.,account,account:0
+752,My payment failed but the money left my account.,billing,billing:2
+753,I want to cancel my subscription before renewal. The shipment is delayed and I need an update. please respond quickly,cancellation,cancellation:0
+754,My payment failed but the money left my account. the issue started yesterday,account,billing:2
+755,I received a login alert from an unknown location. The system is slow and sometimes freezes urgent. thank you please respond quickly,security,security:2
+756,My payment failed but the money left my account.,billing,billing:2
+757,I was charged twice for the same subscription. I need to change the delivery address for my order.,billing,billing:0
+758,I need confirmation that my membership was cancelled. I can provide screenshots I already contacted support,cancellation,cancellation:3
+759,I was charged twice for the same subscription. please respond quickly the issue started yesterday,cancellation,billing:0
+760,I receive an error when uploading a file. Please stop my plan at the end of the month. I am using the mobile app,technical,technical:2
+761,The invoice amount is wrong this month urgent. I can provide screenshots please respond quickly,billing,billing:1
+762,Please stop my plan at the end of the month. I can provide screenshots the issue started yesterday,cancellation,cancellation:1
+763,My order has not arrived and tracking has not updated. The export button does not work on my browser. I can provide screenshots this has happened before,delivery,delivery:0
+764,The app crashes every time I open the dashboard.,technical,technical:0
+765,I saw suspicious activity on my account. thank you,security,security:0
+766,Please help me secure my account immediately urgent.,security,security:3
+767,I was charged twice for the same subscription. The export button does not work on my browser. the issue started yesterday I already contacted support,billing,billing:0
+768,I receive an error when uploading a file.,technical,technical:2
+769,I cannot log into my account after resetting my password. the issue started yesterday,account,account:0
+770,The invoice amount is wrong this month.,billing,billing:1
+771,The shipment is delayed and I need an update.,delivery,delivery:3
+772,My payment failed but the money left my account urgent.,technical,billing:2
+773,Someone changed my password without permission. this has happened before I can provide screenshots,security,security:1
+774,Please stop my plan at the end of the month.,cancellation,cancellation:1
+775,I saw suspicious activity on my account. My payment failed but the money left my account.,security,security:0
+776,The app crashes every time I open the dashboard.,technical,technical:0
+777,The invoice amount is wrong this month. I need help changing the email address on my account. the issue started yesterday this has happened before,billing,billing:1
+778,My profile is locked and I need access again. I need a refund for an incorrect billing charge.,account,account:1
+779,I need help changing the email address on my account. I can provide screenshots,account,account:3
+780,The invoice amount is wrong this month. I am using the mobile app,billing,billing:1
+781,The shipment is delayed and I need an update. I already contacted support I can provide screenshots,delivery,delivery:3
+782,The system is slow and sometimes freezes. I am using the mobile app thank you,delivery,technical:3
+783,I need a refund for an incorrect billing charge. My profile is locked and I need access again.,billing,billing:3
+784,The invoice amount is wrong this month. Please help me secure my account immediately. I already contacted support,billing,billing:1
+785,The export button does not work on my browser. this has happened before,technical,technical:1
+786,The shipment is delayed and I need an update.,delivery,delivery:3
+787,The shipment is delayed and I need an update. this has happened before,delivery,delivery:3
+788,Someone changed my password without permission. I was charged twice for the same subscription. I can provide screenshots,security,security:1
+789,I was charged twice for the same subscription.,technical,billing:0
+790,The app crashes every time I open the dashboard. I saw suspicious activity on my account. the issue started yesterday,technical,technical:0
+791,The app crashes every time I open the dashboard. I can provide screenshots,technical,technical:0
+792,I need help changing the email address on my account. I can provide screenshots I am using the mobile app,account,account:3
+793,I receive an error when uploading a file.,technical,technical:2
+794,My order has not arrived and tracking has not updated urgent. this has happened before,billing,delivery:0
+795,My profile is locked and I need access again. I already contacted support,account,account:1
+796,I saw suspicious activity on my account. I can provide screenshots this has happened before,security,security:0
+797,Please stop my plan at the end of the month.,delivery,cancellation:1
+798,Someone changed my password without permission. The export button does not work on my browser. I am using the mobile app,security,security:1
+799,I cancelled but I still received a renewal notice urgent. this has happened before,cancellation,cancellation:2
