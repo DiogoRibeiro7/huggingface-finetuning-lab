@@ -309,15 +309,22 @@ def metadata_from_artifact(
     manifest = _load("heldout_manifest.json")
 
     from hf_finetuning_lab.model_cards.model_card import quality_metrics
+    from hf_finetuning_lab.provenance import load_provenance
+
+    recorded = load_provenance(directory)
+    dataset_ids = list(datasets) or ([recorded.dataset_id] if recorded.dataset_id else [])
 
     return HubCardMetadata(
         model_name=model_name,
         license=license,
-        base_model=training.get("model_name"),
-        datasets=list(datasets),
+        base_model=recorded.base_model or training.get("model_name"),
+        base_model_revision=recorded.base_model_revision,
+        datasets=dataset_ids,
         tags=list(tags),
         metrics=quality_metrics(metrics_payload),
-        dataset_fingerprint=manifest.get("fingerprint"),
+        dataset_revision=recorded.dataset_revision,
+        dataset_fingerprint=recorded.dataset_fingerprint or manifest.get("fingerprint"),
+        source_commit=recorded.source_commit,
     )
 
 

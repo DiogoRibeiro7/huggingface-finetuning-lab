@@ -56,6 +56,7 @@ RECOMMENDED_FILES: tuple[str, ...] = (
     "model_card.md",
     "test_metrics.json",
     "preprocessing.json",
+    "provenance.json",
 )
 
 
