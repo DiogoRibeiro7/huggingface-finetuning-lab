@@ -28,7 +28,7 @@ The default example uses a synthetic customer-support triage dataset. It is inte
 ## Architecture
 
 ```mermaid
-flowchart LR
+graph LR
     D["Data<br/>local file or Hub preset"]
     T["Train<br/>full fine-tune or LoRA"]
     A["Model artifact<br/>weights + contracts"]
@@ -41,8 +41,8 @@ flowchart LR
     D --> T --> A
     A --> E --> G
     A --> V --> G
-    G -->|"required criteria passed"| S
-    G -->|"missing or failed evidence"| H
+    G -->|required criteria passed| S
+    G -->|missing or failed evidence| H
 ```
 
 A model artifact is the unit that moves through the lifecycle: training writes it, evaluation

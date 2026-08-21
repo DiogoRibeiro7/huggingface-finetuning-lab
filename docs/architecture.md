@@ -3,7 +3,7 @@
 ## High-level flow
 
 ```mermaid
-flowchart TD
+graph TD
     LOCAL["Local CSV / JSONL"] --> VALIDATE
     HUBSRC["Hub preset<br/>data.hub"] --> VALIDATE
     VALIDATE["Validate schema, build label mapping<br/>data.io"] --> SPLIT
@@ -28,10 +28,10 @@ flowchart TD
     VERIFY --> GATE
 
     GATE{"Promotion gate<br/>governance.promotion"}
-    GATE -->|"every required criterion<br/>evaluated and passed"| SERVING["FastAPI serving<br/>serving.api, serving.config"]
-    GATE -->|"missing or failed evidence"| BLOCKED["Blocked"]
+    GATE -->|every required criterion<br/>evaluated and passed| SERVING["FastAPI serving<br/>serving.api, serving.config"]
+    GATE -->|missing or failed evidence| BLOCKED["Blocked"]
 
-    ARTIFACT -->|"preprocessing.json pins max_length"| PREDICT["Predictor<br/>inference.predictor"]
+    ARTIFACT -->|preprocessing.json pins max_length| PREDICT["Predictor<br/>inference.predictor"]
     PREDICT --> SERVING
 ```
 
