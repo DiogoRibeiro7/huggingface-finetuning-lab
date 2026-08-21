@@ -82,7 +82,10 @@ def test_readiness_503_when_predictor_factory_raises(tmp_path: Path) -> None:
         assert response.status_code == 503
         body = response.json()
         assert body["detail"]["status"] == "not_ready"
-        assert "model artefact missing" in body["detail"]["startup_error"]
+        # The internal failure is logged, never returned: the payload must not
+        # leak local paths or library internals to an unauthenticated caller.
+        assert "model artefact missing" not in response.text
+        assert body["detail"]["startup_error"] == "model failed to load"
 
 
 def test_readiness_ok_when_warm_up_fails_but_predictor_loads(tmp_path: Path) -> None:
@@ -178,3 +181,31 @@ def test_predict_503_when_predictor_is_missing(tmp_path: Path) -> None:
         response = client.post("/predict", json={"texts": ["x"]})
         assert response.status_code == 503
         assert response.json()["detail"] == "predictor not ready"
+
+
+def test_predict_rejects_an_oversized_text(tmp_path: Path) -> None:
+    """The batch cap bounds how many texts arrive, not how large they are."""
+    app = create_app(
+        model_dir=tmp_path,
+        predictor_factory=lambda _path: FakePredictor(),
+        warm_up_texts=None,
+        max_chars_per_text=50,
+    )
+    with TestClient(app) as client:
+        response = client.post("/predict", json={"texts": ["x" * 51]})
+
+    assert response.status_code == 413
+    assert "51" in response.json()["detail"]
+
+
+def test_predict_accepts_text_at_the_limit(tmp_path: Path) -> None:
+    app = create_app(
+        model_dir=tmp_path,
+        predictor_factory=lambda _path: FakePredictor(),
+        warm_up_texts=None,
+        max_chars_per_text=50,
+    )
+    with TestClient(app) as client:
+        response = client.post("/predict", json={"texts": ["x" * 50]})
+
+    assert response.status_code == 200

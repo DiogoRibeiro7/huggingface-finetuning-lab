@@ -18,6 +18,7 @@ from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from hf_finetuning_lab import __version__
+from hf_finetuning_lab.serving.config import ServingConfig
 from hf_finetuning_lab.serving.logging import StructuredRequestLogger, get_request_logger
 
 
@@ -74,6 +75,7 @@ def create_app(
     warm_up_texts: Sequence[str] | None = ("warm up",),
     model_version: str | None = None,
     enable_metrics: bool = False,
+    max_chars_per_text: int = 20_000,
 ) -> FastAPI:
     """Create the serving app.
 
@@ -91,7 +93,9 @@ def create_app(
         Optional version string echoed in health responses and request logs.
     enable_metrics:
         Mount a Prometheus ``/metrics`` endpoint and instrument requests.
-        Requires ``prometheus-client`` at runtime.
+        Requires the ``metrics`` extra (``poetry install --extras metrics``).
+    max_chars_per_text:
+        Reject any request carrying a longer single text than this.
     """
     model_path = Path(model_dir)
     factory = predictor_factory or _default_predictor_factory
@@ -124,8 +128,11 @@ def create_app(
         except Exception as exc:
             app.state.predictor = None
             app.state.warmed_up = False
-            app.state.startup_error = repr(exc)
-            logger.exception("predictor initialisation failed")
+            # Keep the detail in the server log only: the readiness payload
+            # is reachable by any caller and repr(exc) can carry local paths,
+            # configuration values, or library internals.
+            app.state.startup_error = "model failed to load"
+            logger.exception("predictor initialisation failed: %r", exc)
         yield
 
     app = FastAPI(
@@ -135,6 +142,7 @@ def create_app(
     )
     app.state.model_dir = str(model_path)
     app.state.model_version = model_version
+    app.state.max_chars_per_text = max_chars_per_text
     app.state.predictor = None
     app.state.warmed_up = False
     app.state.startup_error = None
@@ -179,6 +187,14 @@ def create_app(
         predictor: TextClassifierProtocol | None = request.app.state.predictor
         if predictor is None:
             raise HTTPException(status_code=503, detail="predictor not ready")
+        limit = request.app.state.max_chars_per_text
+        oversized = next((len(text) for text in payload.texts if len(text) > limit), None)
+        if oversized is not None:
+            # The batch cap alone bounds the number of texts, not their size.
+            raise HTTPException(
+                status_code=413,
+                detail=f"text of {oversized} characters exceeds the {limit} character limit",
+            )
         predictions = predictor.predict(payload.texts)
         return PredictResponse(
             predictions=predictions,
@@ -186,3 +202,18 @@ def create_app(
         )
 
     return app
+
+
+def create_app_from_config(
+    config: ServingConfig,
+    *,
+    predictor_factory: PredictorFactory | None = None,
+) -> FastAPI:
+    """Build the app from a resolved :class:`ServingConfig`."""
+    return create_app(
+        model_dir=config.model_dir,
+        predictor_factory=predictor_factory,
+        model_version=config.model_version,
+        enable_metrics=config.enable_metrics,
+        max_chars_per_text=config.max_chars_per_text,
+    )
