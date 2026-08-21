@@ -4,35 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project follows Semantic Versioning.
 
-## [1.0.0] - 2026-05-21
-
-### Added
-
-- `hf_finetuning_lab.artifacts` module: `ArtifactCheck`, `ArtifactReport`, and `verify_artifact(model_dir)` enforcing the stable v1.0 model-artifact layout (`config.json`, weights, tokenizer, plus recommended `tokenizer_config.json` / `special_tokens_map.json` / `model_card.md` / `metrics.json`).
-- CLI commands `hf-lab version`, `hf-lab list-commands`, and `hf-lab verify-artifact --model-dir <path> [--strict]`.
-- `notebooks/09_v1_capstone.ipynb`: enumerates the CLI surface, demonstrates `verify_artifact` on a synthetic artifact, lists the v1.0 module map and the notebook stack, and includes the release checklist.
-- `docs/architecture.md` refreshed with the v1.0 module map, the artifact contract, and the notebook stack.
-
-### Changed
-
-- Bumped package version to `1.0.0` (`pyproject.toml` + `hf_finetuning_lab.__version__`).
-
 ## [Unreleased]
+
+## [1.0.0] - 2026-08-21
 
 ### Security
 
 - Upgraded the Hugging Face and serving stack to patched releases, clearing 56 Dependabot alerts (1 critical, 22 high): `transformers` `^5.5.0`, `datasets` `^5.0.0`, `torch` `^2.13.0`, `fastapi` `^0.141.0` (pulling in a patched `starlette`), plus `huggingface-hub` `^1.5.0`, `accelerate` `^1.1.0`, `peft` `^0.20.0`, `safetensors` `^0.8.0`, `evaluate` `^0.4.6`, and `pytest` `^9.0.3`. Transitive fixes cover `pillow`, `mistune`, `aiohttp`, `jupyter-server`, `jupyterlab`, and `setuptools`.
-
-### Changed
-
-- Hardened GitHub Actions with explicit permissions, concurrency, timeouts, release artifact retention, and a separate notebook smoke job.
-- `trainer.py`: load classification models with `ignore_mismatched_sizes=True`. Transformers 5 raises on a classifier head whose label count differs from the checkpoint, where 4.x reinitialised it with a warning; the head is always retrained here, so the reinitialisation is now explicit.
-- `trainer.py`: `CompatibleTrainer.create_optimizer` now accepts the model positionally and returns the optimizer, matching the Transformers 5 `Trainer` contract it overrides. The previous signature took no model and returned `None`, which would raise `TypeError` against Transformers 5.
-- Pinned CI, the release workflow, and the Docker image to Poetry `2.2.1`, and install Poetry before `setup-python` so its dependency cache resolves.
-- Expanded package metadata with license, project URLs, Trove classifiers, and Python version support.
-- Bumped minimum supported Python to `3.11` (matches actual `datetime.UTC` usage). `pyproject.toml`, ruff `target-version`, mypy `python_version`, and the CI matrix all updated together.
-- `trainer.py`: switched `TrainingArguments(evaluation_strategy=...)` to `eval_strategy=`, switched `Trainer(tokenizer=...)` to `processing_class=`, and modernised `isinstance(value, (int, float))` to `isinstance(value, int | float)`.
-- `CHANGELOG.md`: added blank lines under each `### Added` / `### Changed` heading per Keep-a-Changelog convention.
 
 ### Added
 
@@ -60,6 +38,22 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 - `hf_finetuning_lab.serving` deployment hardening: `create_app` now accepts a `predictor_factory` (lazy/injectable predictor), runs model warm-up on startup, and exposes `/health/live` + `/health/ready` (with 503 + diagnostic payload when the predictor cannot load). `StructuredRequestLogger` emits one JSON log line per request; `install_metrics(app)` mounts a Prometheus `/metrics` endpoint when `prometheus-client` is installed.
 - `docker-compose.yml` at the repo root plus a `HEALTHCHECK` in the Dockerfile wired to `/health/ready` so orchestrators only route traffic to healthy instances.
 - `notebooks/08_serving_hardening.ipynb`: drives the hardened API offline via `TestClient` + a fake predictor; demonstrates warm-up evidence, structured logs, a 503 readiness failure, and the optional Prometheus metrics endpoint.
+- `hf_finetuning_lab.artifacts` module: `ArtifactCheck`, `ArtifactReport`, and `verify_artifact(model_dir)` enforcing the stable v1.0 model-artifact layout (`config.json`, weights, tokenizer, plus recommended `tokenizer_config.json` / `special_tokens_map.json` / `model_card.md` / `metrics.json`).
+- CLI commands `hf-lab version`, `hf-lab list-commands`, and `hf-lab verify-artifact --model-dir <path> [--strict]`.
+- `notebooks/09_v1_capstone.ipynb`: enumerates the CLI surface, demonstrates `verify_artifact` on a synthetic artifact, lists the v1.0 module map and the notebook stack, and includes the release checklist.
+- `docs/architecture.md` refreshed with the v1.0 module map, the artifact contract, and the notebook stack.
+
+### Changed
+
+- Hardened GitHub Actions with explicit permissions, concurrency, timeouts, release artifact retention, and a separate notebook smoke job.
+- `trainer.py`: load classification models with `ignore_mismatched_sizes=True`. Transformers 5 raises on a classifier head whose label count differs from the checkpoint, where 4.x reinitialised it with a warning; the head is always retrained here, so the reinitialisation is now explicit.
+- `trainer.py`: `CompatibleTrainer.create_optimizer` now accepts the model positionally and returns the optimizer, matching the Transformers 5 `Trainer` contract it overrides. The previous signature took no model and returned `None`, which would raise `TypeError` against Transformers 5.
+- Pinned CI, the release workflow, and the Docker image to Poetry `2.2.1`, and install Poetry before `setup-python` so its dependency cache resolves.
+- Expanded package metadata with license, project URLs, Trove classifiers, and Python version support.
+- Bumped minimum supported Python to `3.11` (matches actual `datetime.UTC` usage). `pyproject.toml`, ruff `target-version`, mypy `python_version`, and the CI matrix all updated together.
+- `trainer.py`: switched `TrainingArguments(evaluation_strategy=...)` to `eval_strategy=`, switched `Trainer(tokenizer=...)` to `processing_class=`, and modernised `isinstance(value, (int, float))` to `isinstance(value, int | float)`.
+- `CHANGELOG.md`: added blank lines under each `### Added` / `### Changed` heading per Keep-a-Changelog convention.
+- Bumped package version to `1.0.0` (`pyproject.toml` + `hf_finetuning_lab.__version__`).
 
 ## [0.1.0] - 2026-05-05
 
