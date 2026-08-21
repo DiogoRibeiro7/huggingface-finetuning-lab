@@ -44,9 +44,13 @@ def verify_artifact_cmd(
         bool,
         typer.Option("--strict", help="Exit with code 1 if any recommended file is missing."),
     ] = False,
+    deep: Annotated[
+        bool,
+        typer.Option("--deep", help="Also parse the JSON and load the tokenizer and model."),
+    ] = False,
 ) -> None:
     """Verify that a model directory follows the stable v1.0 artifact layout."""
-    report = verify_artifact(model_dir)
+    report = verify_artifact(model_dir, deep=deep)
     for check in report.checks:
         marker = {"ok": "OK ", "warning": "WARN", "missing": "MISS"}[check.status]
         typer.echo(f"[{marker}] {check.name}: {check.detail}")
