@@ -22,6 +22,9 @@ from pathlib import Path
 from typing import Any, Literal
 
 CriterionStatus = Literal["pass", "fail", "skip"]
+#: ``required`` criteria gate promotion: each must be evaluated and pass.
+#: ``advisory`` criteria are reported but never block.
+CriterionSeverity = Literal["required", "advisory"]
 
 
 @dataclass(slots=True)
@@ -33,6 +36,7 @@ class PromotionCriterion:
     detail: str = ""
     value: float | str | None = None
     threshold: float | str | None = None
+    severity: CriterionSeverity = "required"
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -63,9 +67,32 @@ class PromotionReport:
         return [c for c in self.criteria if c.status == "pass"]
 
     @property
+    def required(self) -> list[PromotionCriterion]:
+        return [c for c in self.criteria if c.severity == "required"]
+
+    @property
+    def blocking_reasons(self) -> list[str]:
+        """Why promotion is blocked, empty when the model may ship.
+
+        Absent evidence is not evidence of readiness, so a report with no
+        required criteria, or with a required criterion that was never
+        evaluated, blocks rather than promotes.
+        """
+        required = self.required
+        if not required:
+            return ["no required criteria were evaluated"]
+        reasons = [f"required criterion '{c.name}' failed" for c in required if c.status == "fail"]
+        reasons += [
+            f"required criterion '{c.name}' was not evaluated"
+            for c in required
+            if c.status == "skip"
+        ]
+        return reasons
+
+    @property
     def should_promote(self) -> bool:
-        """True when no criterion failed. Skipped criteria do not block."""
-        return not self.failed
+        """True only when every required criterion was evaluated and passed."""
+        return not self.blocking_reasons
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -74,6 +101,7 @@ class PromotionReport:
             "generated_at_utc": self.generated_at_utc,
             "notes": self.notes,
             "should_promote": self.should_promote,
+            "blocking_reasons": self.blocking_reasons,
             "criteria": [c.to_dict() for c in self.criteria],
         }
 
@@ -85,6 +113,7 @@ def threshold_criterion(
     *,
     direction: Literal["ge", "le"],
     detail_unit: str = "",
+    severity: CriterionSeverity = "required",
 ) -> PromotionCriterion:
     """Build a numeric pass/fail criterion.
 
@@ -107,21 +136,38 @@ def threshold_criterion(
         detail=detail,
         value=float(value),
         threshold=float(threshold),
+        severity=severity,
     )
 
 
-def boolean_criterion(name: str, ok: bool, detail: str = "") -> PromotionCriterion:
+def boolean_criterion(
+    name: str,
+    ok: bool,
+    detail: str = "",
+    *,
+    severity: CriterionSeverity = "required",
+) -> PromotionCriterion:
     """Build a binary pass/fail criterion."""
     return PromotionCriterion(
         name=name,
         status="pass" if ok else "fail",
         detail=detail,
+        severity=severity,
     )
 
 
-def skipped_criterion(name: str, detail: str = "") -> PromotionCriterion:
-    """Build a criterion that is intentionally not evaluated."""
-    return PromotionCriterion(name=name, status="skip", detail=detail)
+def skipped_criterion(
+    name: str,
+    detail: str = "",
+    *,
+    severity: CriterionSeverity = "required",
+) -> PromotionCriterion:
+    """Build a criterion that is intentionally not evaluated.
+
+    A skipped criterion still blocks promotion unless it is marked
+    ``advisory``: a check that did not run has produced no evidence.
+    """
+    return PromotionCriterion(name=name, status="skip", detail=detail, severity=severity)
 
 
 def write_promotion_report(report: PromotionReport, output_path: str | Path) -> Path:
@@ -129,15 +175,22 @@ def write_promotion_report(report: PromotionReport, output_path: str | Path) -> 
     destination = Path(output_path)
     destination.parent.mkdir(parents=True, exist_ok=True)
     verdict_word = "PROMOTE" if report.should_promote else "BLOCK"
+    reasons = report.blocking_reasons
+    blocking_block = (
+        "**Blocked by:**\n" + "\n".join(f"- {reason}" for reason in reasons)
+        if reasons
+        else "_Nothing blocking._"
+    )
     rows = [
-        "| status | criterion | value | threshold | detail |",
-        "| --- | --- | --- | --- | --- |",
+        "| status | criterion | severity | value | threshold | detail |",
+        "| --- | --- | --- | --- | --- | --- |",
     ]
     for criterion in report.criteria:
         value = "—" if criterion.value is None else str(criterion.value)
         threshold = "—" if criterion.threshold is None else str(criterion.threshold)
         rows.append(
-            f"| {criterion.status.upper()} | `{criterion.name}` | {value} | {threshold} | {criterion.detail} |"
+            f"| {criterion.status.upper()} | `{criterion.name}` | {criterion.severity} "
+            f"| {value} | {threshold} | {criterion.detail} |"
         )
     body = f"""# Promotion Report: {report.run_id}
 
@@ -148,6 +201,8 @@ def write_promotion_report(report: PromotionReport, output_path: str | Path) -> 
 - **Model:** `{report.model_name}`
 - **Generated (UTC):** `{report.generated_at_utc}`
 - **Failed:** {len(report.failed)} | **Passed:** {len(report.passed)} | **Skipped:** {len(report.skipped)}
+
+{blocking_block}
 
 ## Criteria
 
@@ -178,6 +233,7 @@ def aggregate_reports(reports: Iterable[PromotionReport]) -> list[dict[str, Any]
                 "n_failed": len(report.failed),
                 "n_passed": len(report.passed),
                 "n_skipped": len(report.skipped),
+                "n_required": len(report.required),
                 "generated_at_utc": report.generated_at_utc,
             }
         )
