@@ -6,6 +6,8 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-08-21
+
 ### Fixed
 
 - Hub datasets with non-numeric labels encoded each split independently, so the same
