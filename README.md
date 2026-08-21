@@ -105,6 +105,7 @@ Citation metadata is maintained in `CITATION.cff`. Zenodo release metadata is ma
 
 - 5-minute setup: `docs/quickstart_5min.md`
 - System architecture: `docs/architecture.md`
+- Publishing to the Hub: `docs/hub_lifecycle.md`
 - Release/versioning policy: `docs/release_process.md`
 - Changelog: `CHANGELOG.md`
 
