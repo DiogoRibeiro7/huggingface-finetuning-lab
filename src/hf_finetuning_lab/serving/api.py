@@ -209,11 +209,26 @@ def create_app_from_config(
     *,
     predictor_factory: PredictorFactory | None = None,
 ) -> FastAPI:
-    """Build the app from a resolved :class:`ServingConfig`."""
+    """Build the app from a resolved :class:`ServingConfig`.
+
+    A Hub source is downloaded at its pinned revision before the app is built,
+    so a failure to fetch surfaces at startup rather than on the first request.
+    """
+    model_dir = config.model_dir
+    version = config.model_version
+    if model_dir is None:
+        from hf_finetuning_lab.publishing import pull_model
+
+        assert config.model_repo_id is not None  # guaranteed by ServingConfig
+        model_dir = pull_model(config.model_repo_id, revision=config.model_revision)
+        if version is None:
+            # Make what is actually being served observable in /health.
+            version = f"{config.model_repo_id}@{config.model_revision}"
+
     return create_app(
-        model_dir=config.model_dir,
+        model_dir=model_dir,
         predictor_factory=predictor_factory,
-        model_version=config.model_version,
+        model_version=version,
         enable_metrics=config.enable_metrics,
         max_chars_per_text=config.max_chars_per_text,
     )
