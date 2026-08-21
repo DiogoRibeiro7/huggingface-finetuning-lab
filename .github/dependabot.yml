@@ -14,9 +14,24 @@ updates:
     groups:
       # Keep routine upgrades to a single PR; majors still get their own so
       # breaking changes are reviewed in isolation.
+      #
+      # Pre-1.0 packages are excluded. Dependabot classifies 0.12 -> 0.27 as a
+      # "minor" bump, but for a 0.x project that is where breaking changes
+      # live: typer 0.27 changed how option defaults reach a command, which
+      # silently broke the --config-file guard inside a green grouped PR.
+      # Those get their own reviewable pull request.
       python-minor-and-patch:
         patterns:
           - "*"
+        exclude-patterns:
+          - "evaluate"
+          - "fastapi"
+          - "httpx"
+          - "peft"
+          - "ruff"
+          - "safetensors"
+          - "typer"
+          - "uvicorn"
         update-types:
           - "minor"
           - "patch"
@@ -40,3 +55,10 @@ updates:
       day: "monday"
     commit-message:
       prefix: "docker"
+    ignore:
+      # The project declares requires-python >=3.11,<3.13, so a newer base
+      # image cannot install it. Nothing in CI builds the Dockerfile, so such
+      # a pull request arrives with green checks. Raise this bound together
+      # with requires-python.
+      - dependency-name: "python"
+        versions: [">=3.13"]
