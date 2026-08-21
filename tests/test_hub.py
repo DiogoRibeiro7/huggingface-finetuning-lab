@@ -117,3 +117,93 @@ def test_normalize_dict_errors_when_no_splits_match() -> None:
     cfg = HubDatasetConfig(name="fake", train_split="missing", test_split="also_missing")
     with pytest.raises(ValueError, match="None of the requested splits"):
         normalize_hub_dataset_dict(ds_dict, cfg)
+
+
+def _string_label_dataset_dict() -> datasets.DatasetDict:
+    """Splits with non-numeric labels and a class present only in train."""
+    train = datasets.Dataset.from_pandas(
+        pd.DataFrame(
+            {
+                "text": ["a apple", "b banana", "c cherry"],
+                "label": ["apple", "banana", "cherry"],
+            }
+        ),
+        preserve_index=False,
+    )
+    test = datasets.Dataset.from_pandas(
+        pd.DataFrame({"text": ["d banana", "e cherry"], "label": ["banana", "cherry"]}),
+        preserve_index=False,
+    )
+    return datasets.DatasetDict({"train": train, "test": test})
+
+
+def _label_id_by_name(frame: pd.DataFrame) -> dict[str, int]:
+    return {row.label: int(row.label_id) for row in frame.itertuples()}
+
+
+def test_string_labels_share_one_mapping_across_splits() -> None:
+    cfg = HubDatasetConfig(name="fake")
+
+    frames = normalize_hub_dataset_dict(_string_label_dataset_dict(), cfg)
+
+    train_map = _label_id_by_name(frames["train"])
+    test_map = _label_id_by_name(frames["test"])
+    for label, label_id in test_map.items():
+        assert train_map[label] == label_id, f"{label} encoded differently across splits"
+    assert train_map == {"apple": 0, "banana": 1, "cherry": 2}
+
+
+def test_string_labels_present_only_in_test_are_encoded_consistently() -> None:
+    train = datasets.Dataset.from_pandas(
+        pd.DataFrame({"text": ["a", "b"], "label": ["banana", "cherry"]}),
+        preserve_index=False,
+    )
+    test = datasets.Dataset.from_pandas(
+        pd.DataFrame({"text": ["c", "d"], "label": ["apple", "cherry"]}),
+        preserve_index=False,
+    )
+    cfg = HubDatasetConfig(name="fake")
+
+    frames = normalize_hub_dataset_dict(datasets.DatasetDict({"train": train, "test": test}), cfg)
+
+    train_map = _label_id_by_name(frames["train"])
+    test_map = _label_id_by_name(frames["test"])
+    # The union of both splits defines the label space: apple=0, banana=1,
+    # cherry=2. Encoding each split alone would give cherry=1 in both.
+    assert train_map == {"banana": 1, "cherry": 2}
+    assert test_map == {"apple": 0, "cherry": 2}
+
+
+def test_normalize_hub_dataset_accepts_an_explicit_label_mapping() -> None:
+    cfg = HubDatasetConfig(name="fake")
+    dataset = _string_label_dataset_dict()["test"]
+
+    frame = normalize_hub_dataset(dataset, cfg, label_mapping={"banana": 5, "cherry": 9})
+
+    assert _label_id_by_name(frame) == {"banana": 5, "cherry": 9}
+
+
+def test_normalize_hub_dataset_rejects_labels_missing_from_the_mapping() -> None:
+    cfg = HubDatasetConfig(name="fake")
+    dataset = _string_label_dataset_dict()["train"]
+
+    with pytest.raises(ValueError, match="apple"):
+        normalize_hub_dataset(dataset, cfg, label_mapping={"banana": 0, "cherry": 1})
+
+
+def test_numeric_labels_keep_their_original_ids() -> None:
+    cfg = HubDatasetConfig(name="fake")
+
+    frames = normalize_hub_dataset_dict(_fake_dataset_dict(), cfg)
+
+    assert _label_id_by_name(frames["train"]) == {"0": 0, "1": 1}
+
+
+def test_splits_filter_accepts_a_generator() -> None:
+    cfg = HubDatasetConfig(name="fake")
+
+    frames = normalize_hub_dataset_dict(
+        _fake_dataset_dict(), cfg, splits=(name for name in ("train", "test"))
+    )
+
+    assert sorted(frames) == ["test", "train"]
