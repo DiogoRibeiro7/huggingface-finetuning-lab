@@ -1,0 +1,40 @@
+{
+  "creators": [
+    {
+      "name": "Ribeiro, Diogo",
+      "affiliation": "ESMAD - Instituto Politécnico do Porto",
+      "orcid": "0009-0001-2022-7072",
+      "type": "ProjectLeader"
+    }
+  ],
+  "title": "Hugging Face Fine-Tuning Lab",
+  "description": "Production-focused Hugging Face NLP fine-tuning workbench with reproducible training, robust evaluation, PEFT/LoRA support, batch inference, FastAPI serving, and model-card/report generation.",
+  "version": "1.0.0",
+  "publication_date": "2026-05-21",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "mit",
+  "language": "eng",
+  "notes": "Source code archive for the Hugging Face Fine-Tuning Lab v1.0.0 release. The repository includes reproducible training pipelines, evaluation utilities, governance artifacts, notebooks, tests, and serving examples for NLP fine-tuning workflows.",
+  "method": "The software is distributed as a Poetry-managed Python package. Reproducible workflows are documented in the repository notebooks and docs, with quality gates provided by ruff, mypy, pytest, and the GitHub Actions release workflow.",
+  "keywords": [
+    "hugging-face",
+    "transformers",
+    "nlp",
+    "text-classification",
+    "fine-tuning",
+    "peft",
+    "lora",
+    "fastapi",
+    "pytorch",
+    "mlops"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/DiogoRibeiro7/huggingface-finetuning-lab/tree/v1.0.0",
+      "relation": "isSupplementTo",
+      "scheme": "url",
+      "resource_type": "software"
+    }
+  ]
+}

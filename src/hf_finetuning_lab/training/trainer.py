@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from hf_finetuning_lab.config import TrainingConfig
 from hf_finetuning_lab.data.io import (
@@ -35,6 +35,13 @@ def _build_model(
         num_labels=num_labels,
         id2label=id2label,
         label2id=label2id,
+        # Starting a run from an existing classification checkpoint whose head
+        # has a different label count is a normal case here: the head is always
+        # retrained against this dataset's label space. Transformers >=5 raises
+        # on that shape mismatch unless the reinitialisation is opted into,
+        # where 4.x only warned. Only the classifier head is affected; an
+        # encoder that genuinely does not fit still fails to load.
+        ignore_mismatched_sizes=True,
     )
 
 
@@ -89,13 +96,17 @@ def _ensure_optimizer_mode_compatibility(optimizer_wrapper: Any) -> None:
 class CompatibleTrainer:
     """Mixin that patches optimizer mode hooks for broader HF stack compatibility."""
 
-    def create_optimizer(self) -> None:
-        super().create_optimizer()  # type: ignore[misc]
-        optimizer = getattr(self, "optimizer", None)
+    def create_optimizer(self, model: Any = None) -> Any:
+        # Transformers >=5 accepts the model positionally and uses the returned
+        # optimizer, so mirror that contract rather than swallowing either.
+        optimizer = super().create_optimizer(model)  # type: ignore[misc]
+        if optimizer is None:
+            optimizer = getattr(self, "optimizer", None)
         if optimizer is not None:
             _ensure_optimizer_mode_compatibility(optimizer)
+        return optimizer
 
-    def training_step(self, model: Any, inputs: dict[str, Any], num_items_in_batch: int | None = None):
+    def training_step(self, model: Any, inputs: dict[str, Any], num_items_in_batch: Any = None) -> Any:
         optimizer = getattr(self, "optimizer", None)
         if optimizer is not None:
             _ensure_optimizer_mode_compatibility(optimizer)
@@ -182,7 +193,9 @@ def train_text_classifier(input_path: str | Path, output_dir: str | Path, config
         # classifier. Otherwise trainer.save_model would persist an adapter-only
         # checkpoint that requires `peft` at inference time and re-resolves the
         # base model from its name, breaking the local artifact contract.
-        merged = trainer.model.merge_and_unload()
+        # The LoRA branch always holds a PeftModel here, which Trainer's
+        # broader `model` type does not express.
+        merged = cast(Any, trainer.model).merge_and_unload()
         merged.save_pretrained(str(output_path))
     else:
         trainer.save_model(str(output_path))

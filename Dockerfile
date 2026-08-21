@@ -9,10 +9,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-COPY pyproject.toml README.md ./
+COPY pyproject.toml poetry.lock README.md ./
 COPY src ./src
 
-RUN pip install --no-cache-dir poetry==1.8.3 && \
+RUN pip install --no-cache-dir poetry==2.2.1 && \
     poetry config virtualenvs.create false && \
     poetry install --only main --no-interaction --no-ansi
 

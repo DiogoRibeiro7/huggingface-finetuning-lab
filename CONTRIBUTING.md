@@ -4,8 +4,8 @@ Thanks for contributing to `huggingface-finetuning-lab`.
 
 ## Development setup
 
-1. Install Python 3.10, 3.11, or 3.12.
-2. Install Poetry.
+1. Install Python 3.11 or 3.12. Python 3.12 is the local default in `.python-version`.
+2. Install Poetry 2.x.
 3. Run:
 
 ```bash
@@ -21,6 +21,7 @@ poetry run ruff check .
 poetry run ruff format .
 poetry run mypy src
 poetry run pytest -q
+make notebook-lint
 ```
 
 Optional pre-commit setup:

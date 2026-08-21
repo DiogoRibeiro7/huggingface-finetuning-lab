@@ -5,6 +5,21 @@ type: software
 authors:
   - family-names: Ribeiro
     given-names: Diogo
+    affiliation: ESMAD - Instituto Politécnico do Porto
+    orcid: https://orcid.org/0009-0001-2022-7072
+abstract: Production-focused Hugging Face NLP fine-tuning workbench with reproducible training, robust evaluation, PEFT/LoRA support, batch inference, FastAPI serving, and model-card/report generation.
+keywords:
+  - hugging-face
+  - transformers
+  - nlp
+  - text-classification
+  - fine-tuning
+  - peft
+  - lora
+  - fastapi
+  - pytorch
+  - mlops
 repository-code: https://github.com/DiogoRibeiro7/huggingface-finetuning-lab
 license: MIT
-version: 0.1.0
+version: 1.0.0
+date-released: 2026-05-21

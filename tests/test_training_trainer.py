@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 
 from hf_finetuning_lab.training.trainer import (
+    CompatibleTrainer,
     _ensure_optimizer_mode_compatibility,
     _write_heldout_test_split,
 )
@@ -78,3 +79,28 @@ def test_write_heldout_test_split_persists_rows(tmp_path: Path) -> None:
     assert written == tmp_path / "heldout_test.csv"
     restored = pd.read_csv(written)
     assert restored.to_dict(orient="records") == frame.to_dict(orient="records")
+
+
+def test_compatible_trainer_create_optimizer_matches_base_contract() -> None:
+    """Transformers >=5 passes the model positionally and uses the return value."""
+    seen: dict[str, object] = {}
+
+    class _BaseTrainer:
+        def create_optimizer(self, model=None):
+            seen["model"] = model
+            self.optimizer = _WrappedOptimizer()
+            return self.optimizer
+
+    class _Trainer(CompatibleTrainer, _BaseTrainer):
+        pass
+
+    trainer = _Trainer()
+    sentinel = object()
+
+    optimizer = trainer.create_optimizer(sentinel)
+
+    assert seen["model"] is sentinel
+    assert optimizer is trainer.optimizer
+    # The mode shims are installed on the returned wrapper.
+    assert optimizer.train() is None
+    assert optimizer.eval() is None

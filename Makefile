@@ -21,7 +21,7 @@ precommit:
 	poetry run pre-commit run --all-files
 
 notebook-lint:
-	poetry run nbqa ruff check notebooks
+	poetry run nbqa "ruff check" notebooks --nbqa-shell --ignore E402,B018
 
 notebook-smoke:
 	poetry run jupyter nbconvert --to notebook --execute notebooks/01_hf_text_classification_workflow.ipynb --output 01_hf_text_classification_workflow.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600

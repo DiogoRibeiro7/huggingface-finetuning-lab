@@ -5,33 +5,59 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   quality:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: 2.2.1
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: "poetry"
-      - name: Install Poetry
-        uses: abatilo/actions-poetry@v3
-        with:
-          poetry-version: 1.8.3
       - name: Install dependencies
         run: poetry install --with dev
       - name: Lint
         run: poetry run ruff check .
       - name: Notebook lint
-        run: poetry run nbqa ruff check notebooks
+        run: poetry run nbqa "ruff check" notebooks --nbqa-shell --ignore E402,B018
       - name: Type check
         run: poetry run mypy src
       - name: Test
         run: poetry run pytest
+
+  notebook-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v3
+        with:
+          poetry-version: 2.2.1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "poetry"
+      - name: Install dependencies
+        run: poetry install --with dev
       - name: Notebook smoke execute
         run: |
           poetry run jupyter nbconvert --to notebook --execute notebooks/01_hf_text_classification_workflow.ipynb --output 01_hf_text_classification_workflow.smoke.ipynb --output-dir notebooks --ExecutePreprocessor.timeout=600

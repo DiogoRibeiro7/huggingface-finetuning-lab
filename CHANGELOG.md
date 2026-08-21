@@ -19,15 +19,27 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 ## [Unreleased]
 
+### Security
+
+- Upgraded the Hugging Face and serving stack to patched releases, clearing 56 Dependabot alerts (1 critical, 22 high): `transformers` `^5.5.0`, `datasets` `^5.0.0`, `torch` `^2.13.0`, `fastapi` `^0.141.0` (pulling in a patched `starlette`), plus `huggingface-hub` `^1.5.0`, `accelerate` `^1.1.0`, `peft` `^0.20.0`, `safetensors` `^0.8.0`, `evaluate` `^0.4.6`, and `pytest` `^9.0.3`. Transitive fixes cover `pillow`, `mistune`, `aiohttp`, `jupyter-server`, `jupyterlab`, and `setuptools`.
+
 ### Changed
 
+- Hardened GitHub Actions with explicit permissions, concurrency, timeouts, release artifact retention, and a separate notebook smoke job.
+- `trainer.py`: load classification models with `ignore_mismatched_sizes=True`. Transformers 5 raises on a classifier head whose label count differs from the checkpoint, where 4.x reinitialised it with a warning; the head is always retrained here, so the reinitialisation is now explicit.
+- `trainer.py`: `CompatibleTrainer.create_optimizer` now accepts the model positionally and returns the optimizer, matching the Transformers 5 `Trainer` contract it overrides. The previous signature took no model and returned `None`, which would raise `TypeError` against Transformers 5.
+- Pinned CI, the release workflow, and the Docker image to Poetry `2.2.1`, and install Poetry before `setup-python` so its dependency cache resolves.
+- Expanded package metadata with license, project URLs, Trove classifiers, and Python version support.
 - Bumped minimum supported Python to `3.11` (matches actual `datetime.UTC` usage). `pyproject.toml`, ruff `target-version`, mypy `python_version`, and the CI matrix all updated together.
-- Bumped `transformers` pin to `^4.46.0` so `Trainer(processing_class=...)` is available.
 - `trainer.py`: switched `TrainingArguments(evaluation_strategy=...)` to `eval_strategy=`, switched `Trainer(tokenizer=...)` to `processing_class=`, and modernised `isinstance(value, (int, float))` to `isinstance(value, int | float)`.
 - `CHANGELOG.md`: added blank lines under each `### Added` / `### Changed` heading per Keep-a-Changelog convention.
 
 ### Added
 
+- `poetry.lock`, so dependency resolution is reproducible and CI's Poetry cache has a file to key on. Its absence was failing every CI run at `setup-python`.
+- `.github/dependabot.yml`: weekly `pip`, `github-actions`, and `docker` update checks, with minor and patch bumps grouped into a single pull request so majors stay reviewable on their own.
+- Public repository governance files: `SECURITY.md`, `.gitattributes`, issue templates, and a pull request template.
+- Zenodo release metadata in `.zenodo.json`, with matching citation metadata in `CITATION.cff`.
 - Repository professionalization baseline: CI quality gates, contributor workflow, and release automation.
 - `hf_finetuning_lab.governance.promotion` module: `PromotionCriterion`, `PromotionReport`, `threshold_criterion` / `boolean_criterion` / `skipped_criterion` helpers, `write_promotion_report` (Markdown verdict + criteria table + JSON sidecar), and `aggregate_reports` for comparison tables.
 - `notebooks/10_promotion_gate.ipynb`: composes v0.4 robust-evaluation checks (bootstrap CIs on macro F1, ECE, subgroup F1 ratio, train/test PSI drift), v0.9 governance artifacts (dataset card, model card, reproducibility checklist), and v1.0 artifact verification into a single Markdown + JSON promotion report with an explicit `should_promote` verdict.

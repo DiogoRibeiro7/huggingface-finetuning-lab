@@ -1,0 +1,40 @@
+name: Feature Request
+description: Propose an improvement to the training, evaluation, governance, or serving workflow.
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What workflow gap or limitation should this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+      description: Describe the change and the expected user-facing behavior.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Data loading
+        - Training
+        - Evaluation
+        - Token classification
+        - Retrieval
+        - Governance
+        - Serving
+        - Documentation
+        - CI/release
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation Plan
+      description: Tests, notebook smoke checks, or docs that should change with this feature.

@@ -2,25 +2,14 @@
 
 Production-focused Hugging Face NLP fine-tuning workbench with reproducible training, robust evaluation, PEFT/LoRA support, batch inference, FastAPI serving, and model-card/report generation.
 
-## Suggested GitHub About and Topics
+[![CI](https://github.com/DiogoRibeiro7/huggingface-finetuning-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/DiogoRibeiro7/huggingface-finetuning-lab/actions/workflows/ci.yml)
+[![Release](https://github.com/DiogoRibeiro7/huggingface-finetuning-lab/actions/workflows/release.yml/badge.svg)](https://github.com/DiogoRibeiro7/huggingface-finetuning-lab/actions/workflows/release.yml)
+[![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](pyproject.toml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Use the following in repository settings for stronger discoverability.
+## Project Status
 
-- About (repo description): `Production-focused Hugging Face NLP fine-tuning lab with reproducible training, evaluation, PEFT/LoRA, serving, and model cards.`
-- Website (optional): your docs landing page or portfolio link.
-- Topics:
-  - `hugging-face`
-  - `transformers`
-  - `nlp`
-  - `text-classification`
-  - `fine-tuning`
-  - `peft`
-  - `lora`
-  - `model-evaluation`
-  - `fastapi`
-  - `mlops`
-  - `python`
-  - `pytorch`
+Version `1.0.0` is the stable baseline for the package, CLI, notebooks, artifact contract, and serving workflow. The repository is designed for offline local validation first, then opt-in use with Hugging Face Hub datasets and model downloads.
 
 The project focuses on a practical end-to-end workflow:
 
@@ -77,6 +66,10 @@ poetry run pytest
 ## Contributing
 
 See `CONTRIBUTING.md` for development workflow, test constraints, and responsible AI contribution rules.
+
+## Citation and Archival
+
+Citation metadata is maintained in `CITATION.cff`. Zenodo release metadata is maintained in `.zenodo.json`; Zenodo will use that file when archiving GitHub releases.
 
 ## Quickstart and architecture
 
@@ -196,7 +189,7 @@ curl -X POST http://localhost:8000/predict \
   -d '{"texts": ["I cannot access my account and my payment failed"]}'
 ```
 
-## Supported tasks in v0.1
+## Supported Capabilities
 
 - Text classification.
 - Local CSV and JSONL datasets.
