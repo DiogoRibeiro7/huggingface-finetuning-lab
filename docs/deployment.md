@@ -37,7 +37,9 @@ environment, so the same image works from flags locally and from Compose in depl
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `HF_LAB_MODEL_DIR` | `/models` in the image | Model directory to serve. Required. |
+| `HF_LAB_MODEL_DIR` | `/models` in the image | Local model directory to serve. |
+| `HF_LAB_MODEL_REPO` | unset | Hub repository to serve instead, as `owner/name`. |
+| `HF_LAB_MODEL_REVISION` | `main` | Revision to pin when serving from the Hub. |
 | `HF_LAB_MODEL_VERSION` | unset | Version string echoed in health responses and request logs. |
 | `HF_LAB_ENABLE_METRICS` | `false` | Mount `/metrics` and instrument requests. Needs the `metrics` extra. |
 | `HF_LAB_HOST` | `127.0.0.1` | Bind address. |
@@ -45,8 +47,25 @@ environment, so the same image works from flags locally and from Compose in depl
 | `HF_LAB_MAX_TEXTS_PER_REQUEST` | `256` | Reject batches larger than this. |
 | `HF_LAB_MAX_CHARS_PER_TEXT` | `20000` | Reject any single text longer than this. |
 
+Exactly one model source is required, and the two are mutually exclusive: a directory or
+a repository, not both.
+
 Booleans accept `1/0`, `true/false`, `yes/no`, `on/off`. An unparseable value fails at
 startup rather than being silently treated as false.
+
+### Serving from the Hub
+
+```bash
+hf-lab serve --model-repo me/support-triage --model-revision 9f8e7d6c5b4a
+```
+
+The revision is downloaded at startup, so a fetch failure surfaces then rather than on the
+first request, and a restart reuses the Hub cache instead of refetching the weights. When
+no `HF_LAB_MODEL_VERSION` is set, health responses report `repo@revision`, so what is
+actually serving is visible without inspecting the container.
+
+Pin a commit sha or tag. A branch resolves to whatever it points at today, which means the
+weights can change under a running deployment — the server warns when it is given one.
 
 ## Endpoints
 

@@ -254,21 +254,27 @@ def promote_revision(
 
 def pull_model(
     repo_id: str,
-    destination: str | Path,
+    destination: str | Path | None = None,
     *,
     revision: str = "main",
     api: HubApi | None = None,
     token: str | None = None,
 ) -> Path:
-    """Download a published model at a pinned revision."""
+    """Download a published model at a pinned revision.
+
+    With no destination the Hub cache is used, which is what a server wants:
+    a restart reuses the existing download instead of refetching the weights.
+    """
     client = api if api is not None else _default_api()
-    path = client.snapshot_download(
-        repo_id=repo_id,
-        revision=revision,
-        local_dir=str(destination),
-        token=token,
-        repo_type="model",
-    )
+    kwargs: dict[str, Any] = {
+        "repo_id": repo_id,
+        "revision": revision,
+        "token": token,
+        "repo_type": "model",
+    }
+    if destination is not None:
+        kwargs["local_dir"] = str(destination)
+    path = client.snapshot_download(**kwargs)
     return Path(path)
 
 

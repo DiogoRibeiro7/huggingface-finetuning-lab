@@ -185,6 +185,12 @@ def predict(
 @app.command("serve")
 def serve(
     model_dir: Path | None = typer.Option(None, help="Local model directory."),
+    model_repo: str | None = typer.Option(
+        None, "--model-repo", help="Hub repository to serve, as owner/name."
+    ),
+    model_revision: str | None = typer.Option(
+        None, "--model-revision", help="Revision to pin when serving from the Hub."
+    ),
     host: str | None = typer.Option(None, help="Server host."),
     port: int | None = typer.Option(None, help="Server port."),
 ) -> None:
@@ -199,9 +205,22 @@ def serve(
     from hf_finetuning_lab.serving.config import ServingConfig
 
     try:
-        config = ServingConfig.from_env(model_dir=model_dir, host=host, port=port)
+        config = ServingConfig.from_env(
+            model_dir=model_dir,
+            model_repo_id=model_repo,
+            model_revision=model_revision,
+            host=host,
+            port=port,
+        )
     except ValueError as exc:
         raise typer.BadParameter(str(exc)) from exc
+
+    if config.serves_a_moving_target:
+        typer.echo(
+            f"Warning: {config.model_repo_id}@{config.model_revision} is a branch, so the "
+            "weights can change under this server. Pin a commit sha or tag for a "
+            "reproducible deployment."
+        )
 
     app_instance = create_app_from_config(config)
     uvicorn.run(app_instance, host=config.host, port=config.port)
