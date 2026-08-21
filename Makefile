@@ -1,4 +1,4 @@
-.PHONY: install test lint typecheck check format sample run precommit release-check branch-protect notebook-lint notebook-smoke
+.PHONY: install test lint typecheck check check-fast check-full format sample run precommit release-check branch-protect notebook-lint notebook-smoke
 
 install:
 	poetry install --with dev
@@ -12,7 +12,13 @@ lint:
 typecheck:
 	poetry run mypy src
 
-check: lint typecheck test
+# check-fast: code only, seconds. check: what CI's quality job runs.
+# check-full: adds notebook execution, which is the slowest CI job.
+check-fast: lint typecheck test
+
+check: lint notebook-lint typecheck test
+
+check-full: check notebook-smoke
 
 format:
 	poetry run ruff format .
