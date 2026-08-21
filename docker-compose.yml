@@ -9,15 +9,15 @@ services:
       # Read by `hf-lab serve` through ServingConfig.from_env. The image
       # ships no model, so the bind-mount below supplies the artifact these
       # paths point at.
-      HF_LAB_MODEL_DIR: "/app/artifacts/models/support-triage"
+      HF_LAB_MODEL_DIR: "/models/support-triage"
       HF_LAB_MODEL_VERSION: "1.0.0"
       HF_LAB_ENABLE_METRICS: "false"
     ports:
       - "8000:8000"
-    # Bind-mount a host directory holding the trained model so the image
-    # itself does not need to ship one.
+    # The image ships no model. Mount a host directory holding a trained
+    # artifact; HF_LAB_MODEL_DIR above points inside this mount.
     volumes:
-      - ./artifacts:/app/artifacts:ro
+      - ./artifacts/models:/models:ro
     healthcheck:
       test:
         - "CMD-SHELL"
