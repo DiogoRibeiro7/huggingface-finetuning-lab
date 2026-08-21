@@ -6,6 +6,8 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-08-21
+
 ### Added
 
 - Hub publication lifecycle: `hf-lab push-to-hub`, `promote-to-hub` and `pull-model`.
@@ -29,19 +31,16 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
   `repo@revision`, and the server warns when handed a branch, which can change under a
   running deployment.
 - `docs/hub_lifecycle.md` covering the path from training to a served, pinned revision.
-
-### Fixed
-
-- Hub dataset presets used bare repository ids (`ag_news`, `imdb`, `banking77`,
-  `tweet_eval`). Those resolved through Hub redirects until `huggingface-hub` 1.14,
-  which rejects them: *Repository id must be 'namespace/name'*. All four are now
-  namespaced, with `banking77` pointing at the parquet mirror because the PolyAI copy
-  is still script-based and `datasets` >=4 no longer runs dataset scripts.
-- `hf-lab train --config-file <file>` rejected every training flag as
-  "explicitly passed" when none were. The guard compared a `ParameterSource` from the
-  command context against one imported from `click`; typer ships its own copy of click,
-  so those can be different enum classes that never compare equal. The comparison is now
-  by name, and the package no longer imports click at all.
+- Architecture diagrams in the README and `docs/architecture.md`, replacing an ASCII
+  sketch that drew the flow as a straight line and so could not show that the validation
+  and test splits play different roles, or that the artifact is read by every downstream
+  stage rather than being one step among many.
+- A scheduled `Hub presets` workflow resolves every preset against the real Hub. Preset
+  breakage is invisible to the rest of the suite, which builds datasets in memory — the
+  `huggingface-hub` 1.28 failure above passed CI on both Python versions. The checks are
+  marked `network` and excluded from the default run, so merges stay fast.
+- Regression coverage for the `--config-file` path, which previously had none, and a test
+  asserting every preset id is namespaced.
 
 ### Changed
 
@@ -59,18 +58,18 @@ The format is based on Keep a Changelog, and this project follows Semantic Versi
   PR. Python base images above the supported range are ignored, since nothing in CI builds
   the Dockerfile and such a bump also arrives green.
 
-### Added
+### Fixed
 
-- Architecture diagrams in the README and `docs/architecture.md`, replacing an ASCII
-  sketch that drew the flow as a straight line and so could not show that the validation
-  and test splits play different roles, or that the artifact is read by every downstream
-  stage rather than being one step among many.
-- A scheduled `Hub presets` workflow resolves every preset against the real Hub. Preset
-  breakage is invisible to the rest of the suite, which builds datasets in memory — the
-  `huggingface-hub` 1.28 failure above passed CI on both Python versions. The checks are
-  marked `network` and excluded from the default run, so merges stay fast.
-- Regression coverage for the `--config-file` path, which previously had none, and a test
-  asserting every preset id is namespaced.
+- Hub dataset presets used bare repository ids (`ag_news`, `imdb`, `banking77`,
+  `tweet_eval`). Those resolved through Hub redirects until `huggingface-hub` 1.14,
+  which rejects them: *Repository id must be 'namespace/name'*. All four are now
+  namespaced, with `banking77` pointing at the parquet mirror because the PolyAI copy
+  is still script-based and `datasets` >=4 no longer runs dataset scripts.
+- `hf-lab train --config-file <file>` rejected every training flag as
+  "explicitly passed" when none were. The guard compared a `ParameterSource` from the
+  command context against one imported from `click`; typer ships its own copy of click,
+  so those can be different enum classes that never compare equal. The comparison is now
+  by name, and the package no longer imports click at all.
 
 ## [1.0.1] - 2026-08-21
 
