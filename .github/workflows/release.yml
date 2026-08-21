@@ -31,6 +31,10 @@ jobs:
         run: poetry install --with dev
       - name: Lint
         run: poetry run ruff check .
+      # Mirrors the CI quality job: a release must not pass a gate that every
+      # pull request had to clear.
+      - name: Notebook lint
+        run: poetry run nbqa "ruff check" notebooks --nbqa-shell --ignore E402,B018
       - name: Type check
         run: poetry run mypy src
       - name: Test

@@ -49,10 +49,13 @@ For CPU-only local work this is enough. GPU execution depends on your local PyTo
 
 ## Quality checks
 
-Run the same checks used in CI:
+`make check` runs the same gates as CI's quality job (lint, notebook lint, type check,
+tests). `make check-full` adds notebook execution, which is what CI's notebook job runs.
 
 ```bash
-make check
+make check-fast   # lint, types, tests — code only
+make check        # + notebook lint (CI quality job)
+make check-full   # + notebook execution (all of CI)
 ```
 
 Or run tools directly:
