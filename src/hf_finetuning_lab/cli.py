@@ -11,6 +11,14 @@ from hf_finetuning_lab.config import TrainingConfig
 from hf_finetuning_lab.data.hub import list_hub_presets, write_hub_dataset_csv
 from hf_finetuning_lab.evaluation.evaluator import evaluate_model
 from hf_finetuning_lab.inference.predictor import batch_predict
+from hf_finetuning_lab.publishing import (
+    STAGING_REVISION,
+    HubPublishConfig,
+    metadata_from_artifact,
+    promote_revision,
+    publish_artifact,
+    pull_model,
+)
 from hf_finetuning_lab.sample_data import write_sample_data
 from hf_finetuning_lab.training.trainer import train_text_classifier
 
@@ -197,3 +205,81 @@ def serve(
 
     app_instance = create_app_from_config(config)
     uvicorn.run(app_instance, host=config.host, port=config.port)
+
+
+@app.command("push-to-hub")
+def push_to_hub(
+    model_dir: Path = typer.Option(..., help="Local model directory to publish."),
+    repo_id: str = typer.Option(..., help="Target repository as owner/name."),
+    revision: str = typer.Option(
+        STAGING_REVISION, help="Branch to publish to. Defaults to staging."
+    ),
+    model_name: str | None = typer.Option(None, help="Card title. Defaults to the repo name."),
+    dataset: list[str] = typer.Option([], "--dataset", help="Source dataset id. Repeatable."),
+    license_id: str | None = typer.Option(None, "--license", help="License identifier."),
+    tag: list[str] = typer.Option([], "--tag", help="Extra card tag. Repeatable."),
+    private: Annotated[
+        bool, typer.Option("--private", help="Create the repository as private.")
+    ] = False,
+    dry_run: Annotated[
+        bool,
+        typer.Option("--dry-run", help="Report what would be published without uploading."),
+    ] = False,
+) -> None:
+    """Publish a model artifact to the Hub.
+
+    Publishes to a staging branch by default, so releasing is a separate,
+    deliberate step (see promote-to-hub).
+    """
+    metadata = metadata_from_artifact(
+        model_dir,
+        model_name=model_name or repo_id.split("/")[-1],
+        license=license_id,
+        datasets=dataset,
+        tags=tag,
+    )
+    config = HubPublishConfig(repo_id=repo_id, revision=revision, private=private)
+
+    try:
+        plan = publish_artifact(model_dir, config, metadata, dry_run=dry_run)
+    except ValueError as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+
+    typer.echo(f"{'Would publish' if dry_run else 'Published'} {len(plan.files)} file(s) "
+               f"to {plan.repo_id}@{plan.revision}")
+    for name in plan.excluded:
+        typer.echo(f"  excluded: {name}")
+    if dry_run:
+        typer.echo("")
+        typer.echo(plan.card)
+
+
+@app.command("promote-to-hub")
+def promote_to_hub(
+    repo_id: str = typer.Option(..., help="Repository as owner/name."),
+    source_revision: str = typer.Option(
+        STAGING_REVISION, "--from", help="Revision holding the reviewed commit."
+    ),
+    target_revision: str = typer.Option(..., "--to", help="Release revision to point at it."),
+) -> None:
+    """Point a release revision at an already-published commit.
+
+    Promotion never re-uploads: the released weights are the reviewed ones.
+    """
+    try:
+        promoted = promote_revision(repo_id, source_revision, target_revision)
+    except ValueError as exc:
+        raise typer.BadParameter(str(exc)) from exc
+    typer.echo(f"Promoted {repo_id}@{source_revision} to {promoted}")
+
+
+@app.command("pull-model")
+def pull_model_cmd(
+    repo_id: str = typer.Option(..., help="Repository as owner/name."),
+    output_dir: Path = typer.Option(..., help="Directory to download into."),
+    revision: str = typer.Option("main", help="Revision to pin. Defaults to main."),
+) -> None:
+    """Download a published model at a pinned revision."""
+    path = pull_model(repo_id, output_dir, revision=revision)
+    typer.echo(f"Downloaded {repo_id}@{revision} to {path}")
