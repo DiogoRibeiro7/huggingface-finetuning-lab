@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Annotated
 
-import click
 import typer
 
 from hf_finetuning_lab import __version__
@@ -118,10 +117,15 @@ def train(
             "model_name", "text_col", "label_col", "epochs",
             "batch_size", "learning_rate", "max_length", "use_lora",
         )
+        # Compare the source by name rather than against an imported enum
+        # member. Typer ships its own copy of click, so the context's
+        # ParameterSource can be a different class from the separately
+        # installed `click` package — comparing members across the two enums
+        # is always unequal, which would flag every option as explicitly set.
         overridden = [
             name
             for name in config_flags
-            if ctx.get_parameter_source(name) != click.core.ParameterSource.DEFAULT
+            if getattr(ctx.get_parameter_source(name), "name", None) != "DEFAULT"
         ]
         if overridden:
             raise typer.BadParameter(
