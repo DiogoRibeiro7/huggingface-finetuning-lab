@@ -207,3 +207,14 @@ def test_splits_filter_accepts_a_generator() -> None:
     )
 
     assert sorted(frames) == ["test", "train"]
+
+
+def test_every_preset_uses_a_namespaced_repository_id() -> None:
+    """huggingface-hub >=1.14 rejects bare ids: "must be 'namespace/name'".
+
+    Bare ids used to resolve through Hub redirects, so this only surfaces on a
+    real download — which no unit test performs.
+    """
+    bare = {key: cfg.name for key, cfg in HUB_PRESETS.items() if "/" not in cfg.name}
+
+    assert not bare, f"presets must use owner/name repository ids: {bare}"
