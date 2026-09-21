@@ -3911,19 +3911,19 @@ re2 = ["google-re2 (>=1.1)"]
 
 [[package]]
 name = "peft"
-version = "0.20.0"
+version = "0.21.0"
 description = "Parameter-Efficient Fine-Tuning (PEFT)"
 optional = false
 python-versions = ">=3.10.0"
 groups = ["main"]
 files = [
-    {file = "peft-0.20.0-py3-none-any.whl", hash = "sha256:0fbba16ffebfad3de96e06f2da6860fd860292324b85b6141909fa1e26ea9233"},
-    {file = "peft-0.20.0.tar.gz", hash = "sha256:4769c8093a4ca145fd6fb3fd4dd50449675f5fe46434ad1e98b285a132d4b1d0"},
+    {file = "peft-0.21.0-py3-none-any.whl", hash = "sha256:b64eb75fd9dece7401c70e675b8d9de024993b70483691b41c62876f0c7809b7"},
+    {file = "peft-0.21.0.tar.gz", hash = "sha256:17f2b5a264439f4cd983c02e95954f2e948e3bcb85f75895ee307f94a55fd28f"},
 ]
 
 [package.dependencies]
 accelerate = ">=0.21.0"
-huggingface-hub = ">=0.25.0"
+huggingface_hub = ">=0.25.0"
 numpy = ">=1.17"
 packaging = ">=20.0"
 psutil = "*"
@@ -3934,10 +3934,10 @@ tqdm = "*"
 transformers = "*"
 
 [package.extras]
-dev = ["black", "hf-doc-builder", "requests", "ruff (>=0.15.12,<0.16.0)"]
+dev = ["black", "black", "griffe", "hf-doc-builder", "hf-doc-builder", "requests", "ruff (==0.16.4)"]
 docs-specific = ["black", "hf-doc-builder", "requests"]
-quality = ["black", "hf-doc-builder", "ruff (>=0.15.12,<0.16.0)"]
-test = ["black", "datasets", "diffusers", "hf-doc-builder", "parameterized", "protobuf", "pytest", "pytest-cov", "pytest-xdist", "requests", "ruff (>=0.15.12,<0.16.0)", "scikit-learn", "scipy", "sentencepiece", "torchvision"]
+quality = ["black", "griffe", "hf-doc-builder", "ruff (==0.16.4)"]
+test = ["black", "black", "datasets", "diffusers", "griffe", "hf-doc-builder", "hf-doc-builder", "parameterized", "protobuf", "pytest", "pytest-cov", "pytest-xdist", "requests", "ruff (==0.16.4)", "scikit-learn", "scipy", "sentencepiece", "torchvision"]
 
 [[package]]
 name = "pexpect"
@@ -6807,4 +6807,4 @@ metrics = ["prometheus-client"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.13"
-content-hash = "42e7d5199845ff5484587974d44e131700d61b0dcb679ea86f64dd21b29a2c25"
+content-hash = "2d1e64fa126dbf59f69a4b1d0be951c340a4071f0fd09d3f01275c32639539da"
