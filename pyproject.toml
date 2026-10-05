@@ -65,7 +65,7 @@ accelerate = "^1.1.0"
 torch = "^2.13.0"
 safetensors = "^0.8.0"
 huggingface-hub = "^1.28.0"
-peft = "^0.20.0"
+peft = "^0.21.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.3"
