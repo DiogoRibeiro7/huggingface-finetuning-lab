@@ -1,0 +1,7 @@
+Tool: built-in image generation
+
+Use case: logo-brand.
+Asset type: square README project logo for huggingface-finetuning-lab.
+Project purpose: Production-focused Hugging Face NLP fine-tuning workbench with reproducible training, robust evaluation, PEFT/LoRA, FastAPI serving, and model-card/report generation.
+Design direction: A large cobalt calibration dial gently aligns three raspberry speech-shaped paper strips into one crisp chartreuse speech ribbon. Playful precision-instrument illustration, clean cream background, matte painted surfaces and sharp color blocking. An original fine-tuning metaphor; no official Hugging Face character or logo.
+Composition: create one finished square artwork with a strong silhouette, readable at 160 pixels, and comfortable margins. This is the logo itself, not a presentation or product mockup. No text, words, letters, numbers, captions or watermark anywhere in the image. Do not use a generic navy-and-gold metallic badge.

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/project-logo.png" alt="huggingface-finetuning-lab project logo" width="160" height="160">
+</p>
+
 # Hugging Face Fine-Tuning Lab
 
 Production-focused Hugging Face NLP fine-tuning workbench with reproducible training, robust evaluation, PEFT/LoRA support, batch inference, FastAPI serving, and model-card/report generation.
